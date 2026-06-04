@@ -6,7 +6,11 @@
 
 package application;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -35,15 +39,48 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		webEngine = webView.getEngine();
-		webEngine.loadContent("<!DOCTYPE html>\r\n" + "<html>\r\n" + "<head>\r\n" + "    <style>\r\n"
-				+ "        /* Force XML elements to look like block-level paragraphs */\r\n"
-				+ "        paragraph-node { display: block; margin: 10px 0; min-height: 1.2em; border-left: 2px solid #ccc; padding-left: 5px; }\r\n"
-				+ "        bold-node { font-weight: bold; display: inline; }\r\n" + "    </style>\r\n" + "</head>\r\n"
-				+ "<body contenteditable=\"true\">\r\n"
-				+ "    <paragraph-node id=\"node_1\">This is an example paragraph node matching your DTD.</paragraph-node>\r\n"
-				+ "    <paragraph-node id=\"node_2\">You can key text content right into here.</paragraph-node>\r\n"
-				+ "</body>\r\n" + "</html>\r\n" + "");
-
+		String filePath = "data/XLingPaper.css";
+		File f = new File(filePath);
+		if (f.exists()) {
+			try {
+				String cssUrl = f.toURI().toURL().toExternalForm();
+				webEngine.setUserStyleSheetLocation(cssUrl);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println(filePath + " not found");
+		}
+		webEngine.loadContent(loadFileIntoNeededHTML());
 	}
 
+	String loadFileIntoNeededHTML() {
+		StringBuilder sb= new StringBuilder();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+		sb.append("<!DOCTYPE html>\n");
+		sb.append("<html>\n");
+		sb.append("<head>\n");
+		sb.append("</head>\n");
+		sb.append("<body contenteditable=\"true\">\n");
+		String filePath = "data/SamplePaper.xml";
+		String fileContent = "";
+		File f = new File(filePath);
+		if (!f.exists()) {
+			System.out.println(filePath + " not found");
+		} else {
+			try {
+				fileContent = Files.readString(Paths.get(filePath));
+				int iBegin = fileContent.indexOf("<lingPaper");
+				fileContent = fileContent.substring(iBegin);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		sb.append(fileContent);
+		sb.append("</body>\n");
+		sb.append("</html>\n");
+		return sb.toString();
+	}
 }

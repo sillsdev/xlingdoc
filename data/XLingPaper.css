@@ -1,0 +1,421 @@
+/***********************
+ XLingPaper.css Style sheet for **whatever we call it**
+ */
+
+:root {
+	--citation-background-color: #F09FF0;
+	--comment-background-color: yellow;
+	--example-background-color: #F5DEB3;
+	--section-background-color: #BFD0FF;
+}
+
+article
+{
+	display:inline;
+}
+
+author { 
+    display: block;
+    text-align: center;
+    font-weight: normal;
+    font-size: medium;
+    color: maroon;
+    margin-top: .67ex;
+    margin-bottom: .67ex;
+}
+
+backMatter 
+{
+	display:block;
+/*	counter-reset:appendix; */
+}
+
+book
+{
+	display:inline;
+}
+
+comment
+{
+	display:inline;
+	background-color: var(--comment-background-color);
+	color:Black;
+}
+
+endnotes:before
+{
+	content: "Endnotes";
+}
+endnotes
+{
+	display:block;
+}
+
+example:before
+{
+	content: "(" attr(num) ")";
+	background-color: var(--example-background-color);
+	
+/* if show counters
+	counter-increment:example;
+	content: "(" 
+	counter(example)
+	") "
+	text-field(attribute, num, columns, 10, font-size, small) 
+	" " 
+	;
+	background-color:example-background-color(); */
+}
+example
+{
+	display:block;
+	padding-left: 0.25in;
+/* if show counters
+	counter-reset:listexample; */
+} 
+
+exampleRef[num]:before
+{
+	content: "(" attr(num) ")";
+	background-color: var(--example-background-color);
+}
+
+free
+{
+	display:block;
+	color: concatenate(xpath("id(@lang)/@color"));
+	font-family: concatenate("'",xpath("id(@lang)/@font-family"),"'");
+	font-size: concatenate(xpath("id(@lang)/@font-size"));
+	font-style: concatenate(xpath("id(@lang)/@font-style"));
+	font-weight: concatenate(xpath("id(@lang)/@font-weight")); 
+}
+
+frontMatter 
+{
+	display:block;
+}
+
+gloss
+{
+	display:inline;
+	color:green; 
+	font-family:Serif;
+/*	color: concatenate(xpath("id(@lang)/@color"));
+	font-family: concatenate("'",xpath("id(@lang)/@font-family"),"'");
+	font-size: concatenate(xpath("id(@lang)/@font-size"));
+	font-style: concatenate(xpath("id(@lang)/@font-style"));
+	font-weight: concatenate(xpath("id(@lang)/@font-weight"));*/
+}
+
+institution
+{
+	display:inline;
+}
+institution:after
+{
+	content: ". ";
+}
+
+interlinear
+{
+	display:block;
+	padding-left:example-indent();
+}
+
+jPages:before
+{
+	content: ":";
+}
+jPages
+{
+	display:inline;
+}
+jPages:after
+{
+	content: ". ";
+}
+
+jTitle
+{
+	display:inline;
+	font-style:italic;
+}
+jTitle:after
+{
+	content: " ";
+}
+
+jVol
+{
+	display:inline;
+}
+jVol:after
+{
+ 	content: ". ";
+
+}
+
+langData
+{
+	display:inline;
+	color: blue;
+/*	color: concatenate(xpath("id(@lang)/@color"));
+	font-family: concatenate("'",xpath("id(@lang)/@font-family"),"'");
+	font-size: concatenate(xpath("id(@lang)/@font-size"));
+	font-style: concatenate(xpath("id(@lang)/@font-style"));
+	font-weight: concatenate(xpath("id(@lang)/@font-weight")); */
+}
+
+language:before
+{
+	content:"language: " 
+/*	text-field(attribute, id, columns, 10, font-size, small,
+                        background-color, white)
+	" "
+			 command-button(text, "  Click to Set Font Info  ", 
+							command, "ChooseFontCmd",
+							border-style, solid,
+							border-width, thin,
+							background-color, endnote-background-color(),
+							select, element)
+			 "     "
+			 command-button(text, "  Click to Set Color  ", 
+							command, "ChooseColorCmd",
+							border-style, solid,
+							border-width, thin,
+							background-color, endnote-background-color(),
+							select, element,
+							color, blue)*/
+			" "
+			;
+}
+language
+{
+	display:block;
+	padding-left: 0.125in;
+	padding-top: 0.05in;
+/*	property-group: isCollapsible( yes, 1);*/
+}
+
+languages:before
+{
+	content:" Languages: ";
+	/* color:Silver; is too light */
+}
+languages
+{
+	display:block;
+	/* color:Silver; is too light */
+	/*property-group: isCollapsible( no, 1);*/
+}
+lingPaper languages
+{
+	display:block;
+	/* color:Silver; is too light */
+/*	property-group: isCollapsible( yes, 1);*/
+}
+
+line
+{
+	display:block;
+}
+
+lineGroup
+{
+	display:block;
+}
+
+lingPaper
+{
+	display:block;
+}
+
+location
+{
+	display:inline;
+}
+location:after
+{
+	content: ". ";
+}
+
+ms
+{
+	display:inline;
+}
+
+publisher
+{
+	display:inline;
+}
+publisher:after
+{
+	content: ". ";
+}
+
+refAuthor:before
+{
+	content: collapser(collapsed-icon, icon(url(resources/plus-box.png)), expanded-icon, icon(url(resources/minus-box.png)))
+	" name: "
+	text-field(attribute, name, columns, 40)
+	" cite as: "
+	text-field(attribute, citename, columns 15)
+	;
+}
+refAuthor
+{
+	display:block;
+	padding-left: .25in;
+/*	property-group: isCollapsible( no, 1);*/
+}
+
+refDate:before
+{
+	content: " ";
+}
+refDate
+{
+	display:inline;
+}
+refDate:after
+{
+	content: ". ";
+}
+
+refTitle
+{
+	font-weight: bold;
+}
+refTitle:after
+{
+	content: ". ";
+}
+
+refWork:before
+{
+	content: attr(id);
+	background-color: var(--citation-background-color);
+	font-size: small;
+}
+
+refWork
+{
+	display:block;
+	padding-left: .25in;
+	text-indent: -.25in;
+}
+
+references:before
+{
+/*	property-group: labelNotPresent( " References" ); */
+	font-weight:bold;
+	font-size:larger;
+}
+references
+{
+	display:block;
+    padding-top: 1ex;
+/*	property-group: isCollapsible( no, 1); */
+}
+
+secTitle:before
+{
+	content:" ";
+}
+secTitle 
+{
+	font-weight: bold;
+	font-size:large;
+}
+
+section1:before
+{
+	content: " "
+/*    simple-counter(1, decimal)
+    " " */
+    attr(id) 
+    ;
+	font-weight: bold;
+	font-size:large;
+	background-color: var(--section-background-color);
+/*    property-group: sectionBefore( n, section-background-color() ); */
+}
+section1 
+{
+	display:block;
+	text-align: left;
+/*	property-group: isCollapsible( yes, 1);*/
+/*	property-group: section(  );*/
+}
+
+/*sectionRef:before
+{
+	content: label(xpath,"if((/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='singular']
+	[string-length(normalize-space(@sectionRefSingularLabel))>0],(/xlingpaper/styledPaper/lingPaper|/lingPaper)
+	/@sectionRefSingularLabel,(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='singular']
+	[string-length(normalize-space(@sectionRefSingularLabel))=0], 'section ', 
+	(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='plural']
+	[string-length(normalize-space(@sectionRefPluralLabel))>0],(
+		/xlingpaper/styledPaper/lingPaper|/lingPaper)/@sectionRefPluralLabel,
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='plural']
+		[string-length(normalize-space(@sectionRefPluralLabel))=0], 'sections ',
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='capitalizedSingular']
+		[string-length(normalize-space(@sectionRefCapitalizedSingularLabel))>0],
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)/@sectionRefCapitalizedSingularLabel,
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='capitalizedSingular']
+		[string-length(normalize-space(@sectionRefCapitalizedSingularLabel))=0], 'Section ', 
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='capitalizedPlural']
+		[string-length(normalize-space(@sectionRefCapitalizedPluralLabel))>0],
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)/@sectionRefCapitalizedPluralLabel,
+		(/xlingpaper/styledPaper/lingPaper|/lingPaper)[@sectionRefDefault='capitalizedPlural']
+		[string-length(normalize-space(@sectionRefCapitalizedPluralLabel))=0], 'Sections ','')");
+}*/
+
+sectionRef:before
+{
+	content: attr(sec);
+	background-color: var(--section-background-color);
+}
+
+title { 
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+    color: black;
+    margin-top: .67ex;
+    margin-bottom: .67ex;
+}
+
+type:before
+{
+	content:"type: " 
+	attr(id)
+	" "
+	;
+	font-size: small;
+	background-color: white;
+}
+type
+{
+	display:block;
+	padding-left: 0.125in;
+	padding-top: 0.05in;
+/*	property-group: isCollapsible( yes, 1);*/
+/*	property-group: fontColor();*/
+}
+
+types:before
+{
+	content:" Types: ";
+}
+types
+{
+	display:block;
+/*	property-group: isCollapsible( no, 1);*/
+}
+lingPaper types
+{
+	display:block;
+/*	property-group: isCollapsible( yes, 1); */
+}
