@@ -4,18 +4,16 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package application;
+package application.service;
 
 import javafx.scene.web.WebEngine;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import javax.xml.transform.*;
 
 public class XmlSerializer {
 
@@ -46,52 +44,6 @@ public class XmlSerializer {
         XmlCaseCorrector.sanitizeAndFixCasing(xmlDoc.getDocumentElement(), xmlDoc);
         
         SCMFriendlyXmlFormatter.saveWithCustomFormat(xmlDoc, outputFile);
-//        Element rootElement = xmlDoc.getDocumentElement();
-//
-//        // 4. Run the rest of your cleanup rules safely in standard Java space
-//        normalizeInlineElements(rootElement);
-//        sanitizeXmlTree(rootElement);
-//
-//        // 5. Serialize out to disk using your Transformer setup
-//        javax.xml.transform.TransformerFactory tf = javax.xml.transform.TransformerFactory.newInstance();
-//        javax.xml.transform.Transformer transformer = tf.newTransformer();
-//        
-//        transformer.setOutputProperty(OutputKeys.INDENT, "no");
-//        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-//        
-//        if (dtdSystemId != null) {
-//            transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-//            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-//            transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, dtdSystemId);
-//            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "-//XMLmind//DTD XLingPap//EN");
-//        }
-//
-//        javax.xml.transform.dom.DOMSource source = new javax.xml.transform.dom.DOMSource(xmlDoc);
-//        javax.xml.transform.stream.StreamResult result = new javax.xml.transform.stream.StreamResult(outputFile);
-//        transformer.transform(source, result);
-    }
-    
-    /**
-     * Recursively strips out browser-specific mutations like "contenteditable"
-     * or temporary UI IDs so they don't pollute your clean production XML data.
-     */
-    private static void sanitizeXmlTree(Element element) {
-        // Remove editing attributes we used inside the WebView
-        element.removeAttribute("contenteditable");
-        
-        // If you generated temporary auto-IDs for synchronization, strip them here if needed
-        if (element.getAttribute("id").startsWith("gen_")) {
-            element.removeAttribute("id");
-        }
-
-        // Walk down the child elements
-        NodeList children = element.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            if (child.getNodeType() == Node.ELEMENT_NODE) {
-                sanitizeXmlTree((Element) child);
-            }
-        }
     }
 
     public static void normalizeInlineElements(Element root) {

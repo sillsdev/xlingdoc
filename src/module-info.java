@@ -7,6 +7,8 @@ module xmleditorplay {
 	requires transitive javafx.graphics;
 	
 	opens application to javafx.graphics, javafx.fxml;
+	opens application.view to javafx.graphics, javafx.fxml;
 	
 	exports application;
+	exports application.view;
 }
