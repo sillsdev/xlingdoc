@@ -13,6 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -30,7 +34,7 @@ public class MainController implements Initializable {
 	@FXML
 	BorderPane rootLayout;
 	@FXML
-	private Button btnBottom;
+	private Button btnSave;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -82,5 +86,16 @@ public class MainController implements Initializable {
 		sb.append("</body>\n");
 		sb.append("</html>\n");
 		return sb.toString();
+	}
+
+	@FXML
+	private void handleSave() {
+		File f = new File("data/SamplePaperSaved.xml");
+		try {
+			XmlSerializer.exportWebViewToXml(webEngine, f, "XLingPap.dtd");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
