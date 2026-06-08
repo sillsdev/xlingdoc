@@ -21,6 +21,7 @@ import application.service.XmlSerializer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
@@ -38,6 +39,8 @@ public class MainController implements Initializable {
 	BorderPane rootLayout;
 	@FXML
 	private Button btnSave;
+	@FXML
+	private Label elementPath;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -66,40 +69,34 @@ public class MainController implements Initializable {
 			// boundaries
 			double x = event.getX();
 			double y = event.getY();
-
 			// 1. Execute the plural elementsFromPoint script
 			String script = String.format("document.elementsFromPoint(%f, %f);", x, y);
 			Object result = webEngine.executeScript(script);
-
 			// 2. The browser returns an array-like collection wrapped as a JSObject
 			if (result instanceof JSObject) {
 				JSObject elementList = (JSObject) result;
-
 				// Evaluate the length of the array returned by WebKit
 				Object lengthObj = elementList.getMember("length");
 				if (lengthObj instanceof Number) {
 					int length = ((Number) lengthObj).intValue();
-
-					System.out.println("\n--- Elements at click layer hierarchy ---");
-
+					StringBuilder sb = new StringBuilder();
+					sb.append(" ");
 					// 3. Iterate through the array slots from topmost to bottommost
-					for (int i = 0; i < length; i++) {
+					for (int i = length-1; i >= 0; i--) {
 						Object arrayItem = elementList.getSlot(i);
-
 						// Each item inside the slot implements the standard org.w3c.dom.Element
 						// interface!
 						if (arrayItem instanceof Element) {
 							Element domElement = (Element) arrayItem;
-
 							String tagName = domElement.getTagName();
 							if (tagName.equals("BODY") || tagName.equals("HTML")) {
 								continue;
 							}
-							String elementId = domElement.getAttribute("id");
-
-							System.out.printf("[%d] Tag: %s | ID: %s%n", i, InternalToExternalNameMapper.mapName(tagName),
-									elementId != null && !elementId.isEmpty() ? elementId : "");
-
+							sb.append(InternalToExternalNameMapper.mapName(tagName));
+							if (i > 0) {
+								sb.append(" > ");
+							}
+//							String elementId = domElement.getAttribute("id");
 //		                    // Example Usage:
 //		                    // If you are looking for the first specific DTD container block
 //		                    // beneath a transient selection highlight or inline node:
@@ -109,6 +106,7 @@ public class MainController implements Initializable {
 //		                    }
 						}
 					}
+					elementPath.setText(sb.toString());
 				}
 			}
 		});

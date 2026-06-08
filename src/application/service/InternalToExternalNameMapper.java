@@ -59,6 +59,7 @@ public class InternalToExternalNameMapper {
     	elementCaseMap.put("TR", "tr");
     	elementCaseMap.put("TYPE", "type");
     	elementCaseMap.put("TYPES", "types");
+    	elementCaseMap.put("XLP-BR", "br");
 
 		// Register your structural attribute names here
 		attributeCaseMap.put("CSSSPECIAL", "cssSpecial");
