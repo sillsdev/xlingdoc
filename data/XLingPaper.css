@@ -30,6 +30,11 @@ backMatter
 /*	counter-reset:appendix; */
 }
 
+body
+{
+	counter-reset: section1, section2, section3, section4, section5, section6;
+}
+
 book
 {
 	display:inline;
@@ -331,7 +336,9 @@ secTitle
 
 section1:before
 {
-	content: " "
+	counter-increment: section1;
+	content: counter(section1)
+	" "
 /*    simple-counter(1, decimal)
     " " */
     attr(id) 
