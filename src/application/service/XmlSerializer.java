@@ -28,7 +28,8 @@ public class XmlSerializer {
         if (xmlContentString == null || xmlContentString.isEmpty()) {
             throw new IllegalArgumentException("Could not extract the <lingPaper> markup from WebView.");
         }
-        xmlContentString = xmlContentString.replace("<br><br>", "<br></br>");
+        xmlContentString = xmlContentString.replaceAll("><tbody", "");
+        xmlContentString = xmlContentString.replaceAll("></tbody", "");
 
         // 2. Instantiate a safe standard Java XML parser
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -41,7 +42,7 @@ public class XmlSerializer {
         );
 
      // Resolve case variations and clean up runtime attributes
-        XmlCaseCorrector.sanitizeAndFixCasing(xmlDoc.getDocumentElement(), xmlDoc);
+        XmlNameMapper.sanitizeAndFixCasing(xmlDoc.getDocumentElement(), xmlDoc);
         
         SCMFriendlyXmlFormatter.saveWithCustomFormat(xmlDoc, outputFile);
     }

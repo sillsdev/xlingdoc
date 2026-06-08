@@ -13,11 +13,11 @@ import org.w3c.dom.NodeList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class XmlCaseCorrector {
+public class XmlNameMapper {
 
 	// 1. Maintain a master index matching lowercased keys to CamelCase targets
-	private static final Map<String, String> elementCaseMap = new HashMap<>();
-	private static final Map<String, String> attributeCaseMap = new HashMap<>();
+	private static final Map<String, String> elementNameMap = new HashMap<>();
+	private static final Map<String, String> attributeNameMap = new HashMap<>();
 
 	static {
 		// Element names end up being lower case because the WebView runs a WebKit
@@ -25,26 +25,32 @@ public class XmlCaseCorrector {
 		// tag and attribute names are treated as case-insensitive and are automatically
 		// normalized to lowercase when you extract markup using .outerHTML.
 		// So we need to map any camel-case names here.
-		elementCaseMap.put("backmatter", "backMatter");
-		elementCaseMap.put("exampleref", "exampleRef");
-		elementCaseMap.put("frontmatter", "frontMatter");
-		elementCaseMap.put("jpages", "jPages");
-		elementCaseMap.put("jtitle", "jTitle");
-		elementCaseMap.put("jvol", "jVol");
-		elementCaseMap.put("langdata", "langData");
-		elementCaseMap.put("linegroup", "lineGroup");
-		elementCaseMap.put("lingpaper", "lingPaper");
-		elementCaseMap.put("refauthor", "refAuthor");
-		elementCaseMap.put("refdate", "refDate");
-		elementCaseMap.put("reftitle", "refTitle");
-		elementCaseMap.put("refwork", "refWork");
-		elementCaseMap.put("sectitle", "secTitle");
-		elementCaseMap.put("sectionref", "sectionRef");
+		elementNameMap.put("backmatter", "backMatter");
+		elementNameMap.put("exampleref", "exampleRef");
+		elementNameMap.put("frontmatter", "frontMatter");
+		elementNameMap.put("jpages", "jPages");
+		elementNameMap.put("jtitle", "jTitle");
+		elementNameMap.put("jvol", "jVol");
+		elementNameMap.put("langdata", "langData");
+		elementNameMap.put("linegroup", "lineGroup");
+		elementNameMap.put("lingpaper", "lingPaper");
+		elementNameMap.put("refauthor", "refAuthor");
+		elementNameMap.put("refdate", "refDate");
+		elementNameMap.put("reftitle", "refTitle");
+		elementNameMap.put("refwork", "refWork");
+		elementNameMap.put("sectitle", "secTitle");
+		elementNameMap.put("sectionref", "sectionRef");
+		elementNameMap.put("xlp-br", "br");
+		// We may need to do something specific for tables...
+//		elementNameMap.put("xlp-table", "table");
+//		elementNameMap.put("xlp-td", "td");
+//		elementNameMap.put("xlp-th", "th");
+//		elementNameMap.put("xlp-tr", "tr");
 
 		// Register your structural attribute names here
-		attributeCaseMap.put("cssspecial", "cssSpecial");
-		attributeCaseMap.put("xelatexspecial", "XeLaTeXSpecial");
-		attributeCaseMap.put("xsl-fospecial", "xsl-foSpecial");
+		attributeNameMap.put("cssspecial", "cssSpecial");
+		attributeNameMap.put("xelatexspecial", "XeLaTeXSpecial");
+		attributeNameMap.put("xsl-fospecial", "xsl-foSpecial");
 	}
 
 	public static void sanitizeAndFixCasing(Element element, Document doc) {
@@ -67,8 +73,8 @@ public class XmlCaseCorrector {
 			Node attr = attributes.item(i);
 			String lowerName = attr.getNodeName().toLowerCase();
 
-			if (attributeCaseMap.containsKey(lowerName)) {
-				String correctCaseName = attributeCaseMap.get(lowerName);
+			if (attributeNameMap.containsKey(lowerName)) {
+				String correctCaseName = attributeNameMap.get(lowerName);
 				String value = attr.getNodeValue();
 
 				// Strip the old lowercased attribute and write the correctly cased version
@@ -79,8 +85,8 @@ public class XmlCaseCorrector {
 
 		// 5. Correct Tag/Element Casing
 		String lowerTagName = element.getTagName().toLowerCase();
-		if (elementCaseMap.containsKey(lowerTagName)) {
-			String correctTagName = elementCaseMap.get(lowerTagName);
+		if (elementNameMap.containsKey(lowerTagName)) {
+			String correctTagName = elementNameMap.get(lowerTagName);
 
 			if (!element.getTagName().equals(correctTagName)) {
 				// Rename the node by creating a replacement element shell
@@ -104,6 +110,21 @@ public class XmlCaseCorrector {
 		}
 	}
 
+	public static String mapInputFromXLingPaperToHTML(String fileContent) {
+		fileContent = mapElementName(fileContent, "br");
+		// We may need to do something specific for tables...
+//		fileContent = mapElementName(fileContent, "table");
+//		fileContent = mapElementName(fileContent, "td");
+//		fileContent = mapElementName(fileContent, "th");
+//		fileContent = mapElementName(fileContent, "tr");
+		return fileContent;
+	}
+
+	static String mapElementName(String fileContent, String elementName) {
+		fileContent = fileContent.replaceAll("<" + elementName, "<xlp-" + elementName);
+		fileContent = fileContent.replaceAll("</" + elementName, "</xlp-" + elementName);
+		return fileContent;
+	}
 	// We can try and see if this will generate all the elements we need without
 	// having to key them one by one.
 	public static void populateMapFromDtd(org.w3c.dom.DocumentType doctype) {
@@ -115,7 +136,7 @@ public class XmlCaseCorrector {
 		org.w3c.dom.NamedNodeMap elements = doctype.getEntities();
 		for (int i = 0; i < elements.getLength(); i++) {
 			String originalName = elements.item(i).getNodeName();
-			elementCaseMap.put(originalName.toLowerCase(), originalName);
+			elementNameMap.put(originalName.toLowerCase(), originalName);
 		}
 	}
 }

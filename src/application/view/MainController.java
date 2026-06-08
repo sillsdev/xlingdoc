@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
+import application.service.XmlNameMapper;
 import application.service.XmlSerializer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -79,6 +80,7 @@ public class MainController implements Initializable {
 				e.printStackTrace();
 			}
 		}
+		fileContent = XmlNameMapper.mapInputFromXLingPaperToHTML(fileContent);
 		sb.append(fileContent);
 		sb.append("</body>\n");
 		sb.append("</html>\n");

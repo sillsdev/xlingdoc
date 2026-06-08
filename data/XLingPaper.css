@@ -35,6 +35,7 @@ book
 	display:inline;
 }
 
+
 comment
 {
 	display:inline;
@@ -418,4 +419,16 @@ lingPaper types
 {
 	display:block;
 /*	property-group: isCollapsible( yes, 1); */
+}
+
+xlp-br:before
+{
+	content:"<br/>\21a9\A";
+	white-space: pre;
+	font-size:small;
+	background-color: white;
+}
+xlp-br
+{
+	display:inline;
 }
