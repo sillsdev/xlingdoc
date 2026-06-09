@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.web.WebView?>
 
 <BorderPane fx:id="rootLayout" prefHeight="600.0" prefWidth="800.0"  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="application.view.MainController">
    <top>
-   <Label fx:id="elementPath" prefHeight="20.0" prefWidth="800.0"  text=" lingPaper"/>
+   <TextFlow fx:id="componentPathBar" prefHeight="20.0" prefWidth="800.0"/>
    </top>
    <center>
       <WebView fx:id="webView" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER" />

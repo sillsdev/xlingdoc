@@ -18,12 +18,15 @@ import org.w3c.dom.Element;
 import application.service.InternalToExternalNameMapper;
 import application.service.XmlNameMapper;
 import application.service.XmlSerializer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
@@ -40,7 +43,9 @@ public class MainController implements Initializable {
 	@FXML
 	private Button btnSave;
 	@FXML
-	private Label elementPath;
+	private TextFlow componentPathBar;
+	private final String kComponentGap = " " + Character.toString(0x227a);
+	private final Color kComponentPathItemColor = Color.MAROON;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -65,6 +70,27 @@ public class MainController implements Initializable {
 		webEngine.loadContent(loadFileIntoNeededHTML());
 
 		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+			updateComponentPathBar(event);
+		});
+
+		componentPathBar.setOnMouseClicked(event -> {
+			if (event.getTarget() instanceof Text) {
+				Text clickedText = (Text) event.getTarget();
+				System.out.println("\nClicked text: " + clickedText.getText());
+				Object obj = clickedText.getUserData();
+				if (obj instanceof Element el) {
+					System.out.println("el = '" + el.getNodeName());
+				}
+				// Perform action with clickedText
+			}
+		});
+		Text top = new Text(" lingPaper");
+		top.setFill(kComponentPathItemColor);
+		componentPathBar.getChildren().add(top);
+	}
+
+	protected void updateComponentPathBar(MouseEvent event) {
+		Platform.runLater(() -> {
 			// Always use coordinate locations relative strictly to the WebView viewport
 			// boundaries
 			double x = event.getX();
@@ -79,8 +105,11 @@ public class MainController implements Initializable {
 				Object lengthObj = elementList.getMember("length");
 				if (lengthObj instanceof Number) {
 					int length = ((Number) lengthObj).intValue();
+					System.out.println("length = " + length);
 					StringBuilder sb = new StringBuilder();
 					sb.append(" ");
+					componentPathBar.getChildren().clear();
+					componentPathBar.requestLayout();
 					// 3. Iterate through the array slots from topmost to bottommost
 					for (int i = length-1; i >= 0; i--) {
 						Object arrayItem = elementList.getSlot(i);
@@ -92,25 +121,36 @@ public class MainController implements Initializable {
 							if (tagName.equals("BODY") || tagName.equals("HTML")) {
 								continue;
 							}
+							if (tagName.equals("TH") | tagName.equals("TD")) {
+								sb.append("tr > ");
+								Text tTr = new Text(" tr");
+								tTr.setFill(kComponentPathItemColor);
+								Text tTrGap = new Text(kComponentGap);
+								tTr.setUserData(domElement.getParentNode());
+								componentPathBar.getChildren().addAll(tTr, tTrGap);
+							}
 							sb.append(InternalToExternalNameMapper.mapName(tagName));
+							Text t = new Text(" " + InternalToExternalNameMapper.mapName(tagName));
+							t.setFill(kComponentPathItemColor);
+							t.setUserData(domElement);
+							if (i == 0) {
+								t.setStyle("-fx-font-weight: bold;");
+							}
+							componentPathBar.getChildren().add(t);
 							if (i > 0) {
+								Text tGap = new Text(kComponentGap);
+								tGap.setUserData("gap");
+								componentPathBar.getChildren().add(tGap);
 								sb.append(" > ");
 							}
-//							String elementId = domElement.getAttribute("id");
-//		                    // Example Usage:
-//		                    // If you are looking for the first specific DTD container block
-//		                    // beneath a transient selection highlight or inline node:
-//		                    if (tagName.equalsIgnoreCase("paragraph-node") || tagName.equalsIgnoreCase("frontMatter")) {
-//		                        System.out.println("   -> Target XML element captured: " + tagName);
-//		                        // Do your work with domElement here...
-//		                    }
+							componentPathBar.requestLayout();
 						}
 					}
-					elementPath.setText(sb.toString());
+					rootLayout.requestLayout();
+					System.out.println(sb.toString());
 				}
 			}
 		});
-
 	}
 
 	String loadFileIntoNeededHTML() {
