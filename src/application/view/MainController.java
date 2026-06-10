@@ -11,10 +11,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.w3c.dom.Element;
 
+import application.model.ComponentPathItem;
 import application.service.InternalToExternalNameMapper;
 import application.service.XmlNameMapper;
 import application.service.XmlSerializer;
@@ -46,6 +49,9 @@ public class MainController implements Initializable {
 	private TextFlow componentPathBar;
 	private final String kComponentGap = " " + Character.toString(0x227a);
 	private final Color kComponentPathItemColor = Color.MAROON;
+	private final String kClass = "class";
+	private final String kComponentSelected = "component-selected";
+	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -78,10 +84,10 @@ public class MainController implements Initializable {
 				Text clickedText = (Text) event.getTarget();
 				System.out.println("\nClicked text: " + clickedText.getText());
 				Object obj = clickedText.getUserData();
-				if (obj instanceof Element el) {
-					System.out.println("el = '" + el.getNodeName());
+				if (obj instanceof ComponentPathItem cpItem) {
+					System.out.println("cpItem = '" + cpItem.getName());
+					highlightDomElement(cpItem);
 				}
-				// Perform action with clickedText
 			}
 		});
 		Text top = new Text(" lingPaper");
@@ -105,11 +111,10 @@ public class MainController implements Initializable {
 				Object lengthObj = elementList.getMember("length");
 				if (lengthObj instanceof Number) {
 					int length = ((Number) lengthObj).intValue();
-					System.out.println("length = " + length);
 					StringBuilder sb = new StringBuilder();
 					sb.append(" ");
 					componentPathBar.getChildren().clear();
-					componentPathBar.requestLayout();
+					componentsInPathBar.clear();
 					// 3. Iterate through the array slots from topmost to bottommost
 					for (int i = length-1; i >= 0; i--) {
 						Object arrayItem = elementList.getSlot(i);
@@ -126,31 +131,53 @@ public class MainController implements Initializable {
 								Text tTr = new Text(" tr");
 								tTr.setFill(kComponentPathItemColor);
 								Text tTrGap = new Text(kComponentGap);
-								tTr.setUserData(domElement.getParentNode());
+								ComponentPathItem trItem = new ComponentPathItem("tr", (Element)domElement.getParentNode());
+								tTr.setUserData(trItem);
 								componentPathBar.getChildren().addAll(tTr, tTrGap);
+								componentsInPathBar.add(trItem);
 							}
-							sb.append(InternalToExternalNameMapper.mapName(tagName));
-							Text t = new Text(" " + InternalToExternalNameMapper.mapName(tagName));
+							String adjustedTagName = InternalToExternalNameMapper.mapName(tagName);
+							sb.append(adjustedTagName);
+							Text t = new Text(" " + adjustedTagName);
 							t.setFill(kComponentPathItemColor);
-							t.setUserData(domElement);
 							if (i == 0) {
 								t.setStyle("-fx-font-weight: bold;");
 							}
 							componentPathBar.getChildren().add(t);
+							ComponentPathItem cpItem = new ComponentPathItem(adjustedTagName, domElement);
+							componentsInPathBar.add(cpItem);
+							t.setUserData(cpItem);
 							if (i > 0) {
 								Text tGap = new Text(kComponentGap);
 								tGap.setUserData("gap");
 								componentPathBar.getChildren().add(tGap);
 								sb.append(" > ");
 							}
-							componentPathBar.requestLayout();
 						}
 					}
-					rootLayout.requestLayout();
 					System.out.println(sb.toString());
 				}
 			}
 		});
+	}
+
+	public void highlightDomElement(ComponentPathItem cpItem) {
+		Element targetElement = cpItem.getElement();
+		if (componentsInPathBar.contains(cpItem)) {
+			int index = componentsInPathBar.lastIndexOf(cpItem);
+			System.out.println("\tindex = " + index);
+			for (int i = index + 1; i < componentsInPathBar.size(); i++) {
+				Element el = componentsInPathBar.get(i).getElement();
+				String cssClass = el.getAttribute(kClass);
+				System.out.println("\tel = " + el.getTagName() + "; class='" + cssClass + "'");
+				if (cssClass != null && cssClass.length() > 0) {
+					cssClass = cssClass.replaceAll(kComponentSelected, "");
+					el.setAttribute(kClass, cssClass);
+				}
+			}
+		}
+		// TODO: what if there are more CSS names in the class attribute?
+		targetElement.setAttribute(kClass, kComponentSelected);
 	}
 
 	String loadFileIntoNeededHTML() {

@@ -2,6 +2,10 @@
  XLingPaper.css Style sheet for **whatever we call it**
  */
 
+.component-selected
+{
+	outline: 1.5px solid red;
+}
 :root {
 	--citation-background-color: #F09FF0;
 	--comment-background-color: yellow;

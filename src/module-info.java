@@ -11,5 +11,6 @@ module xmleditorplay {
 	opens application.view to javafx.graphics, javafx.fxml;
 
 	exports application;
+	exports application.model;
 	exports application.view;
 }
