@@ -123,10 +123,11 @@ public class MainController implements Initializable {
 						if (arrayItem instanceof Element) {
 							Element domElement = (Element) arrayItem;
 							String tagName = domElement.getTagName();
-							if (tagName.equals("BODY") || tagName.equals("HTML")) {
+							if (tagName.equals("BODY") || tagName.equals("HTML")
+									|| tagName.equals("DETAILS") || tagName.equals("SUMMARY")) {
 								continue;
 							}
-							if (tagName.equals("TH") | tagName.equals("TD")) {
+							if (tagName.equals("TH") || tagName.equals("TD")) {
 								sb.append("tr > ");
 								Text tTr = new Text(" tr");
 								tTr.setFill(kComponentPathItemColor);
@@ -207,6 +208,7 @@ public class MainController implements Initializable {
 		sb.append(fileContent);
 		sb.append("</body>\n");
 		sb.append("</html>\n");
+//		System.out.print(sb.toString());
 		return sb.toString();
 	}
 

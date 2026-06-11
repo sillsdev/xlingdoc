@@ -30,6 +30,10 @@ public class XmlSerializer {
         }
         xmlContentString = xmlContentString.replaceAll("><tbody", "");
         xmlContentString = xmlContentString.replaceAll("></tbody", "");
+        xmlContentString = xmlContentString.replaceAll("<details>", "");
+        xmlContentString = xmlContentString.replaceAll("</details>", "");
+        xmlContentString = xmlContentString.replaceAll("<summary>", "");
+        xmlContentString = xmlContentString.replaceAll("</summary>", "");
 
         // 2. Instantiate a safe standard Java XML parser
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

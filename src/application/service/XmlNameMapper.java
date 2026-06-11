@@ -117,6 +117,7 @@ public class XmlNameMapper {
 //		fileContent = mapElementName(fileContent, "td");
 //		fileContent = mapElementName(fileContent, "th");
 //		fileContent = mapElementName(fileContent, "tr");
+		fileContent = insertWrapping(fileContent);
 		return fileContent;
 	}
 
@@ -125,6 +126,17 @@ public class XmlNameMapper {
 		fileContent = fileContent.replaceAll("</" + elementName, "</xlp-" + elementName);
 		return fileContent;
 	}
+
+	static String insertWrapping(String fileContent) {
+		final String kDetailsSummaryBegin = "<details><summary>";
+		final String kSummaryEnd = "</summary";
+		final String kDetailsEnd = "</details>";
+		fileContent = fileContent.replaceAll("<secTitle", kDetailsSummaryBegin + "<secTitle");
+		fileContent = fileContent.replaceAll("</secTitle", "</secTitle>" + kSummaryEnd);
+		fileContent = fileContent.replaceAll("</section1", kDetailsEnd + "</section1");
+		return fileContent;
+	}
+
 	// We can try and see if this will generate all the elements we need without
 	// having to key them one by one.
 	public static void populateMapFromDtd(org.w3c.dom.DocumentType doctype) {

@@ -338,7 +338,7 @@ secTitle
 	font-size:large;
 }
 
-section1:before
+section1 summary:before
 {
 	counter-increment: section1;
 	content: counter(section1)
