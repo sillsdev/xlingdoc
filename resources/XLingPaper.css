@@ -207,11 +207,11 @@ language
 /*	property-group: isCollapsible( yes, 1);*/
 }
 
-languages:before
+/*languages:before
 {
 	content:" Languages: ";
-	/* color:Silver; is too light */
-}
+	 color:Silver; is too light
+}*/
 languages
 {
 	display:block;
@@ -415,10 +415,10 @@ type
 /*	property-group: fontColor();*/
 }
 
-types:before
+/*types:before
 {
 	content:" Types: ";
-}
+}*/
 types
 {
 	display:block;

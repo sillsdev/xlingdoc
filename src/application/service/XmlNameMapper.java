@@ -18,6 +18,9 @@ public class XmlNameMapper {
 	// 1. Maintain a master index matching lowercased keys to CamelCase targets
 	private static final Map<String, String> elementNameMap = new HashMap<>();
 	private static final Map<String, String> attributeNameMap = new HashMap<>();
+	final static String kDetailsSummaryBegin = "<details><summary>";
+	final static String kSummaryEnd = "</summary";
+	final static String kDetailsEnd = "</details>";
 
 	static {
 		// Element names end up being lower case because the WebView runs a WebKit
@@ -128,12 +131,20 @@ public class XmlNameMapper {
 	}
 
 	static String insertWrapping(String fileContent) {
-		final String kDetailsSummaryBegin = "<details><summary>";
-		final String kSummaryEnd = "</summary";
-		final String kDetailsEnd = "</details>";
 		fileContent = fileContent.replaceAll("<secTitle", kDetailsSummaryBegin + "<secTitle");
 		fileContent = fileContent.replaceAll("</secTitle", "</secTitle>" + kSummaryEnd);
 		fileContent = fileContent.replaceAll("</section1", kDetailsEnd + "</section1");
+
+		// TODO: be sure to use localized value for the wrap summary string
+		fileContent = wrapElement(fileContent, "languages", "Languages");
+		fileContent = wrapElement(fileContent, "types", "Types");
+
+		return fileContent;
+	}
+
+	protected static String wrapElement(String fileContent, String elementToWrap, String wrapSummary) {
+		fileContent = fileContent.replace("<" + elementToWrap, "<" + elementToWrap + ">" + kDetailsSummaryBegin + wrapSummary + kSummaryEnd);
+		fileContent = fileContent.replace("</" + elementToWrap, kDetailsEnd + "</" + elementToWrap);
 		return fileContent;
 	}
 

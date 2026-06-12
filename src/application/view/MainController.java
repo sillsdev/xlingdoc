@@ -60,7 +60,7 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		webEngine = webView.getEngine();
-		String filePath = "data/XLingPaper.css";
+		String filePath = "resources/XLingPaper.css";
 		File f = new File(filePath);
 		if (f.exists()) {
 			try {
@@ -93,6 +93,8 @@ public class MainController implements Initializable {
 		Text top = new Text(" lingPaper");
 		top.setFill(kComponentPathItemColor);
 		componentPathBar.getChildren().add(top);
+
+//		webView.setOnContextMenuRequested(null);
 	}
 
 	protected void updateComponentPathBar(MouseEvent event) {
@@ -153,6 +155,8 @@ public class MainController implements Initializable {
 								tGap.setUserData("gap");
 								componentPathBar.getChildren().add(tGap);
 								sb.append(" > ");
+							} else {
+								System.out.println("Clicked on this element: '" +adjustedTagName + "");
 							}
 						}
 					}
