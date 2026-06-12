@@ -11,5 +11,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Andy Black/Documents/eclipse-workspace/xmleditorplay/libs/xerces-2_12_2/xercesImplNo.org.w3c.dom.html.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="mods"/>
 </classpath>

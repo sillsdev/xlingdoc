@@ -5,7 +5,13 @@
  */
 
 package application.service;
+/**
+ * code drafted by Gemini
+ */
 
+import org.apache.xerces.impl.dtd.DTDGrammar;
+import org.apache.xerces.impl.dtd.XMLAttributeDecl;
+import org.apache.xerces.impl.dtd.XMLElementDecl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,39 +28,11 @@ public class XmlNameMapper {
 	final static String kSummaryEnd = "</summary";
 	final static String kDetailsEnd = "</details>";
 
-	static {
 		// Element names end up being lower case because the WebView runs a WebKit
 		// rendering engine, which strictly treats content as HTML5. Under the HTML5 specification,
 		// tag and attribute names are treated as case-insensitive and are automatically
-		// normalized to lowercase when you extract markup using .outerHTML.
-		// So we need to map any camel-case names here.
-		elementNameMap.put("backmatter", "backMatter");
-		elementNameMap.put("exampleref", "exampleRef");
-		elementNameMap.put("frontmatter", "frontMatter");
-		elementNameMap.put("jpages", "jPages");
-		elementNameMap.put("jtitle", "jTitle");
-		elementNameMap.put("jvol", "jVol");
-		elementNameMap.put("langdata", "langData");
-		elementNameMap.put("linegroup", "lineGroup");
-		elementNameMap.put("lingpaper", "lingPaper");
-		elementNameMap.put("refauthor", "refAuthor");
-		elementNameMap.put("refdate", "refDate");
-		elementNameMap.put("reftitle", "refTitle");
-		elementNameMap.put("refwork", "refWork");
-		elementNameMap.put("sectitle", "secTitle");
-		elementNameMap.put("sectionref", "sectionRef");
-		elementNameMap.put("xlp-br", "br");
-		// We may need to do something specific for tables...
-//		elementNameMap.put("xlp-table", "table");
-//		elementNameMap.put("xlp-td", "td");
-//		elementNameMap.put("xlp-th", "th");
-//		elementNameMap.put("xlp-tr", "tr");
-
-		// Register your structural attribute names here
-		attributeNameMap.put("cssspecial", "cssSpecial");
-		attributeNameMap.put("xelatexspecial", "XeLaTeXSpecial");
-		attributeNameMap.put("xsl-fospecial", "xsl-foSpecial");
-	}
+		// normalized to lower case when you extract mark-up using .outerHTML.
+		// So we need to map any camel-case names.
 
 	public static void sanitizeAndFixCasing(Element element, Document doc) {
 		// 2. Clear out contenteditable fields as before
@@ -148,18 +126,39 @@ public class XmlNameMapper {
 		return fileContent;
 	}
 
-	// We can try and see if this will generate all the elements we need without
-	// having to key them one by one.
-	public static void populateMapFromDtd(org.w3c.dom.DocumentType doctype) {
-		if (doctype == null)
-			return;
+	public static void populateMapsFromDtd(DTDGrammar dtdGrammar) {
+		elementNameMap.clear();
+		attributeNameMap.clear();
 
-		// Read entity declarations directly from your active schema definition
-		// parameters
-		org.w3c.dom.NamedNodeMap elements = doctype.getEntities();
-		for (int i = 0; i < elements.getLength(); i++) {
-			String originalName = elements.item(i).getNodeName();
-			elementNameMap.put(originalName.toLowerCase(), originalName);
+		if (dtdGrammar == null)
+			return;
+		XMLElementDecl xed = new XMLElementDecl();
+		int elementIndex = dtdGrammar.getFirstElementDeclIndex();
+		while (elementIndex != -1) {
+			dtdGrammar.getElementDecl(elementIndex, xed);
+			String elementRealName = xed.name.rawname;
+			elementNameMap.put(elementRealName.toLowerCase(), elementRealName);
+			XMLAttributeDecl xad = new XMLAttributeDecl();
+			int attrIndex = dtdGrammar.getFirstAttributeDeclIndex(elementIndex);
+			while (attrIndex != -1) {
+				dtdGrammar.getAttributeDecl(attrIndex, xad);
+				String attrRealName = xad.name.rawname;
+				if (!attributeNameMap.containsValue(attrRealName)) {
+					attributeNameMap.put(attrRealName.toLowerCase(), attrRealName);
+				}
+				attrIndex = dtdGrammar.getNextAttributeDeclIndex(attrIndex);
+			}
+			elementIndex = dtdGrammar.getNextElementDeclIndex(elementIndex);
+		}
+		// exceptions
+		elementNameMap.put("xlp-br", "br");
+	}
+
+	public static String getMappedElementName(String lowercaseName) {
+		if (elementNameMap.containsKey(lowercaseName)) {
+			return elementNameMap.get(lowercaseName);
+		} else {
+			return lowercaseName;
 		}
 	}
 }

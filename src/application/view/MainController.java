@@ -18,7 +18,8 @@ import java.util.ResourceBundle;
 import org.w3c.dom.Element;
 
 import application.model.ComponentPathItem;
-import application.service.InternalToExternalNameMapper;
+import application.service.DtdSchemaInspector;
+import application.service.XmlDocumentManager;
 import application.service.XmlNameMapper;
 import application.service.XmlSerializer;
 import javafx.application.Platform;
@@ -52,6 +53,7 @@ public class MainController implements Initializable {
 	private final String kClass = "class";
 	private final String kComponentSelected = "component-selected";
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
+	private DtdSchemaInspector inspector;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -73,7 +75,9 @@ public class MainController implements Initializable {
 		} else {
 			System.out.println(filePath + " not found");
 		}
+		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd");
 		webEngine.loadContent(loadFileIntoNeededHTML());
+
 
 		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
 			updateComponentPathBar(event);
@@ -139,7 +143,8 @@ public class MainController implements Initializable {
 								componentPathBar.getChildren().addAll(tTr, tTrGap);
 								componentsInPathBar.add(trItem);
 							}
-							String adjustedTagName = InternalToExternalNameMapper.mapName(tagName);
+							String adjustedTagName = XmlNameMapper.getMappedElementName(tagName.toLowerCase());
+									//InternalToExternalNameMapper.mapName(tagName);
 							sb.append(adjustedTagName);
 							Text t = new Text(" " + adjustedTagName);
 							t.setFill(kComponentPathItemColor);
@@ -157,10 +162,20 @@ public class MainController implements Initializable {
 								sb.append(" > ");
 							} else {
 								System.out.println("Clicked on this element: '" +adjustedTagName + "");
+								List<String> before = inspector.getValidAdjacentElements(domElement, false);
+								System.out.println("Valid before; size = " + before.size());
+								for (String s :before) {
+									System.out.println("\t" + s);
+								}
+								List<String> after = inspector.getValidAdjacentElements(domElement, true);
+								System.out.println("Valid after; size = " + after.size());
+								for (String s :after) {
+									System.out.println("\t" + s);
+								}
 							}
 						}
 					}
-					System.out.println(sb.toString());
+//					System.out.println(sb.toString());
 				}
 			}
 		});
@@ -194,11 +209,21 @@ public class MainController implements Initializable {
 		sb.append("</head>\n");
 		sb.append("<body contenteditable=\"true\">\n");
 		String filePath = "data/SamplePaper.xml";
+//		String filePath = "data/SamplePaperDtdErrors.xml";
 		String fileContent = "";
 		File f = new File(filePath);
 		if (!f.exists()) {
 			System.out.println(filePath + " not found");
 		} else {
+			XmlDocumentManager mgr = new XmlDocumentManager();
+			try {
+				mgr.loadXmlDocument(f);
+				// See if it has all of the DTDs
+				XmlNameMapper.populateMapsFromDtd(inspector.getGrammar());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			try {
 				fileContent = Files.readString(Paths.get(filePath));
 				int iBegin = fileContent.indexOf("<lingPaper");

@@ -5,6 +5,9 @@
  */
 
 package application.service;
+/**
+ * code drafted by Gemini
+ */
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

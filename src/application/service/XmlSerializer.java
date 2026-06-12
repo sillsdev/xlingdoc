@@ -5,6 +5,9 @@
  */
 
 package application.service;
+/**
+ * code drafted by Gemini
+ */
 
 import javafx.scene.web.WebEngine;
 import org.w3c.dom.Document;
@@ -32,6 +35,9 @@ public class XmlSerializer {
         xmlContentString = xmlContentString.replaceAll("></tbody", "");
         xmlContentString = xmlContentString.replaceAll("<details>", "");
         xmlContentString = xmlContentString.replaceAll("</details>", "");
+		// TODO: be sure to use localized value for the wrap summary string
+        xmlContentString = xmlContentString.replaceAll("<summary>Languages</summary>", "");
+        xmlContentString = xmlContentString.replaceAll("<summary>Types</summary>", "");
         xmlContentString = xmlContentString.replaceAll("<summary>", "");
         xmlContentString = xmlContentString.replaceAll("</summary>", "");
 
