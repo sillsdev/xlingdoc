@@ -1,0 +1,140 @@
+<!-- references are organized by author.
+     The intent is that only those references which are cited via a citation
+     element are to appear in the list of references.
+       The label attribute allows one to change how the title will appear.
+       The version attribute can be used to keep track of which XLingPap version a master references file is (or was when it was created).
+       This is a subcomponent of XLingPap
+-->
+<!ELEMENT references (labelContentChoices?, shortTitle?, refAuthor*, annotatedBibliographyTypes?)>
+<!-- the citename is the string to use in a citation within the text body -->
+<!ELEMENT refAuthor (refAuthorInitials?, refAuthorSurnameGivenName?, refAuthorName?, citeName?, refWork+)>
+<!-- There are two versions of an author's/authors'  name(s), 
+        one is full and the other contains only initials for first and middle (etc.) names.
+        -->
+<!-- Every work has a date and a title.
+     There are a number of kinds of references, each of which has different
+     content. -->
+<!ELEMENT  refAuthorInitials (#PCDATA | %embedded;)* >
+<!ELEMENT  refAuthorSurnameGivenName (#PCDATA | %embedded;)* >
+<!ELEMENT  refAuthorName (#PCDATA | refAuthorLastName)* >
+<!ELEMENT  refAuthorLastName (#PCDATA) >     
+<!ELEMENT  citeName (#PCDATA | %embedded;)* >
+<!ELEMENT refWork (authorRole?, refDate, refTitle, refTitleLowerCase?, (article | book | collection | dissertation | fieldNotes | ms | paper | proceedings | thesis | webPage), url?, dateAccessed?, iso639-3code*, comment?, annotations?, keywords?)>
+<!-- An author's role in the work.  For example, editor, illustrator, author and illustrator, etc. -->
+<!ELEMENT authorRole (#PCDATA)>
+<!ELEMENT refDate (#PCDATA)>
+<!-- There are two versions of a title: one with capitals and one the is lower case (except for the first word and any proper nouns -->
+<!ELEMENT refTitle (#PCDATA | %embedded;)*>
+<!ELEMENT refTitleLowerCase (#PCDATA | %embedded;)*>
+<!ELEMENT reprintInfo (#PCDATA | %embedded;)*>
+<!-- journal article -->
+<!ELEMENT article (jTitle, jVol, jIssueNumber?, (jPages | jArticleNumber)?, location?, publisher?, reprintInfo?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT jTitle (#PCDATA | %embedded;)*>
+<!ELEMENT jVol (#PCDATA)>
+<!ELEMENT jIssueNumber (#PCDATA)>
+<!ELEMENT jPages (#PCDATA)>
+<!-- jArticleNumber is for an online journal where the articles are published one by one;
+        paper journals publish articles in sets so we use jPages for those.
+        -->
+<!ELEMENT jArticleNumber (#PCDATA)>
+<!-- book -->
+<!ELEMENT book (translatedBy?, (editor, editorInitials?, editorSurnameGivenName?)?, bookversion?, edition?, (seriesEd?, seriesEdInitials?, seriesEdSurnameGivenName?, series)?, bVol?, multivolumeWork?, location?, publisher?, reprintInfo?, bookTotalPages?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT translatedBy (#PCDATA | %embedded;)*>
+<!ELEMENT editor (#PCDATA | %embedded;)*>
+<!ELEMENT editorInitials (#PCDATA | %embedded;)*>
+<!ELEMENT editorSurnameGivenName (#PCDATA | %embedded;)*>
+
+<!ELEMENT bookversion (#PCDATA | %embedded;)*>
+<!ELEMENT edition (#PCDATA | %embedded;)*>
+<!ELEMENT series (#PCDATA | %embedded;)*>
+<!ELEMENT seriesEd (#PCDATA | %embedded;)*>
+<!ELEMENT seriesEdInitials (#PCDATA | %embedded;)*>
+<!ELEMENT seriesEdSurnameGivenName (#PCDATA | %embedded;)*>
+
+<!ELEMENT bVol (#PCDATA)>
+<!ELEMENT multivolumeWork (#PCDATA | %embedded;)*>
+<!ELEMENT publisher (#PCDATA | %embedded;)*>
+<!ELEMENT location (#PCDATA | %embedded;)*>
+<!ELEMENT bookTotalPages (#PCDATA)>
+<!-- paper from a collection volume
+       there are two ways to record the information:
+       a one-off method that includes all the information about the collection volume itself
+       a reference to a book element (for the collection volume) and a possible set of pages for this paper
+-->
+<!ELEMENT collection ((((collEd, collEdInitials?, collEdSurnameGivenName?)?, collTitle, collTitleLowerCase?, bookversion?, edition?, collVol?, collPages?, (seriesEd?, seriesEdInitials?, seriesEdSurnameGivenName?, series)?, bVol?, multivolumeWork?, location?, publisher?) | collCitation),
+                         reprintInfo?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+
+<!ELEMENT collEd (#PCDATA | %embedded;)*>
+<!ELEMENT collEdInitials (#PCDATA | %embedded;)*>
+<!ELEMENT collEdSurnameGivenName (#PCDATA | %embedded;)*>
+<!ELEMENT collTitle (#PCDATA | %embedded;)*>
+<!ELEMENT collTitleLowerCase (#PCDATA | %embedded;)*>
+<!ELEMENT collVol (#PCDATA)>
+<!ELEMENT collPages (#PCDATA)>
+<!-- a reference to the collection volume itself (which will be a book element) -->
+<!ELEMENT collCitation EMPTY>
+
+<!-- PhD dissertation -->
+<!ELEMENT dissertation (location?, institution, published?, reprintInfo?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT institution (#PCDATA | %embedded;)*>
+<!ELEMENT published (location?, publisher?, pubDate)>
+<!ELEMENT pubDate (#PCDATA)>
+<!-- field notes -->
+<!ELEMENT fieldNotes (location?, institution, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!-- ms (manuscript) -->
+<!ELEMENT ms (((location?, institution, msVersion?) | msVersion | empty), url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT msVersion (#PCDATA | %embedded;)*>
+<!ELEMENT empty EMPTY>
+<!-- paper presented at a conference -->
+<!ELEMENT paper (conference, location?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT conference (#PCDATA)>
+<!-- proceedings paper from a conference
+       there are two ways to record the information:
+       a one-off method that includes all the information about the proceedings volume itself
+       a reference to a book element (for the proceedings volume) and a possible set of pages for this paper
+-->
+<!ELEMENT proceedings ((((procEd, procEdInitials?, procEdSurnameGivenName?)?, procTitle, procTitleLowerCase?, procVol?, procPages?,(seriesEd?, seriesEdInitials?, seriesEdSurnameGivenName?, series)?, bVol?, multivolumeWork?, location?, publisher?) | procCitation),
+                        reprintInfo?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT procEd (#PCDATA | %embedded;)*>
+<!ELEMENT procEdInitials (#PCDATA | %embedded;)*>
+<!ELEMENT procEdSurnameGivenName (#PCDATA | %embedded;)*>
+<!ELEMENT procTitle (#PCDATA | %embedded;)*>
+<!ELEMENT procTitleLowerCase (#PCDATA | %embedded;)*>
+<!ELEMENT procVol (#PCDATA)>
+<!ELEMENT procPages (#PCDATA)>
+<!-- a reference to the proceedings volume itself (which will be a book element) -->
+<!ELEMENT procCitation EMPTY>
+<!-- MA thesis -->
+<!ELEMENT thesis (location?, institution, published?, reprintInfo?, url?, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!-- web page -->
+<!ELEMENT webPage (edition?, location?, (institution | publisher)?, url, dateAccessed?, doi?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT url (#PCDATA)>
+<!ELEMENT dateAccessed (#PCDATA)>
+<!-- One may optionally add the ISO 639-3 code for all languages mentioned 
+     in the work.
+-->
+<!ELEMENT iso639-3code (#PCDATA)>
+<!-- One may optionally add a DOI (digital object identifier) for a work.
+-->
+<!ELEMENT doi (#PCDATA)>
+<!-- One may optionally add any number of keywords associated with the work; XLingPaper does not use this.
+-->
+<!ELEMENT keywords (keyword+) >
+<!ELEMENT keyword (#PCDATA) >
+<!-- In a citation,
+     one may optionally not include the author's name
+           (e.g. when one is citing multiple works by the same author);
+     one may include parentheses around the date ("both", the default), or
+       one may have no parentheses or just initial or just final.
+     one may optionally include page numbers (page).
+ -->
+<!ELEMENT citation EMPTY>
+<!ENTITY % XLingPapCharacterEntities SYSTEM  "XLingPapCharacterEntities.dtd">
+%XLingPapCharacterEntities;
+
+<!-- Following are for annotated bibliographies -->
+<!ELEMENT annotatedBibliographyTypes (annotatedBibliographyType+) >
+<!ELEMENT annotatedBibliographyType (#PCDATA) >
+<!ELEMENT annotations (annotation+) >
+<!ELEMENT annotation (#PCDATA | %embedded;)* >
+<!ELEMENT annotationRef EMPTY >

@@ -7,20 +7,22 @@
 package application.service;
 
 /**
- * code drafted by Gemini
+ * code drafted by Leo
  */
 import org.apache.xerces.impl.dtd.XMLElementDecl;
 import org.apache.xerces.util.SymbolTable;
 import org.apache.xerces.impl.dtd.DTDGrammar;
+import org.apache.xerces.impl.dtd.XMLContentSpec;
 import org.apache.xerces.impl.dtd.XMLDTDLoader;
 import org.apache.xerces.xni.parser.XMLInputSource;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class DtdSchemaInspector {
 
@@ -52,11 +54,12 @@ public class DtdSchemaInspector {
 	/**
 	 * Determines which elements can legally be inserted adjacent to the target
 	 * node. * @param targetElement The element currently selected in the WebView
-	 * @param insertAfter True for "Insert After" context, False for "Insert Before"
+	 * 
+	 * @param insertBefore True for "Insert After" context, False for "Insert Before"
 	 * @return List of valid element tag names
 	 */
-	public List<String> getValidAdjacentElements(Element targetElement, boolean insertAfter) {
-		List<String> validChoices = new ArrayList<>();
+	public SortedSet<String> getValidAdjacentElements(Element targetElement, XmlDocumentManager manager, boolean insertBefore) {
+		SortedSet<String> validChoices = new TreeSet<>();
 
 		// 1. Identify the parent context and current sibling sequence
 		Element parent = (Element) targetElement.getParentNode();
@@ -72,43 +75,100 @@ public class DtdSchemaInspector {
 			parent = (Element) parent.getParentNode();
 			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName().toLowerCase());
 		}
+		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName().toLowerCase());
 
-		// 2. Fetch all possible elements that are allowed anywhere inside this parent
-		List<String> globallyAllowedInParent = getAllowedChildrenForParent(parentTag);
+		Set<String> predecessors = DynamicPrecedenceChecker.getRemainingAllowedPredecessors(grammar, targetElement,
+				parentTag);
 
-		// 3. Simulate the proposed DOM modification
-		List<String> currentSiblings = getChildElementNames(parent);
-		int targetIndex = currentSiblings.indexOf(targetElement.getTagName());
-
-		// 4. Test each globally allowed element in the proposed position
-		for (String candidateTag : globallyAllowedInParent) {
-			List<String> simulatedSequence = new ArrayList<>(currentSiblings);
-
-			int insertIndex = insertAfter ? targetIndex + 1 : targetIndex;
-			simulatedSequence.add(insertIndex, candidateTag);
-
-			// 5. Run a tentative validation check against the DTD rule
-			if (isValidSequence(parentTag, simulatedSequence)) {
-				validChoices.add(candidateTag);
+		System.out.println("predecessors size = " + predecessors.size());
+		System.out.println("Elements allowed before " + targetName + ": " + predecessors);
+		for (String elem : predecessors) {
+			if (manager.isValidInsertion(manager.getBuilder(), targetElement, elem, insertBefore)) {
+				validChoices.add(elem);
 			}
 		}
-
-		return validChoices;
+		System.out.println("results size = " + validChoices.size());
+		System.out.println("Elements allowed before " + targetName + ": " + validChoices);
+		return  validChoices;
 	}
 
 	public DTDGrammar getGrammar() {
 		return grammar;
 	}
 
+	// 2. Fetch all possible elements that are allowed anywhere inside this parent
 	private List<String> getAllowedChildrenForParent(String parentTag) {
 		List<String> children = new ArrayList<>();
-		XMLElementDecl elementDecl = new XMLElementDecl();
+		XMLElementDecl parentDecl = new XMLElementDecl();
 
 		// Query Xerces for the element declaration index
-		int elementIndex = grammar.getElementDeclIndex(parentTag);
-		System.out.println("\tparent tag = '" + parentTag + "'; elementIndex = " + elementIndex);
-		if (elementIndex != -1) {
-			grammar.getElementDecl(elementIndex, elementDecl);
+		int parentIndex = grammar.getElementDeclIndex(parentTag);
+		System.out.println("\tparent tag = '" + parentTag + "'; parentIndex = " + parentIndex);
+		if (parentIndex != -1) {
+			System.out.println("\tgrammar: " + grammar.getContentSpecAsString(parentIndex));
+			int contentSpecIndex = grammar.getContentSpecIndex(parentIndex);
+			System.out.println("\tcontentSpecIndex = " + contentSpecIndex);
+			if (contentSpecIndex != -1) {
+				// 3. Retrieve the root of the content model tree
+				XMLContentSpec contentSpec = new XMLContentSpec();
+				grammar.getContentSpec(contentSpecIndex, contentSpec);
+				System.out.println("\tcontentSpec = " + contentSpec.type);
+				switch (contentSpec.type) {
+				case XMLContentSpec.CONTENTSPECNODE_ANY:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_LAX:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LAX");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_LOCAL:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LOCAL");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_LAX:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_LAX");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_SKIP:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_SKIP");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_OTHER:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_OTHER");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_OTHER_LAX:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_OTHER_LAX");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_OTHER_SKIP:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_OTHER_SKIP");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ANY_SKIP:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_SKIP");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_CHOICE:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_CHOICE");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_LEAF:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_LEAF");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ONE_OR_MORE:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ONE_OR_MORE");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_SEQ:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_SEQ");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ZERO_OR_MORE:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ZERO_OR_MORE");
+					break;
+				case XMLContentSpec.CONTENTSPECNODE_ZERO_OR_ONE:
+					System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ZERO_OR_ONE");
+					break;
+				default:
+					System.out.println("\t\tUNKOWN");
+					break;
+				}
+
+				// 4. Recursively analyze 'contentSpec' to find "targetElementName"
+				// and collect all valid elements found in SEQUENCE nodes to its left.
+//			    findPrecedingElements(grammar, contentSpec, "targetElementName", ...);
+			}
+			grammar.getElementDecl(parentIndex, parentDecl);
 //			elementDecl.contentModelValidator.validate(elementDecl.name, elementIndex, elementIndex);
 
 			// For a production system like XLingPaper, you can programmatically extract
@@ -118,29 +178,4 @@ public class DtdSchemaInspector {
 		return children;
 	}
 
-	/**
-	 * Simulates the child layout sequence to verify if it breaks DTD rules.
-	 */
-	private boolean isValidSequence(String parentTag, List<String> sequence) {
-		// Enforce the strict rules defined by your DTD.
-		// For example, if parent is <frontMatter>, it might require <title> to be at
-		// index 0.
-		if (parentTag.equals("frontMatter")) {
-			if (sequence.contains("title") && !sequence.get(0).equals("title")) {
-				return false; // Invalid: title must be first
-			}
-		}
-		return true;
-	}
-
-	private List<String> getChildElementNames(Element parent) {
-		List<String> names = new ArrayList<>();
-		NodeList kids = parent.getChildNodes();
-		for (int i = 0; i < kids.getLength(); i++) {
-			if (kids.item(i).getNodeType() == Node.ELEMENT_NODE) {
-				names.add(((Element) kids.item(i)).getTagName());
-			}
-		}
-		return names;
-	}
 }

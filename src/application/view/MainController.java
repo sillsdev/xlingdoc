@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.SortedSet;
 
 import org.w3c.dom.Element;
 
@@ -54,6 +55,7 @@ public class MainController implements Initializable {
 	private final String kComponentSelected = "component-selected";
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 	private DtdSchemaInspector inspector;
+	private XmlDocumentManager manager;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -161,17 +163,17 @@ public class MainController implements Initializable {
 								componentPathBar.getChildren().add(tGap);
 								sb.append(" > ");
 							} else {
-								System.out.println("Clicked on this element: '" +adjustedTagName + "");
-								List<String> before = inspector.getValidAdjacentElements(domElement, false);
-								System.out.println("Valid before; size = " + before.size());
-								for (String s :before) {
-									System.out.println("\t" + s);
-								}
-								List<String> after = inspector.getValidAdjacentElements(domElement, true);
-								System.out.println("Valid after; size = " + after.size());
-								for (String s :after) {
-									System.out.println("\t" + s);
-								}
+								System.out.println("Clicked on this element: '" +adjustedTagName + "'");
+								SortedSet<String> before = inspector.getValidAdjacentElements(domElement, manager, true);
+//								System.out.println("Valid before; size = " + before.size());
+//								for (String s :before) {
+//									System.out.println("\t" + s);
+//								}
+//								List<String> after = inspector.getValidAdjacentElements(domElement, true);
+//								System.out.println("Valid after; size = " + after.size());
+//								for (String s :after) {
+//									System.out.println("\t" + s);
+//								}
 							}
 						}
 					}
@@ -215,9 +217,9 @@ public class MainController implements Initializable {
 		if (!f.exists()) {
 			System.out.println(filePath + " not found");
 		} else {
-			XmlDocumentManager mgr = new XmlDocumentManager();
+			manager = new XmlDocumentManager();
 			try {
-				mgr.loadXmlDocument(f);
+				manager.loadXmlDocument(f);
 				// See if it has all of the DTDs
 				XmlNameMapper.populateMapsFromDtd(inspector.getGrammar());
 			} catch (Exception e) {

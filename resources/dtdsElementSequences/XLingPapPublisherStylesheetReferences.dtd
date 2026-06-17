@@ -1,0 +1,135 @@
+<!-- XLingPapPublisherStylesheetReferences.dtd
+     XML/XSLT-based Linguistic paper document type definition
+     Stylesheet  information for a particular publisher, references subsection
+       One may reference/link/insert an XLingPap document into this template as a particular instance.
+     Version 2.28.0
+     (Revision history is at the end.)
+  -->
+
+
+<!ENTITY % XLingPapAttributeEntities SYSTEM  "XLingPapAttributeEntities.dtd">
+%XLingPapAttributeEntities;
+
+<!-- 
+  ===================================================
+References Layouts
+  ===================================================
+-->
+<!-- 
+    usecitationformatwhennumbereofsharedpaperis = number of shared papers required before using the citation format in 
+         collections and proceedings; a value of 0 means do not use the citation format
+-->
+<!ELEMENT referencesLayout ( publisherStyleSheetReferencesName?, comment?, publisherStyleSheetReferencesVersion?, publisherStyleSheetPublisher?, publisherStyleSheetDate?, publisherStyleSheetUrl?, publisherStyleSheetDateAccessed?,
+                                                         refAuthorLayouts,
+                                                         articleLayouts, bookLayouts, collectionLayouts, dissertationLayouts, 
+                                                         fieldNotesLayouts, msLayouts, paperLayouts, proceedingsLayouts, thesisLayouts, 
+                                                         webPageLayouts, publishedLayout, locationPublisherLayouts, urlDateAccessedLayouts?, iso639-3codeItem?, refAuthorNameChange?)>
+
+<!-- Name and version of this references stylesheet -->
+<!ELEMENT  publisherStyleSheetReferencesName (#PCDATA)>
+<!ELEMENT  publisherStyleSheetReferencesVersion (#PCDATA)>
+
+<!ELEMENT refAuthorLayouts ((comment?, refAuthorLayout)+, refAuthorLastNameLayout?) >                                                         
+<!ELEMENT refAuthorLayout (authorRoleItem | refAuthorItem | refDateItem)+ >                                                         
+<!ELEMENT  authorRoleItem EMPTY >
+<!ELEMENT  refAuthorLastNameLayout EMPTY >
+<!ELEMENT  refAuthorItem EMPTY >
+<!ELEMENT  refDateItem EMPTY >
+<!ELEMENT  refTitleItem EMPTY >
+
+<!ELEMENT articleLayouts (comment?, articleLayout)+>
+<!ELEMENT bookLayouts (comment?, bookLayout)+>
+<!ELEMENT collectionLayouts (comment?, collectionLayout)+>
+<!ELEMENT dissertationLayouts (comment?, dissertationLayout)+>
+<!ELEMENT fieldNotesLayouts (comment?, fieldNotesLayout)+>
+<!ELEMENT msLayouts (comment?, msLayout)+>
+<!ELEMENT paperLayouts (comment?, paperLayout)+>
+<!ELEMENT proceedingsLayouts (comment?, proceedingsLayout)+>
+<!ELEMENT thesisLayouts (comment?, thesisLayout)+>
+<!ELEMENT webPageLayouts (comment?, webPageLayout)+>
+
+<!ELEMENT articleLayout (refTitleItem | jTitleItem |  jVolItem | jIssueNumberItem |  jPagesItem | jArticleNumberItem |  
+                                                locationPublisherLayoutsRef | reprintInfoItem | urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT bookLayout (refTitleItem | translatedByItem  | editorItem | bVolItem | bookversionItem | editionItem | seriesEdItem | seriesItem |  multivolumeWorkItem |
+                                               bookTotalPagesItem | locationPublisherLayoutsRef | reprintInfoItem | urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT collectionLayout (refTitleItem | collEdItem |  collTitleItem | bookversionItem |  editionItem | collVolItem |  collPagesItem | bVolItem | seriesEdItem | seriesItem | multivolumeWorkItem |  collCitationItem | authorRoleItem |
+                                               locationPublisherLayoutsRef | reprintInfoItem | urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT dissertationLayout (refTitleItem | dissertationLabelItem | locationItem |  institutionItem |  publishedLayoutRef | reprintInfoItem |
+                                               urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT fieldNotesLayout (refTitleItem | locationItem |  institutionItem | 
+                                               urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT msLayout (refTitleItem | locationItem |  institutionItem | emptyItem | msVersionItem |
+                                               urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT paperLayout (refTitleItem | paperLabelItem | conferenceItem |  locationItem | 
+                                               urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT proceedingsLayout (refTitleItem | procEdItem |  procTitleItem |  procVolItem |  procPagesItem | bVolItem | seriesEdItem | seriesItem | multivolumeWorkItem |  procCitationItem | authorRoleItem |
+                                                locationPublisherLayoutsRef | reprintInfoItem | urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT thesisLayout (refTitleItem | thesisLabelItem | locationItem |  institutionItem |  publishedLayoutRef | reprintInfoItem |
+                                               urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+<!ELEMENT webPageLayout (refTitleItem | editionItem |  locationItem |  institutionItem |  publisherItem | 
+                                               urlDateAccessedLayoutsRef | urlItem | dateAccessedItem | doiItem | iso639-3codeItemRef)+>
+
+<!ELEMENT emptyItem EMPTY >
+<!ELEMENT jTitleItem EMPTY >
+<!ELEMENT jVolItem EMPTY >
+<!ELEMENT jIssueNumberItem EMPTY >
+<!ELEMENT jPagesItem EMPTY >
+<!ELEMENT jArticleNumberItem EMPTY >
+<!ELEMENT bVolItem EMPTY >
+<!ELEMENT reprintInfoItem EMPTY >
+<!ELEMENT dissertationLabelItem EMPTY >
+<!ELEMENT paperLabelItem EMPTY >
+<!ELEMENT thesisLabelItem EMPTY >
+<!ELEMENT locationItem EMPTY >
+<!ELEMENT publisherItem EMPTY >
+<!ELEMENT editorItem EMPTY >
+<!ELEMENT bookversionItem EMPTY >
+<!ELEMENT editionItem EMPTY >
+<!ELEMENT institutionItem EMPTY >
+<!ELEMENT msVersionItem EMPTY >
+<!ELEMENT dateAccessedItem EMPTY >
+
+<!ELEMENT publishedLayout (locationPublisherLayoutsRef | pubDateItem)+ >
+<!ELEMENT pubDateItem EMPTY >
+<!ELEMENT publishedLayoutRef EMPTY >
+
+<!ELEMENT procEdItem EMPTY >
+<!ELEMENT procTitleItem EMPTY >
+<!ELEMENT procVolItem EMPTY >
+<!ELEMENT procPagesItem EMPTY >
+<!ELEMENT procCitationItem EMPTY >
+<!ELEMENT conferenceItem EMPTY >
+<!ELEMENT collEdItem EMPTY >
+<!ELEMENT collTitleItem EMPTY >
+<!ELEMENT collVolItem EMPTY >
+<!ELEMENT collPagesItem EMPTY >
+<!ELEMENT collCitationItem EMPTY >
+<!ELEMENT translatedByItem EMPTY >
+<!ELEMENT seriesEdItem EMPTY >
+<!ELEMENT seriesItem EMPTY >
+<!ELEMENT multivolumeWorkItem EMPTY >
+<!ELEMENT bookTotalPagesItem EMPTY >
+
+
+<!ELEMENT urlItem EMPTY >
+
+<!ELEMENT iso639-3codeItem EMPTY >
+<!-- the following is a way to create a common set of location and publisher layouts; it reduces the number of patterns needed -->
+<!ELEMENT locationPublisherLayouts (comment?, locationPublisherLayout)+ >
+<!ELEMENT  locationPublisherLayout (locationItem | publisherItem | missingItem)+>
+<!ELEMENT  locationPublisherLayoutsRef EMPTY >
+<!-- the following is a way to create a common set of url and dateAccessed layouts; it reduces the number of patterns needed -->
+<!ELEMENT urlDateAccessedLayouts (comment?, urlDateAccessedLayout)+ >
+<!ELEMENT  urlDateAccessedLayout (urlItem | dateAccessedItem | doiItem | missingItem)+>
+<!ELEMENT  urlDateAccessedLayoutsRef EMPTY >
+<!-- following indicates that the location/publisher or url/dateAccessed items are not present -->
+<!ELEMENT missingItem EMPTY >
+<!ELEMENT doiItem EMPTY >
+
+
+<!ELEMENT  iso639-3codeItemRef EMPTY >
+<!ELEMENT refAuthorNameChange EMPTY >
+<!-- REVISION HISTORY
+1.0.0 31-Aug-2007 Andy Black  Initial draft.
+
+-->
