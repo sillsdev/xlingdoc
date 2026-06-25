@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package application.view;
+package org.sil.xlingdoc.view;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,13 +16,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.SortedSet;
 
+import org.sil.xlingdoc.model.ComponentPathItem;
+import org.sil.xlingdoc.service.DtdSchemaInspector;
+import org.sil.xlingdoc.service.XmlDocumentManager;
+import org.sil.xlingdoc.service.XmlNameMapper;
+import org.sil.xlingdoc.service.XmlSerializer;
 import org.w3c.dom.Element;
 
-import application.model.ComponentPathItem;
-import application.service.DtdSchemaInspector;
-import application.service.XmlDocumentManager;
-import application.service.XmlNameMapper;
-import application.service.XmlSerializer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

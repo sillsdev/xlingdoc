@@ -1,4 +1,4 @@
-package application;
+package org.sil.xlingdoc;
 	
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
-import application.view.MainController;
+import org.sil.xlingdoc.view.MainController;
 
 public class Main extends Application {
 	BorderPane rootLayout;

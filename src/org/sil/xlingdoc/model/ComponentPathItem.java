@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package application.model;
+package org.sil.xlingdoc.model;
 
 import org.w3c.dom.Element;
 

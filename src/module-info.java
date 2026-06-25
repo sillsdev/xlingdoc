@@ -7,11 +7,12 @@ module xmleditorplay {
 	requires transitive javafx.graphics;
 	requires jdk.jsobject;
 	requires xercesImplNo.org.w3c.dom.html;
+	requires junit;
 
-	opens application to javafx.graphics, javafx.fxml;
-	opens application.view to javafx.graphics, javafx.fxml;
+	opens org.sil.xlingdoc to javafx.graphics, javafx.fxml;
+	opens org.sil.xlingdoc.view to javafx.graphics, javafx.fxml;
 
-	exports application;
-	exports application.model;
-	exports application.view;
+	exports org.sil.xlingdoc;
+	exports org.sil.xlingdoc.model;
+	exports org.sil.xlingdoc.view;
 }

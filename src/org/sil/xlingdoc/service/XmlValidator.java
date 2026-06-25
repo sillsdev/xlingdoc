@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package application.service;
+package org.sil.xlingdoc.service;
 
 /**
  * code drafted by Gemini
