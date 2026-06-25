@@ -78,17 +78,18 @@ public class DtdSchemaInspector {
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName().toLowerCase());
 
 		Set<String> predecessors = DynamicPrecedenceChecker.getRemainingAllowedPredecessors(grammar, targetElement,
-				parentTag);
+				parentTag, insertBefore);
 
-		System.out.println("predecessors size = " + predecessors.size());
-		System.out.println("Elements allowed before " + targetName + ": " + predecessors);
+		String dir = insertBefore? "before" : "after";
+		System.out.println("size = " + predecessors.size());
+		System.out.println("Elements allowed " + dir + " " + targetName + ": " + predecessors);
 		for (String elem : predecessors) {
 			if (manager.isValidInsertion(manager.getBuilder(), targetElement, elem, insertBefore)) {
 				validChoices.add(elem);
 			}
 		}
 		System.out.println("results size = " + validChoices.size());
-		System.out.println("Elements allowed before " + targetName + ": " + validChoices);
+		System.out.println("Elements allowed " + dir + " " + targetName + ": " + validChoices);
 		return  validChoices;
 	}
 

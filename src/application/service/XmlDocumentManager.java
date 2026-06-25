@@ -133,7 +133,7 @@ public class XmlDocumentManager {
 		}
 		return previousSiblingName;
 	}
-	public boolean isValidInsertion(DocumentBuilder builder, Element targetElement, String candidateName, boolean before) {
+	public boolean isValidInsertion(DocumentBuilder builder, Element targetElement, String candidateName, boolean insertBefore) {
 		String parentName = findParentName(targetElement);
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName().toLowerCase());
 		String prevSiblingName = findPreviousSiblingName(targetElement);
@@ -144,11 +144,11 @@ public class XmlDocumentManager {
 		if (prevSiblingName != null) {
 			xmlBuilder.append("<").append(prevSiblingName).append("/>");
 		}
-		if (before) {
+		if (insertBefore) {
 			xmlBuilder.append("<").append(candidateName).append("/>");
 		}
 		xmlBuilder.append("<").append(targetName).append("/>");
-		if (!before) {
+		if (!insertBefore) {
 			xmlBuilder.append("<").append(candidateName).append("/>");
 		}
 		xmlBuilder.append("</").append(parentName).append(">");

@@ -90,9 +90,9 @@
 <!ELEMENT presentedAt (#PCDATA | %embedded;)*>
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT version (#PCDATA | %embedded;)*>
-<!ELEMENT acknowledgements (labelContentChoices?, shortTitle?, (%chunk;)+)>
-<!ELEMENT abstract (labelContentChoices?, shortTitle?, (%chunk;)+)>
-<!ELEMENT preface (labelContentChoices?, shortTitle?, (%chunk; | landscape | framedUnit | abbreviationsShownHere | listOfFiguresShownHere | listOfTablesShownHere | glossaryTermsShownHere | glossaryTermsShownHereAsDefinitionList | iso639-3codesShownHere)+)>
+<!ELEMENT acknowledgements (labelContentChoices?, shortTitle?, (%chunk;)*)>
+<!ELEMENT abstract (labelContentChoices?, shortTitle?, (%chunk;)*)>
+<!ELEMENT preface (labelContentChoices?, shortTitle?, (%chunk; | landscape | framedUnit | abbreviationsShownHere | listOfFiguresShownHere | listOfTablesShownHere | glossaryTermsShownHere | glossaryTermsShownHereAsDefinitionList | iso639-3codesShownHere)*)>
 <!ELEMENT contents (labelContentChoices?, shortTitle?)>
 <!-- an keywordsShownHere element can be placed in front matter or back matter.
     The list of keywords defined within publishingInfo will be listed one after the other separated by what is in the separationText attribute.
@@ -332,7 +332,7 @@
 <!ELEMENT landscape (%chunk;)*>
 
 <!-- framedUnit: output the material offset per attributes in the framedType -->
-<!ELEMENT framedUnit (%chunk;)+>
+<!ELEMENT framedUnit (%chunk;)*>
 <!ELEMENT framedTypes (framedType)+>
 <!ELEMENT framedType EMPTY>
 <!-- the tagging of some text or embedded elements as belonging to an index term;

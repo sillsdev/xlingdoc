@@ -17,14 +17,15 @@ public class DynamicPrecedenceChecker {
 
     /**
      * Returns DTD-allowed predecessors that have NOT yet appeared as preceding siblings.
+     * @param insertBefore TODO
      */
     public static Set<String> getRemainingAllowedPredecessors(DTDGrammar grammar, 
                                                               Element targetElement, 
-                                                              String parentElementName) {
+                                                              String parentElementName, boolean insertBefore) {
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName().toLowerCase());
         // 1. Get all theoretically allowed predecessors from DTD
         Set<String> allowedPredecessors = DTDPrecedenceAnalyzer.findPrecedingElements(
-            grammar, parentElementName, targetName);
+            grammar, parentElementName, targetName, insertBefore);
 
         // 2. Get elements that actually appeared before this target
         Set<String> actualPrecedingSiblings = new HashSet<>();
