@@ -5,7 +5,7 @@
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane fx:id="rootLayout" prefHeight="600.0" prefWidth="800.0"  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="application.view.MainController">
+<BorderPane fx:id="rootLayout" prefHeight="600.0" prefWidth="800.0"  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="org.sil.xlingdoc.view.MainController">
    <top>
    <TextFlow fx:id="componentPathBar" prefHeight="20.0" prefWidth="800.0"/>
    </top>

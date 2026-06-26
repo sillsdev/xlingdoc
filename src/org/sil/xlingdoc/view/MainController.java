@@ -9,8 +9,6 @@ package org.sil.xlingdoc.view;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -18,6 +16,7 @@ import java.util.SortedSet;
 
 import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.DtdSchemaInspector;
+import org.sil.xlingdoc.service.XLingDocLoader;
 import org.sil.xlingdoc.service.XmlDocumentManager;
 import org.sil.xlingdoc.service.XmlNameMapper;
 import org.sil.xlingdoc.service.XmlSerializer;
@@ -77,8 +76,12 @@ public class MainController implements Initializable {
 		} else {
 			System.out.println(filePath + " not found");
 		}
+		manager = new XmlDocumentManager();
 		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd");
-		webEngine.loadContent(loadFileIntoNeededHTML());
+		String xmlFilePath = "data/SamplePaper.xml";
+//		String xmlFilePath = "data/SamplePaperDtdErrors.xml";
+		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, xmlFilePath);
+		webEngine.loadContent(htmlContent);
 
 
 		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
@@ -163,7 +166,7 @@ public class MainController implements Initializable {
 								componentPathBar.getChildren().add(tGap);
 								sb.append(" > ");
 							} else {
-								System.out.println("Clicked on this element: '" +adjustedTagName + "'");
+								System.out.println("Clicked on this element: '" + adjustedTagName + "'");
 								SortedSet<String> before = inspector.getValidAdjacentElements(domElement, manager, true);
 //								SortedSet<String> after = inspector.getValidAdjacentElements(domElement, manager, false);
 //								System.out.println("Valid before; size = " + before.size());
@@ -201,47 +204,6 @@ public class MainController implements Initializable {
 		}
 		// TODO: what if there are more CSS names in the class attribute?
 		targetElement.setAttribute(kClass, kComponentSelected);
-	}
-
-	String loadFileIntoNeededHTML() {
-		StringBuilder sb= new StringBuilder();
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		sb.append("<!DOCTYPE html>\n");
-		sb.append("<html>\n");
-		sb.append("<head>\n");
-		sb.append("</head>\n");
-		sb.append("<body contenteditable=\"true\">\n");
-		String filePath = "data/SamplePaper.xml";
-//		String filePath = "data/SamplePaperDtdErrors.xml";
-		String fileContent = "";
-		File f = new File(filePath);
-		if (!f.exists()) {
-			System.out.println(filePath + " not found");
-		} else {
-			manager = new XmlDocumentManager();
-			try {
-				manager.loadXmlDocument(f);
-				// See if it has all of the DTDs
-				XmlNameMapper.populateMapsFromDtd(inspector.getGrammar());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				fileContent = Files.readString(Paths.get(filePath));
-				int iBegin = fileContent.indexOf("<lingPaper");
-				fileContent = fileContent.substring(iBegin);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		fileContent = XmlNameMapper.mapInputFromXLingPaperToHTML(fileContent);
-		sb.append(fileContent);
-		sb.append("</body>\n");
-		sb.append("</html>\n");
-//		System.out.print(sb.toString());
-		return sb.toString();
 	}
 
 	@FXML

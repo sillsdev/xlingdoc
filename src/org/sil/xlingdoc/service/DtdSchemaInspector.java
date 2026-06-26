@@ -76,9 +76,9 @@ public class DtdSchemaInspector {
 			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName().toLowerCase());
 		}
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName().toLowerCase());
+		Set<String> predecessors = DTDPrecedenceAnalyzer.findPrecedingElements(
+				grammar, parentTag, targetName, insertBefore);
 
-		Set<String> predecessors = DynamicPrecedenceChecker.getRemainingAllowedPredecessors(grammar, targetElement,
-				parentTag, insertBefore);
 
 		String dir = insertBefore? "before" : "after";
 		System.out.println("size = " + predecessors.size());

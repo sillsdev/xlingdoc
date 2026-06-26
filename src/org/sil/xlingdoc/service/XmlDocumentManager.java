@@ -12,6 +12,7 @@ package org.sil.xlingdoc.service;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -20,6 +21,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class XmlDocumentManager {
 	private Document masterXmlDoc;
@@ -28,6 +32,8 @@ public class XmlDocumentManager {
 	int warningsCount = 0;
 	int errorsCount = 0;
 	int fatalErrorsCount = 0;
+	final String kOpenWedge = "<";
+	final String kClosingWedge = "/>";
 
 	public Document getMasterXmlDoc() {
 		return masterXmlDoc;
@@ -122,38 +128,45 @@ public class XmlDocumentManager {
 		}
 		return parentName;
 	}
-	public String findPreviousSiblingName(Element element) {
-		String previousSiblingName = null;
-		if (element.getPreviousSibling() instanceof Element previousSibling) {
-			previousSiblingName = XmlNameMapper.getMappedElementName(previousSibling.getNodeName().toLowerCase());
-			if ("summary".equals(previousSiblingName)) {
-				previousSibling = (Element)previousSibling.getFirstChild();
-				previousSiblingName = XmlNameMapper.getMappedElementName(previousSibling.getNodeName().toLowerCase());
+
+	public String findSiblingName(Element element, boolean isPrevious) {
+		String siblingName = null;
+		Node immediateSibling;
+		if (isPrevious) {
+			immediateSibling = element.getPreviousSibling();
+		} else {
+			immediateSibling = element.getNextSibling();
+		}
+		if (immediateSibling instanceof Element sibling) {
+			siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+			if ("summary".equals(siblingName)) {
+				sibling = (Element)sibling.getFirstChild();
+				siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
 			}
 		}
-		return previousSiblingName;
+		return siblingName;
 	}
+
 	public boolean isValidInsertion(DocumentBuilder builder, Element targetElement, String candidateName, boolean insertBefore) {
 		String parentName = findParentName(targetElement);
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName().toLowerCase());
-		String prevSiblingName = findPreviousSiblingName(targetElement);
-		// Construct the minimal XML snippet
-		StringBuilder xmlBuilder = new StringBuilder();
-		xmlBuilder.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append("resources/dtdsElementSequences/XLingPap.dtd").append("\">");
-		xmlBuilder.append("<").append(parentName).append(">");
-		if (prevSiblingName != null) {
-			xmlBuilder.append("<").append(prevSiblingName).append("/>");
-		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append("resources/dtdsElementSequences/XLingPap.dtd").append("\">");
+		sb.append(kOpenWedge).append(parentName).append(">");
+		// include all preceding siblings since one or more may be required.
+		includePrecedingSiblingNames(targetElement, sb);
 		if (insertBefore) {
-			xmlBuilder.append("<").append(candidateName).append("/>");
+			sb.append(kOpenWedge).append(candidateName).append(kClosingWedge);
 		}
-		xmlBuilder.append("<").append(targetName).append("/>");
+		sb.append(kOpenWedge).append(targetName).append(kClosingWedge);
 		if (!insertBefore) {
-			xmlBuilder.append("<").append(candidateName).append("/>");
+			sb.append(kOpenWedge).append(candidateName).append(kClosingWedge);
 		}
-		xmlBuilder.append("</").append(parentName).append(">");
-		System.out.println("\t" + xmlBuilder.toString());
-		InputStream is = new ByteArrayInputStream(xmlBuilder.toString().getBytes() );
+		// include all following siblings since one or more may be required.
+		includeFollowingSiblingNames(targetElement, sb);
+		sb.append("</").append(parentName).append(">");
+		System.out.println("\t" + sb.toString());
+		InputStream is = new ByteArrayInputStream(sb.toString().getBytes() );
 		try {
 			warningsCount = 0;
 			errorsCount = 0;
@@ -166,6 +179,48 @@ public class XmlDocumentManager {
 		} catch (Exception e) {
 			// We actually never get here; any exceptions are caught in authorContactInfo().
 			return false; // Validation failed
+		}
+	}
+
+	protected void includeFollowingSiblingNames(Element targetElement, StringBuilder sb) {
+		String siblingName;
+		Node node;
+		List<String> followingNames = new ArrayList<String>();
+		node = targetElement.getNextSibling();
+		while (node != null) {
+			if (node instanceof Element el) {
+				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName().toLowerCase());
+				if ("summary".equals(siblingName)) {
+					Element sibling = (Element)node.getFirstChild();
+					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+				}
+				followingNames.add(siblingName);
+			}
+			node = node.getNextSibling();
+		}
+		for (String name : followingNames) {
+			sb.append(kOpenWedge).append(name).append(kClosingWedge);
+		}
+	}
+
+	protected void includePrecedingSiblingNames(Element targetElement, StringBuilder sb) {
+		String siblingName;
+		List<String> precedingNames = new ArrayList<String>();
+		Node node = targetElement.getPreviousSibling();
+		while (node != null) {
+			if (node instanceof Element el) {
+				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName().toLowerCase());
+				if ("summary".equals(siblingName)) {
+					Element sibling = (Element)node.getFirstChild();
+					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+				}
+				precedingNames.add(siblingName);
+			}
+			node = node.getPreviousSibling();
+		}
+		ListIterator<String> prevIter = precedingNames.listIterator(precedingNames.size());
+		while (prevIter.hasPrevious()) {
+			sb.append(kOpenWedge).append(prevIter.previous()).append(kClosingWedge);
 		}
 	}
 }
