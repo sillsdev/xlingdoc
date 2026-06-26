@@ -14,16 +14,16 @@ import org.apache.xerces.impl.dtd.XMLContentSpec;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DTDPrecedenceAnalyzer {
+public class DTDAdjacentAnalyzer {
 
 	/**
-	 * Finds all element names that can legally precede the targetElement within the
+	 * Finds all element names that can legally be adjacent to the targetElement within the
 	 * content model of the parentElement.
-	 * @param insertBefore TODO
+	 * @param insertBefore 
 	 */
-	public static Set<String> findPrecedingElements(DTDGrammar grammar, String parentElementName,
+	public static Set<String> findAdjacentElements(DTDGrammar grammar, String parentElementName,
 			String targetElementName, boolean insertBefore) {
-		Set<String> precedingElements = new HashSet<>();
+		Set<String> adjacentElements = new HashSet<>();
 
 		// 1. Get Parent Element Index
 		int parentIndex = grammar.getElementDeclIndex(parentElementName);
@@ -31,14 +31,14 @@ public class DTDPrecedenceAnalyzer {
 		System.out.println("\tgrammar: " + grammar.getContentSpecAsString(parentIndex));
 
 		if (parentIndex == -1) {
-			return precedingElements; // Parent not found
+			return adjacentElements; // Parent not found
 		}
 
 		// 2. Get Content Spec Index
 		int contentSpecIndex = grammar.getContentSpecIndex(parentIndex);
 		System.out.println("\tcontentSpecIndex = " + contentSpecIndex);
 		if (contentSpecIndex == -1) {
-			return precedingElements; // ANY or EMPTY content
+			return adjacentElements; // ANY or EMPTY content
 		}
 
 		// 3. Traverse
@@ -47,26 +47,9 @@ public class DTDPrecedenceAnalyzer {
 		System.out.println("\tspec = " + spec);
 		// We need a wrapper to hold state during recursion (whether target was found)
 		boolean[] targetFound = new boolean[1];
-//		collectPrecedingElements(grammar, spec, targetElementName, precedingElements, targetFound);
-//		collectPrecedingElementsNew(grammar, spec, targetElementName, precedingElements, targetFound, false);
-		collectPrecedingElements(grammar, spec, targetElementName, precedingElements, targetFound, false, insertBefore);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY = " + XMLContentSpec.CONTENTSPECNODE_ANY);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LAX = " + XMLContentSpec.CONTENTSPECNODE_ANY_LAX);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LOCAL = " + XMLContentSpec.CONTENTSPECNODE_ANY_LOCAL);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_LAX = " + XMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_LAX);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_SKIP = " + XMLContentSpec.CONTENTSPECNODE_ANY_LOCAL_SKIP);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_OTHER = " + XMLContentSpec.CONTENTSPECNODE_ANY_OTHER);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_OTHER_LAX = " + XMLContentSpec.CONTENTSPECNODE_ANY_OTHER_LAX);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_OTHER_SKIP = " + XMLContentSpec.CONTENTSPECNODE_ANY_OTHER_SKIP);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ANY_SKIP = " + XMLContentSpec.CONTENTSPECNODE_ANY_SKIP);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_CHOICE = " + XMLContentSpec.CONTENTSPECNODE_CHOICE);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_LEAF = " + XMLContentSpec.CONTENTSPECNODE_LEAF);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ONE_OR_MORE = " + XMLContentSpec.CONTENTSPECNODE_ONE_OR_MORE);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_SEQ = " + XMLContentSpec.CONTENTSPECNODE_SEQ);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ZERO_OR_MORE = " + XMLContentSpec.CONTENTSPECNODE_ZERO_OR_MORE);
-//		System.out.println("\t\tXMLContentSpec.CONTENTSPECNODE_ZERO_OR_ONE = " + XMLContentSpec.CONTENTSPECNODE_ZERO_OR_ONE);
+		collectAdjacentElements(grammar, spec, targetElementName, adjacentElements, targetFound, false, insertBefore);
 
-		return precedingElements;
+		return adjacentElements;
 	}
 
 
@@ -130,19 +113,19 @@ public class DTDPrecedenceAnalyzer {
 	/**
 	 * Recursive helper to traverse the content spec tree.
 	 *
-	 * @parm grammar                The DTD
-	 * @param spec                  The current content spec node
-	 * @param targetName            The element name we are looking for
-	 * @param precedingSet          Collection to add valid preceding elements to
-	 * @param targetFoundFlag       Single-element boolean array to signal if target was
+	 * @parm grammar          The DTD
+	 * @param spec            The current content spec node
+	 * @param targetName      The element name we are looking for
+	 * @param adjacentSet     Collection to add valid adjacent elements to
+	 * @param targetFoundFlag Single-element boolean array to signal if target was
 	 *                              found in this branch
 	 * @param insertBefore TODO
 	 * @parm isInsideRepeatingGroup Flag for if inside repeating group
 	 */
-	private static void collectPrecedingElements(DTDGrammar grammar,
+	private static void collectAdjacentElements(DTDGrammar grammar,
 	                                             XMLContentSpec spec, 
 	                                             String targetName, 
-	                                             Set<String> precedingSet, 
+	                                             Set<String> adjacentSet, 
 	                                             boolean[] targetFoundFlag,
 	                                             boolean isInsideRepeatingGroup, boolean insertBefore) {
 	    if (spec == null) return;
@@ -160,13 +143,13 @@ public class DTDPrecedenceAnalyzer {
 	            
 	            boolean[] foundInChild = new boolean[1];
 	            // Pass true for isInsideRepeatingGroup
-	            collectPrecedingElements(grammar, childSpec, targetName, precedingSet, foundInChild, true, insertBefore);
+	            collectAdjacentElements(grammar, childSpec, targetName, adjacentSet, foundInChild, true, insertBefore);
 	            
 	            if (foundInChild[0]) {
 	                targetFoundFlag[0] = true;
 	                // FIX: If inside a repeating group and we found the target, 
 	                // the target itself is a valid predecessor (from a previous iteration).
-	                precedingSet.add(targetName); 
+	                adjacentSet.add(targetName); 
 	            }
 	        }
 	        return;
@@ -179,7 +162,7 @@ public class DTDPrecedenceAnalyzer {
 	            XMLContentSpec childSpec = new XMLContentSpec();
 	            grammar.getContentSpec(childIndex, childSpec);
 	            boolean[] foundInChild = new boolean[1];
-	            collectPrecedingElements(grammar, childSpec, targetName, precedingSet, foundInChild, isInsideRepeatingGroup, insertBefore);
+	            collectAdjacentElements(grammar, childSpec, targetName, adjacentSet, foundInChild, isInsideRepeatingGroup, insertBefore);
 	            if (foundInChild[0]) targetFoundFlag[0] = true;
 	        }
 	        return;
@@ -199,25 +182,17 @@ public class DTDPrecedenceAnalyzer {
 	        boolean[] foundInLeft = new boolean[1];
 	        boolean[] foundInRight = new boolean[1];
 	        
-	        collectPrecedingElements(grammar, leftSpec, targetName, precedingSet, foundInLeft, isInsideRepeatingGroup, insertBefore);
-	        collectPrecedingElements(grammar, rightSpec, targetName, precedingSet, foundInRight, isInsideRepeatingGroup, insertBefore);
+	        collectAdjacentElements(grammar, leftSpec, targetName, adjacentSet, foundInLeft, isInsideRepeatingGroup, insertBefore);
+	        collectAdjacentElements(grammar, rightSpec, targetName, adjacentSet, foundInRight, isInsideRepeatingGroup, insertBefore);
 
 	        // Standard: If target in Right, Left is predecessor
 	        if (insertBefore && foundInRight[0]) {
-	            collectAllLeafElements(grammar, leftSpec, precedingSet);
+	            collectAllLeafElements(grammar, leftSpec, adjacentSet);
 	        }
 	        // Standard: If target in Left, Right is follower
 	        if (!insertBefore && foundInLeft[0]) {
-	            collectAllLeafElements(grammar, rightSpec, precedingSet);
+	            collectAllLeafElements(grammar, rightSpec, adjacentSet);
 	        }
-	        
-	        // FIX: Repeating Sequence Logic
-	        // If inside a repeating group (e.g., (A, B)+) and target is 'A' (Left):
-	        // Technically 'B' (Right) from a previous iteration can precede 'A'.
-	        // IF YOU WANT TO EXCLUDE 'affiliation' (which is B), DO NOT add Right to predecessors here.
-	        // If you only want static predecessors or choice siblings, skip this block for Sequences.
-	        // To strictly match your request (exclude affiliation), we DO NOT add Right side elements 
-	        // when target is in Left side, even if repeating.
 	        
 	        if (foundInLeft[0] || foundInRight[0]) targetFoundFlag[0] = true;
 	        return;
@@ -237,15 +212,15 @@ public class DTDPrecedenceAnalyzer {
 	        boolean[] foundInLeft = new boolean[1];
 	        boolean[] foundInRight = new boolean[1];
 
-	        collectPrecedingElements(grammar, leftSpec, targetName, precedingSet, foundInLeft, isInsideRepeatingGroup, insertBefore);
-	        collectPrecedingElements(grammar, rightSpec, targetName, precedingSet, foundInRight, isInsideRepeatingGroup, insertBefore);
+	        collectAdjacentElements(grammar, leftSpec, targetName, adjacentSet, foundInLeft, isInsideRepeatingGroup, insertBefore);
+	        collectAdjacentElements(grammar, rightSpec, targetName, adjacentSet, foundInRight, isInsideRepeatingGroup, insertBefore);
 
 	        // FIX: Repeating Choice Logic
 	        // If inside a repeating group (e.g., (A|B)+) and target is 'A':
 	        // Then 'B' is a valid predecessor (from a previous iteration).
 	        if (isInsideRepeatingGroup) {
-	            if (foundInRight[0]) collectAllLeafElements(grammar, leftSpec, precedingSet);
-	            if (foundInLeft[0])  collectAllLeafElements(grammar, rightSpec, precedingSet);
+	            if (foundInRight[0]) collectAllLeafElements(grammar, leftSpec, adjacentSet);
+	            if (foundInLeft[0])  collectAllLeafElements(grammar, rightSpec, adjacentSet);
 	        }
 
 	        if (foundInLeft[0] || foundInRight[0]) targetFoundFlag[0] = true;

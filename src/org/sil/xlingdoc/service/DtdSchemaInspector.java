@@ -53,9 +53,10 @@ public class DtdSchemaInspector {
 
 	/**
 	 * Determines which elements can legally be inserted adjacent to the target
-	 * node. * @param targetElement The element currently selected in the WebView
-	 * 
-	 * @param insertBefore True for "Insert After" context, False for "Insert Before"
+	 * node.
+	 * @param  targetElement The element currently selected in the WebView
+	 * @parm   manager
+	 * @param  insertBefore True for "Insert After" context, False for "Insert Before"
 	 * @return List of valid element tag names
 	 */
 	public SortedSet<String> getValidAdjacentElements(Element targetElement, XmlDocumentManager manager, boolean insertBefore) {
@@ -76,14 +77,14 @@ public class DtdSchemaInspector {
 			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName().toLowerCase());
 		}
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName().toLowerCase());
-		Set<String> predecessors = DTDPrecedenceAnalyzer.findPrecedingElements(
+		Set<String> adjacents = DTDAdjacentAnalyzer.findAdjacentElements(
 				grammar, parentTag, targetName, insertBefore);
 
 
 		String dir = insertBefore? "before" : "after";
-		System.out.println("size = " + predecessors.size());
-		System.out.println("Elements allowed " + dir + " " + targetName + ": " + predecessors);
-		for (String elem : predecessors) {
+		System.out.println("size = " + adjacents.size());
+		System.out.println("Elements allowed " + dir + " " + targetName + ": " + adjacents);
+		for (String elem : adjacents) {
 			if (manager.isValidInsertion(manager.getBuilder(), targetElement, elem, insertBefore)) {
 				validChoices.add(elem);
 			}

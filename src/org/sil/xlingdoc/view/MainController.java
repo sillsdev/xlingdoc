@@ -168,16 +168,7 @@ public class MainController implements Initializable {
 							} else {
 								System.out.println("Clicked on this element: '" + adjustedTagName + "'");
 								SortedSet<String> before = inspector.getValidAdjacentElements(domElement, manager, true);
-//								SortedSet<String> after = inspector.getValidAdjacentElements(domElement, manager, false);
-//								System.out.println("Valid before; size = " + before.size());
-//								for (String s :before) {
-//									System.out.println("\t" + s);
-//								}
-//								List<String> after = inspector.getValidAdjacentElements(domElement, true);
-//								System.out.println("Valid after; size = " + after.size());
-//								for (String s :after) {
-//									System.out.println("\t" + s);
-//								}
+								SortedSet<String> after = inspector.getValidAdjacentElements(domElement, manager, false);
 							}
 						}
 					}
