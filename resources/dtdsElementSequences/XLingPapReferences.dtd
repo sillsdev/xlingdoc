@@ -19,7 +19,7 @@
 <!ELEMENT  refAuthorName (#PCDATA | refAuthorLastName)* >
 <!ELEMENT  refAuthorLastName (#PCDATA) >     
 <!ELEMENT  citeName (#PCDATA | %embedded;)* >
-<!ELEMENT refWork (authorRole?, refDate, refTitle, refTitleLowerCase?, (article | book | collection | dissertation | fieldNotes | ms | paper | proceedings | thesis | webPage), url?, dateAccessed?, iso639-3code*, comment?, annotations?, keywords?)>
+<!ELEMENT refWork (authorRole?, refDate, refTitle, refTitleLowerCase?, (article | book | collection | dissertation | fieldNotes | ms | paper | proceedings | thesis | webPage)?, url?, dateAccessed?, iso639-3code*, comment?, annotations?, keywords?)>
 <!-- An author's role in the work.  For example, editor, illustrator, author and illustrator, etc. -->
 <!ELEMENT authorRole (#PCDATA)>
 <!ELEMENT refDate (#PCDATA)>
@@ -133,7 +133,7 @@
 %XLingPapCharacterEntities;
 
 <!-- Following are for annotated bibliographies -->
-<!ELEMENT annotatedBibliographyTypes (annotatedBibliographyType+) >
+<!ELEMENT annotatedBibliographyTypes (annotatedBibliographyType*) >
 <!ELEMENT annotatedBibliographyType (#PCDATA) >
 <!ELEMENT annotations (annotation+) >
 <!ELEMENT annotation (#PCDATA | %embedded;)* >

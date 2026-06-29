@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 public class XmlDocumentManager {
 	private Document masterXmlDoc;
@@ -33,7 +34,18 @@ public class XmlDocumentManager {
 	int errorsCount = 0;
 	int fatalErrorsCount = 0;
 	final String kOpenWedge = "<";
+	final String kEndingWedge = "</";
+	final String kCloseWedge = ">";
 	final String kClosingWedge = "/>";
+
+	// TODO: flesh out all required entries where an element has required subelements
+	Map<String,String> requiredSubElements = Map.ofEntries(
+			Map.entry("appendix","<secTitle/><p/>"),
+			Map.entry("frontMatter","<title/><author/>"),
+			Map.entry("glossary","<p/>"),
+			Map.entry("refAuthor","<refWork><refDate/><refTitle/></refWork>"),
+			Map.entry("refWork","<refDate/><refTitle/>")
+			);
 
 	public Document getMasterXmlDoc() {
 		return masterXmlDoc;
@@ -114,13 +126,7 @@ public class XmlDocumentManager {
 		String parentName = "";
 		if (element.getParentNode() instanceof Element parent) {
 			parentName = XmlNameMapper.getMappedElementName(parent.getNodeName().toLowerCase());
-//			System.out.println("\t" + parentName);
-			if (parentName.equals("details")) {
-				parent = (Element) parent.getParentNode();
-				parentName = XmlNameMapper.getMappedElementName(parent.getNodeName().toLowerCase());
-			}
-//			System.out.println("\t" + parentName);
-			if (parentName.equals("summary")) {
+			while ("details".equals(parentName) || "summary".equals(parentName)) {
 				parent = (Element) parent.getParentNode();
 				parentName = XmlNameMapper.getMappedElementName(parent.getNodeName().toLowerCase());
 			}
@@ -156,16 +162,15 @@ public class XmlDocumentManager {
 		// include all preceding siblings since one or more may be required.
 		includePrecedingSiblingNames(targetElement, sb);
 		if (insertBefore) {
-			sb.append(kOpenWedge).append(candidateName).append(kClosingWedge);
+			appendElementName(candidateName, sb);
 		}
-		sb.append(kOpenWedge).append(targetName).append(kClosingWedge);
+		appendElementName(targetName, sb);
 		if (!insertBefore) {
-			sb.append(kOpenWedge).append(candidateName).append(kClosingWedge);
+			appendElementName(candidateName, sb);
 		}
 		// include all following siblings since one or more may be required.
 		includeFollowingSiblingNames(targetElement, sb);
 		sb.append("</").append(parentName).append(">");
-		System.out.println("\t" + sb.toString());
 		InputStream is = new ByteArrayInputStream(sb.toString().getBytes() );
 		try {
 			warningsCount = 0;
@@ -173,12 +178,24 @@ public class XmlDocumentManager {
 			fatalErrorsCount = 0;
 			builder.parse(is);
 			if (errorsCount > 0) {
+				System.out.println("\t" + sb.toString());
 				return false;
 			}
 			return true; // Validation passed
 		} catch (Exception e) {
-			// We actually never get here; any exceptions are caught in authorContactInfo().
+			// We actually never get here; any exceptions are caught in loadXmlDocument().
 			return false; // Validation failed
+		}
+	}
+
+	protected void appendElementName(String elementName, StringBuilder sb) {
+//		System.out.println("\t\tappend looking for '" + elementName + "'");
+		if (requiredSubElements.containsKey(elementName)) {
+			sb.append(kOpenWedge).append(elementName).append(kCloseWedge);
+			sb.append(requiredSubElements.get(elementName));
+			sb.append(kEndingWedge).append(elementName).append(kCloseWedge);
+		} else {
+			sb.append(kOpenWedge).append(elementName).append(kClosingWedge);
 		}
 	}
 
@@ -199,7 +216,8 @@ public class XmlDocumentManager {
 			node = node.getNextSibling();
 		}
 		for (String name : followingNames) {
-			sb.append(kOpenWedge).append(name).append(kClosingWedge);
+			appendElementName(name, sb);
+//			sb.append(kOpenWedge).append(name).append(kClosingWedge);
 		}
 	}
 
@@ -220,7 +238,7 @@ public class XmlDocumentManager {
 		}
 		ListIterator<String> prevIter = precedingNames.listIterator(precedingNames.size());
 		while (prevIter.hasPrevious()) {
-			sb.append(kOpenWedge).append(prevIter.previous()).append(kClosingWedge);
+			appendElementName(prevIter.previous(), sb);
 		}
 	}
 }

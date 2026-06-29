@@ -27,8 +27,8 @@ public class DTDAdjacentAnalyzer {
 
 		// 1. Get Parent Element Index
 		int parentIndex = grammar.getElementDeclIndex(parentElementName);
-		System.out.println("\tparentIndex = " + parentIndex);
-		System.out.println("\tgrammar: " + grammar.getContentSpecAsString(parentIndex));
+//		System.out.println("\tparentIndex = " + parentIndex);
+//		System.out.println("\tgrammar: " + grammar.getContentSpecAsString(parentIndex));
 
 		if (parentIndex == -1) {
 			return adjacentElements; // Parent not found
@@ -36,7 +36,7 @@ public class DTDAdjacentAnalyzer {
 
 		// 2. Get Content Spec Index
 		int contentSpecIndex = grammar.getContentSpecIndex(parentIndex);
-		System.out.println("\tcontentSpecIndex = " + contentSpecIndex);
+//		System.out.println("\tcontentSpecIndex = " + contentSpecIndex);
 		if (contentSpecIndex == -1) {
 			return adjacentElements; // ANY or EMPTY content
 		}
@@ -44,7 +44,7 @@ public class DTDAdjacentAnalyzer {
 		// 3. Traverse
 		XMLContentSpec spec = new XMLContentSpec();
 		grammar.getContentSpec(contentSpecIndex, spec);
-		System.out.println("\tspec = " + spec);
+//		System.out.println("\tspec = " + spec);
 		// We need a wrapper to hold state during recursion (whether target was found)
 		boolean[] targetFound = new boolean[1];
 		collectAdjacentElements(grammar, spec, targetElementName, adjacentElements, targetFound, false, insertBefore);

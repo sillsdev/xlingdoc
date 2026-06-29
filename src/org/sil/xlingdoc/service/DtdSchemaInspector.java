@@ -83,14 +83,14 @@ public class DtdSchemaInspector {
 
 		String dir = insertBefore? "before" : "after";
 		System.out.println("size = " + adjacents.size());
-		System.out.println("Elements allowed " + dir + " " + targetName + ": " + adjacents);
+		System.out.println("Unsorted elements allowed " + dir + " " + targetName + ": " + adjacents);
 		for (String elem : adjacents) {
 			if (manager.isValidInsertion(manager.getBuilder(), targetElement, elem, insertBefore)) {
 				validChoices.add(elem);
 			}
 		}
-		System.out.println("results size = " + validChoices.size());
-		System.out.println("Elements allowed " + dir + " " + targetName + ": " + validChoices);
+		System.out.println("\tresults size = " + validChoices.size());
+		System.out.println("\tElements allowed " + dir + " " + targetName + ": " + validChoices);
 		return  validChoices;
 	}
 
