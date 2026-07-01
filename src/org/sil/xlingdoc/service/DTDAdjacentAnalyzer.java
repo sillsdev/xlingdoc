@@ -135,7 +135,7 @@ public class DTDAdjacentAnalyzer {
 	    // 1. Handle Repeating Operators
 	    if (type == XMLContentSpec.CONTENTSPECNODE_ZERO_OR_MORE ||
 	        type == XMLContentSpec.CONTENTSPECNODE_ONE_OR_MORE) {
-	        
+//	        System.out.println("\tzero or one or more");
 	        Integer childIndex = extractIndex(spec.value);
 	        if (childIndex != null && childIndex != -1) {
 	            XMLContentSpec childSpec = new XMLContentSpec();
@@ -157,6 +157,7 @@ public class DTDAdjacentAnalyzer {
 	    
 	    // 2. Handle Optional (Zero-or-One) - No repetition
 	    if (type == XMLContentSpec.CONTENTSPECNODE_ZERO_OR_ONE) {
+//	        System.out.println("\tzero or one");
 	        Integer childIndex = extractIndex(spec.value);
 	        if (childIndex != null && childIndex != -1) {
 	            XMLContentSpec childSpec = new XMLContentSpec();
@@ -170,6 +171,7 @@ public class DTDAdjacentAnalyzer {
 
 	    // 3. Handle Sequence (A, B)
 	    if (type == XMLContentSpec.CONTENTSPECNODE_SEQ) {
+//	        System.out.println("\tsequence");
 	        Integer leftIdx = extractIndex(spec.value);
 	        Integer rightIdx = extractIndex(spec.otherValue);
 	        
@@ -200,6 +202,7 @@ public class DTDAdjacentAnalyzer {
 
 	    // 4. Handle Choice (A | B)
 	    if (type == XMLContentSpec.CONTENTSPECNODE_CHOICE) {
+//	        System.out.println("\tchoice\ttarget = " + targetName);
 	        Integer leftIdx = extractIndex(spec.value);
 	        Integer rightIdx = extractIndex(spec.otherValue);
 
@@ -229,8 +232,11 @@ public class DTDAdjacentAnalyzer {
 
 	    // 5. Handle Leaf
 	    if (type == XMLContentSpec.CONTENTSPECNODE_LEAF) {
+//	        System.out.print("\tleaf\ttarget = " + targetName);
 	        if (spec.value != null && spec.value instanceof String) {
 	            String elementName = (String) spec.value;
+	            adjacentSet.add(elementName);
+//		        System.out.println("\t = " + elementName);
 	            if (elementName.equals(targetName)) {
 	                targetFoundFlag[0] = true;
 	            }

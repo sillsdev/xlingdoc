@@ -44,6 +44,17 @@ book
 	display:inline;
 }
 
+example chart
+{
+	display:block;
+	padding-left:example-indent();
+}
+
+citation[ref]:before
+{
+	content: "(" attr(ref) ")";
+	background-color: var(--citation-background-color);
+}
 
 comment
 {

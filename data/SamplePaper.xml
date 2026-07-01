@@ -43,7 +43,14 @@ lang="lGloss"
 ></interlinear
 ></example
 ><p
->This is another paragraph after the interlinear example.</p
+>This is another paragraph after the interlinear example.<sectionRef
+sec="s2"
+></sectionRef
+><exampleRef
+letter="xInterlinear"
+num="xInterlinear"
+></exampleRef
+></p
 ></section1
 ><section1
 id="s2"
@@ -56,8 +63,8 @@ sec="s1"
 >.</p
 ><p
 >To refer to an example, you use the exampleRef element like this: As we saw in example <exampleRef
-letter="xInterlinear"
-num="xInterlinear"
+letter="xChart"
+num="xChart"
 ></exampleRef
 >, blah blah blah.</p
 ><p
@@ -67,6 +74,11 @@ ref="rAdams1998"
 > has shown that more blah.</p
 ><p
 >See the user documentation for much more on what you can do.</p
+><example
+num="xChart"
+><chart
+>I'm a chart</chart
+></example
 ></section1
 ><backMatter
 ><endnotes

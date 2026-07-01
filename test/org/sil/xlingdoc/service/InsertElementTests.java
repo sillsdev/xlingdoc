@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 import java.util.SortedSet;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -109,6 +110,9 @@ public class InsertElementTests {
 		nl = doc.getElementsByTagName("type");
 		el = (Element)nl.item(0);
 		checkElement(el, true, "[comment, type]");
+		nl = doc.getElementsByTagName("exampleRef");
+		el = (Element)nl.item(0);
+		checkElement(el, true, "[abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
 	}
 
 	@Test
@@ -169,6 +173,9 @@ public class InsertElementTests {
 		nl = doc.getElementsByTagName("type");
 		el = (Element)nl.item(0);
 		checkElement(el, false, "[comment, type]");
+		nl = doc.getElementsByTagName("exampleRef");
+		el = (Element)nl.item(0);
+		checkElement(el, false, "[abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
 	}
 
 	protected void checkElement(Element el, boolean insertBefore, String expected) {
