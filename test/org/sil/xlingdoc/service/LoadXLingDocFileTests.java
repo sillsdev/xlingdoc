@@ -20,12 +20,12 @@ import org.sil.xlingdoc.Constants;
  * 
  */
 public class LoadXLingDocFileTests {
-	private DtdSchemaInspector inspector;
+	private DtdInspector inspector;
 	private XmlDocumentManager manager;
 
 	@Before
 	public void setUp() throws Exception {
-		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, "(text)");
+		inspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
 	}
 

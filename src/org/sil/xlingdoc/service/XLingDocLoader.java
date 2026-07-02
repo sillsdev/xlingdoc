@@ -22,7 +22,7 @@ public class XLingDocLoader {
 	public XLingDocLoader() {
 		// TODO Auto-generated constructor stub
 	}
-	public static String loadFileIntoNeededHTML(XmlDocumentManager manager, DtdSchemaInspector inspector, String filePath) {
+	public static String loadFileIntoNeededHTML(XmlDocumentManager manager, DtdInspector inspector, String filePath) {
 		StringBuilder sb= new StringBuilder();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<!DOCTYPE html>\n");

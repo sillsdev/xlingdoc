@@ -20,18 +20,18 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class DtdSchemaInspector {
+public class DtdInspector {
 
 	private DTDGrammar grammar;
-	private DtdContentHandler dtdHandler;
+	private PcDataElementCollector dtdHandler;
 	private String pcDataIndicator = "(??)";
 
-	public DtdSchemaInspector(String dtdPath, String pcDataIndicator) {
+	public DtdInspector(String dtdPath, String pcDataIndicator) {
 		this.pcDataIndicator = pcDataIndicator;
 		try {
 			SymbolTable symbolTable = new SymbolTable();
 			XMLDTDLoader dtdLoader = new XMLDTDLoader(symbolTable);
-			dtdHandler = new DtdContentHandler();
+			dtdHandler = new PcDataElementCollector();
 	        dtdLoader.setDTDContentModelHandler(dtdHandler);
 			XMLInputSource source = new XMLInputSource(null, dtdPath, null, new FileReader(dtdPath), null);
 			this.grammar = (DTDGrammar) dtdLoader.loadGrammar(source);
@@ -71,7 +71,7 @@ public class DtdSchemaInspector {
 //		System.out.println("size = " + adjacents.size());
 //		System.out.println("Unsorted elements allowed " + dir + " " + targetName + ": " + adjacents);
 //		dtdHandler.dumpContentElements();
-		if (dtdHandler.isMixedContent(parentTag)) {
+		if (dtdHandler.hasPcData(parentTag)) {
 			validChoices.add(pcDataIndicator);
 		}
 		for (String elem : adjacents) {

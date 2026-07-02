@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
  * 
  */
 public class InsertElementTests {
-	private DtdSchemaInspector inspector;
+	private DtdInspector inspector;
 	private XmlDocumentManager manager;
 	private Document doc;
 	String fileContent = "";
@@ -37,7 +37,7 @@ public class InsertElementTests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, "(text)");
+		inspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
 		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, Constants.UNIT_TEST_DATA_FILE);
 		doc = manager.getMasterXmlDoc();

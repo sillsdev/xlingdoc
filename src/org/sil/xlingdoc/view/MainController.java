@@ -16,7 +16,7 @@ import java.util.SortedSet;
 
 import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.model.ComponentPathItem;
-import org.sil.xlingdoc.service.DtdSchemaInspector;
+import org.sil.xlingdoc.service.DtdInspector;
 import org.sil.xlingdoc.service.XLingDocLoader;
 import org.sil.xlingdoc.service.XmlDocumentManager;
 import org.sil.xlingdoc.service.XmlNameMapper;
@@ -54,7 +54,7 @@ public class MainController implements Initializable {
 	private final String kClass = "class";
 	private final String kComponentSelected = "component-selected";
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
-	private DtdSchemaInspector inspector;
+	private DtdInspector inspector;
 	private XmlDocumentManager manager;
 
 	public MainController() {
@@ -78,7 +78,7 @@ public class MainController implements Initializable {
 			System.out.println(filePath + " not found");
 		}
 		manager = new XmlDocumentManager();
-		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
+		inspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
 //		String xmlFilePath = "data/SamplePaper.xml";
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, xmlFilePath);
