@@ -11,7 +11,6 @@ import static org.junit.Assert.*;
 import java.util.SortedSet;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sil.xlingdoc.Constants;
@@ -40,7 +39,7 @@ public class InsertElementTests {
 	public void setUp() throws Exception {
 		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
-		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, "test/testdata/TestSample.xml");
+		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, Constants.UNIT_TEST_DATA_FILE);
 		doc = manager.getMasterXmlDoc();
 	}
 

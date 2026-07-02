@@ -18,6 +18,9 @@ public class Constants {
 	public static final String DTD_LOCATION = "resources/dtds/XLingPap.dtd";
 	public static final String ELEMENT_ONLY_DTD_LOCATION = "resources/dtdsElementSequences/XLingPap.dtd";
 	public static final String RESOURCE_LOCATION = "org.sil.xlingdoc.resources.xlingdoc";
-//	public static final String RESOURCE_LOCATION = "resources.xlingdoc";
+
+	public static final String UNIT_TEST_DATA_FILE = "test/testdata/TestSample.xml";
+	public static final String UNIT_TEST_INVALID_DATA_FILE = "test/testdata/SamplePaperDtdErrors.xml";
+
 
 }

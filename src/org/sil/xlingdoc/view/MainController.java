@@ -79,8 +79,8 @@ public class MainController implements Initializable {
 		}
 		manager = new XmlDocumentManager();
 		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
-		String xmlFilePath = "data/SamplePaper.xml";
-//		String xmlFilePath = "data/SamplePaperDtdErrors.xml";
+//		String xmlFilePath = "data/SamplePaper.xml";
+		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, xmlFilePath);
 		webEngine.loadContent(htmlContent);
 
