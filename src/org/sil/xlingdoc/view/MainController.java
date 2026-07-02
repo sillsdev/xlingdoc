@@ -77,7 +77,7 @@ public class MainController implements Initializable {
 			System.out.println(filePath + " not found");
 		}
 		manager = new XmlDocumentManager();
-		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd");
+		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd", resources.getString("element.text"));
 		String xmlFilePath = "data/SamplePaper.xml";
 //		String xmlFilePath = "data/SamplePaperDtdErrors.xml";
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, xmlFilePath);

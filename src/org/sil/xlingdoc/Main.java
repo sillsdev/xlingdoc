@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.sil.xlingdoc.view.MainController;
 
@@ -13,6 +15,7 @@ public class Main extends Application {
 	BorderPane rootLayout;
 	Stage primaryStage;
 	MainController controller;
+	Locale locale;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -25,8 +28,12 @@ public class Main extends Application {
 		}
 	}
 	void initRootLayout() {
+//		locale = Locale.of(applicationPreferences.getLastLocaleLanguage());
+		locale = Locale.of("en");
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("view/fxml/Main.fxml"));
+		ResourceBundle bundle = ResourceBundle.getBundle(Constants.RESOURCE_LOCATION, locale);
+		loader.setResources(bundle);
 		try {
 			rootLayout = (BorderPane) loader.load();
 			// Show the scene containing the root layout.

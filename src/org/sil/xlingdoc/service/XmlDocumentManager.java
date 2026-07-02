@@ -76,7 +76,7 @@ public class XmlDocumentManager {
 			}
 
 			public void error(org.xml.sax.SAXParseException e) {
-				System.out.println("Error:\n" + buildExceptionMessage(e));
+//				System.out.println("Error:\n" + buildExceptionMessage(e));
 				errorsCount++;
 //            	throws org.xml.sax.SAXException { throw e; }
 			}
@@ -178,7 +178,7 @@ public class XmlDocumentManager {
 			fatalErrorsCount = 0;
 			builder.parse(is);
 			if (errorsCount > 0) {
-				System.out.println("\t" + sb.toString());
+//				System.out.println("\t" + sb.toString());
 				return false;
 			}
 			return true; // Validation passed

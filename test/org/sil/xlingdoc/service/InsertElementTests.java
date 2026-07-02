@@ -37,7 +37,7 @@ public class InsertElementTests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd");
+		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd", "(text)");
 		manager = new XmlDocumentManager();
 		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, "test/testdata/TestSample.xml");
 		doc = manager.getMasterXmlDoc();
@@ -112,7 +112,7 @@ public class InsertElementTests {
 		checkElement(el, true, "[comment, type]");
 		nl = doc.getElementsByTagName("exampleRef");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		checkElement(el, true, "[(text), abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
 	}
 
 	@Test
@@ -175,7 +175,7 @@ public class InsertElementTests {
 		checkElement(el, false, "[comment, type]");
 		nl = doc.getElementsByTagName("exampleRef");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		checkElement(el, false, "[(text), abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
 	}
 
 	protected void checkElement(Element el, boolean insertBefore, String expected) {
