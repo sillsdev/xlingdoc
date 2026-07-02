@@ -154,7 +154,8 @@ public class XmlNameMapper {
 		elementNameMap.put("xlp-br", "br");
 	}
 
-	public static String getMappedElementName(String lowercaseName) {
+	public static String getMappedElementName(String elementName) {
+		String lowercaseName = elementName.toLowerCase();
 		if (elementNameMap.containsKey(lowercaseName)) {
 			return elementNameMap.get(lowercaseName);
 		} else {

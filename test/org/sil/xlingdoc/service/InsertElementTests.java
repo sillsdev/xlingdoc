@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.sil.xlingdoc.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -37,7 +38,7 @@ public class InsertElementTests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd", "(text)");
+		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
 		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, "test/testdata/TestSample.xml");
 		doc = manager.getMasterXmlDoc();

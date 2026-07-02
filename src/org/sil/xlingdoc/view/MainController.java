@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.SortedSet;
 
+import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.DtdSchemaInspector;
 import org.sil.xlingdoc.service.XLingDocLoader;
@@ -63,7 +64,7 @@ public class MainController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		webEngine = webView.getEngine();
-		String filePath = "resources/XLingPaper.css";
+		String filePath = Constants.CSS_LOCATION;
 		File f = new File(filePath);
 		if (f.exists()) {
 			try {
@@ -77,7 +78,7 @@ public class MainController implements Initializable {
 			System.out.println(filePath + " not found");
 		}
 		manager = new XmlDocumentManager();
-		inspector = new DtdSchemaInspector("resources/dtds/XLingPap.dtd", resources.getString("element.text"));
+		inspector = new DtdSchemaInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
 		String xmlFilePath = "data/SamplePaper.xml";
 //		String xmlFilePath = "data/SamplePaperDtdErrors.xml";
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, xmlFilePath);
@@ -148,7 +149,7 @@ public class MainController implements Initializable {
 								componentPathBar.getChildren().addAll(tTr, tTrGap);
 								componentsInPathBar.add(trItem);
 							}
-							String adjustedTagName = XmlNameMapper.getMappedElementName(tagName.toLowerCase());
+							String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
 									//InternalToExternalNameMapper.mapName(tagName);
 							sb.append(adjustedTagName);
 							Text t = new Text(" " + adjustedTagName);

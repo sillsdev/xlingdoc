@@ -27,6 +27,7 @@ public class DtdSchemaInspector {
 	private String pcDataIndicator = "(??)";
 
 	public DtdSchemaInspector(String dtdPath, String pcDataIndicator) {
+		this.pcDataIndicator = pcDataIndicator;
 		try {
 			SymbolTable symbolTable = new SymbolTable();
 			XMLDTDLoader dtdLoader = new XMLDTDLoader(symbolTable);
@@ -54,16 +55,16 @@ public class DtdSchemaInspector {
 		Element parent = (Element) targetElement.getParentNode();
 		if (parent == null)
 			return validChoices; // Root node has no siblings
-		String parentTag = XmlNameMapper.getMappedElementName(parent.getTagName().toLowerCase());
+		String parentTag = XmlNameMapper.getMappedElementName(parent.getTagName());
 		if (parentTag.equals("summary")) {
 			parent = (Element) parent.getParentNode();
-			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName().toLowerCase());
+			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName());
 		}
 		if (parentTag.equals("details")) {
 			parent = (Element) parent.getParentNode();
-			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName().toLowerCase());
+			parentTag = XmlNameMapper.getMappedElementName(parent.getTagName());
 		}
-		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName().toLowerCase());
+		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName());
 		Set<String> adjacents = DTDAdjacentAnalyzer.findAdjacentElements(
 				grammar, parentTag, targetName, insertBefore);
 //		String dir = insertBefore? "before" : "after";

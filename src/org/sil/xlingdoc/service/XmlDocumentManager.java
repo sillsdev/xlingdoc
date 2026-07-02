@@ -6,6 +6,7 @@
 
 package org.sil.xlingdoc.service;
 
+import org.sil.xlingdoc.Constants;
 /**
  * code drafted by Gemini and Leo
  */
@@ -125,10 +126,10 @@ public class XmlDocumentManager {
 //		System.out.println("findParentName on " + element.getNodeName());
 		String parentName = "";
 		if (element.getParentNode() instanceof Element parent) {
-			parentName = XmlNameMapper.getMappedElementName(parent.getNodeName().toLowerCase());
+			parentName = XmlNameMapper.getMappedElementName(parent.getNodeName());
 			while ("details".equals(parentName) || "summary".equals(parentName)) {
 				parent = (Element) parent.getParentNode();
-				parentName = XmlNameMapper.getMappedElementName(parent.getNodeName().toLowerCase());
+				parentName = XmlNameMapper.getMappedElementName(parent.getNodeName());
 			}
 //			System.out.println("\t" + parentName);
 		}
@@ -144,10 +145,10 @@ public class XmlDocumentManager {
 			immediateSibling = element.getNextSibling();
 		}
 		if (immediateSibling instanceof Element sibling) {
-			siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+			siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
 			if ("summary".equals(siblingName)) {
 				sibling = (Element)sibling.getFirstChild();
-				siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+				siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
 			}
 		}
 		return siblingName;
@@ -155,9 +156,9 @@ public class XmlDocumentManager {
 
 	public boolean isValidInsertion(DocumentBuilder builder, Element targetElement, String candidateName, boolean insertBefore) {
 		String parentName = findParentName(targetElement);
-		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName().toLowerCase());
+		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName());
 		StringBuilder sb = new StringBuilder();
-		sb.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append("resources/dtdsElementSequences/XLingPap.dtd").append("\">");
+		sb.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append(Constants.ELEMENT_ONLY_DTD_LOCATION).append("\">");
 		sb.append(kOpenWedge).append(parentName).append(">");
 		// include all preceding siblings since one or more may be required.
 		includePrecedingSiblingNames(targetElement, sb);
@@ -206,10 +207,10 @@ public class XmlDocumentManager {
 		node = targetElement.getNextSibling();
 		while (node != null) {
 			if (node instanceof Element el) {
-				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName().toLowerCase());
+				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName());
 				if ("summary".equals(siblingName)) {
 					Element sibling = (Element)node.getFirstChild();
-					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
 				}
 				followingNames.add(siblingName);
 			}
@@ -227,10 +228,10 @@ public class XmlDocumentManager {
 		Node node = targetElement.getPreviousSibling();
 		while (node != null) {
 			if (node instanceof Element el) {
-				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName().toLowerCase());
+				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName());
 				if ("summary".equals(siblingName)) {
 					Element sibling = (Element)node.getFirstChild();
-					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName().toLowerCase());
+					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
 				}
 				precedingNames.add(siblingName);
 			}
