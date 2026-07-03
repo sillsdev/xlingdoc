@@ -42,10 +42,18 @@ public class XmlDocumentManager {
 	// TODO: flesh out all required entries where an element has required subelements
 	Map<String,String> requiredSubElements = Map.ofEntries(
 			Map.entry("appendix","<secTitle/><p/>"),
+			Map.entry("example","<chart/>"),
 			Map.entry("frontMatter","<title/><author/>"),
 			Map.entry("glossary","<p/>"),
+			Map.entry("interlinear","<free/>"),
+			Map.entry("listDefinition","<definition/>"),
+			Map.entry("listInterlinear","<free/>"),
+			Map.entry("listSingle","<langData/>"),
+			Map.entry("listWord","<langData/>"),
 			Map.entry("refAuthor","<refWork><refDate/><refTitle/></refWork>"),
-			Map.entry("refWork","<refDate/><refTitle/>")
+			Map.entry("refWork","<refDate/><refTitle/>"),
+			Map.entry("single","<langData/>"),
+			Map.entry("word","<langData/>")
 			);
 
 	public Document getMasterXmlDoc() {
@@ -169,6 +177,35 @@ public class XmlDocumentManager {
 		if (!insertBefore) {
 			appendElementName(candidateName, sb);
 		}
+		// include all following siblings since one or more may be required.
+		includeFollowingSiblingNames(targetElement, sb);
+		sb.append("</").append(parentName).append(">");
+		InputStream is = new ByteArrayInputStream(sb.toString().getBytes() );
+		try {
+			warningsCount = 0;
+			errorsCount = 0;
+			fatalErrorsCount = 0;
+			builder.parse(is);
+			if (errorsCount > 0) {
+//				System.out.println("\t" + sb.toString());
+				return false;
+			}
+			return true; // Validation passed
+		} catch (Exception e) {
+			// We actually never get here; any exceptions are caught in loadXmlDocument().
+			return false; // Validation failed
+		}
+	}
+
+	public boolean isValidReplace(DocumentBuilder builder, Element targetElement, String candidateName) {
+		String parentName = findParentName(targetElement);
+		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName());
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append(Constants.ELEMENT_ONLY_DTD_LOCATION).append("\">");
+		sb.append(kOpenWedge).append(parentName).append(">");
+		// include all preceding siblings since one or more may be required.
+		includePrecedingSiblingNames(targetElement, sb);
+		appendElementName(candidateName, sb);
 		// include all following siblings since one or more may be required.
 		includeFollowingSiblingNames(targetElement, sb);
 		sb.append("</").append(parentName).append(">");

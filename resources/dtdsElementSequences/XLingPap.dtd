@@ -194,7 +194,7 @@
 
      If one includes the num attribute, then one can reference the example by number.
 -->
-<!ELEMENT example (exampleHeading?, (word | listWord+ | single | listSingle+ | interlinear | interlinearRef | listInterlinear+ | tree | chart | table | definition | listDefinition+ | annotationRef+)?)>
+<!ELEMENT example (exampleHeading?, (word | listWord+ | single | listSingle+ | interlinear | interlinearRef | listInterlinear+ | tree | chart | table | definition | listDefinition+ | annotationRef+))>
 <!ELEMENT word ((langData | gloss)+, word?)>
 <!ELEMENT listWord ((langData | gloss)+, word?)>
 <!ELEMENT single ((langData | gloss)+, interlinearSource?)>

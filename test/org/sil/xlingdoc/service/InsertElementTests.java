@@ -196,6 +196,31 @@ public class InsertElementTests {
 		checkElement(el, EditOperationType.Insert, "[]");
 	}
 
+	@Test
+	public void replaceTests() {
+		nl = doc.getElementsByTagName("title");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Replace, "[title]");
+		nl = doc.getElementsByTagName("author");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Replace, "[author, authorContactInfo]");
+		nl = doc.getElementsByTagName("p");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Replace, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
+		el = (Element)nl.item(1);
+		checkElement(el, EditOperationType.Replace, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, section2, table, tablenumbered, tree, ul]");
+		el = (Element)nl.item(2);
+		checkElement(el, EditOperationType.Replace, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
+		el = (Element)nl.item(3);
+		checkElement(el, EditOperationType.Replace, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		nl = doc.getElementsByTagName("chart");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Replace, "[annotationRef, chart, definition, interlinear, interlinearRef, listDefinition, listInterlinear, listSingle, listWord, single, table, tree, word]");
+		nl = doc.getElementsByTagName("jVol");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Replace, "[jVol]");
+	}
+
 	protected void checkElement(Element el, EditOperationType op, String expected) {
 		switch (op) {
 		case Convert:
@@ -212,6 +237,7 @@ public class InsertElementTests {
 			result = inspector.getValidAdjacentElements(el, manager, true);
 			break;
 		case Replace:
+			result = inspector.getValidReplaceElements(el, manager);
 			break;
 		default:
 			break;
