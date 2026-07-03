@@ -28,8 +28,7 @@ public class InsertElementTests {
 	String fileContent = "";
 	NodeList nl;
 	Element el;
-	SortedSet<String> before;
-	SortedSet<String> after;
+	SortedSet<String> result;
 	String actual;
 
 	/**
@@ -54,133 +53,170 @@ public class InsertElementTests {
 	public void insertBeforeTests() {
 		nl = doc.getElementsByTagName("frontMatter");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[comment]");
+		checkElement(el, EditOperationType.InsertBefore, "[comment]");
 		nl = doc.getElementsByTagName("title");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[]");
+		checkElement(el, EditOperationType.InsertBefore, "[]");
 		nl = doc.getElementsByTagName("author");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[author, authorContactInfo, shortTitle, subtitle]");
+		checkElement(el, EditOperationType.InsertBefore, "[author, authorContactInfo, shortTitle, subtitle]");
 		nl = doc.getElementsByTagName("p");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(1);
-		checkElement(el, true, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(2);
-		checkElement(el, true, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(3);
-		checkElement(el, true, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(4);
-		checkElement(el, true, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(5);
-		checkElement(el, true, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		nl = doc.getElementsByTagName("section1");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[section1]");
+		checkElement(el, EditOperationType.InsertBefore, "[section1]");
 		el = (Element)nl.item(1);
-		checkElement(el, true, "[section1]");
+		checkElement(el, EditOperationType.InsertBefore, "[section1]");
 		nl = doc.getElementsByTagName("secTitle");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[]");
+		checkElement(el, EditOperationType.InsertBefore, "[]");
 		nl = doc.getElementsByTagName("endnotes");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[abbreviations, acknowledgements, appendix, glossary, glossaryTerms]");
+		checkElement(el, EditOperationType.InsertBefore, "[abbreviations, acknowledgements, appendix, glossary, glossaryTerms]");
 		nl = doc.getElementsByTagName("references");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[]");
+		checkElement(el, EditOperationType.InsertBefore, "[]");
 		nl = doc.getElementsByTagName("refAuthor");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[labelContentChoices, refAuthor, shortTitle]");
+		checkElement(el, EditOperationType.InsertBefore, "[labelContentChoices, refAuthor, shortTitle]");
 		el = (Element)nl.item(1);
-		checkElement(el, true, "[refAuthor]");
+		checkElement(el, EditOperationType.InsertBefore, "[refAuthor]");
 		nl = doc.getElementsByTagName("refWork");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[citeName, refAuthorInitials, refAuthorName, refAuthorSurnameGivenName, refWork]");
+		checkElement(el, EditOperationType.InsertBefore, "[citeName, refAuthorInitials, refAuthorName, refAuthorSurnameGivenName, refWork]");
 		el = (Element)nl.item(1);
-		checkElement(el, true, "[refWork]");
+		checkElement(el, EditOperationType.InsertBefore, "[refWork]");
 		nl = doc.getElementsByTagName("languages");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[referencedInterlinearTexts]");
+		checkElement(el, EditOperationType.InsertBefore, "[referencedInterlinearTexts]");
 		nl = doc.getElementsByTagName("language");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[language]");
+		checkElement(el, EditOperationType.InsertBefore, "[language]");
 		nl = doc.getElementsByTagName("types");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[]");
+		checkElement(el, EditOperationType.InsertBefore, "[]");
 		nl = doc.getElementsByTagName("type");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[comment, type]");
+		checkElement(el, EditOperationType.InsertBefore, "[comment, type]");
 		nl = doc.getElementsByTagName("exampleRef");
 		el = (Element)nl.item(0);
-		checkElement(el, true, "[(text), abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		checkElement(el, EditOperationType.InsertBefore, "[(text), abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
 	}
 
 	@Test
 	public void insertAfterTests() {
 		nl = doc.getElementsByTagName("frontMatter");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[section1]");
+		checkElement(el, EditOperationType.InsertAfter, "[section1]");
 		nl = doc.getElementsByTagName("title");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[author, authorContactInfo, shortTitle, subtitle]");
+		checkElement(el, EditOperationType.InsertAfter, "[author, authorContactInfo, shortTitle, subtitle]");
 		nl = doc.getElementsByTagName("author");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[abstract, acknowledgements, affiliation, author, authorContactInfo, contents, date, emailAddress, keywordsShownHere, preface, presentedAt, shortAuthor, version, volume]");
+		checkElement(el, EditOperationType.InsertAfter, "[abstract, acknowledgements, affiliation, author, authorContactInfo, contents, date, emailAddress, keywordsShownHere, preface, presentedAt, shortAuthor, version, volume]");
 		nl = doc.getElementsByTagName("p");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertAfter, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(1);
-		checkElement(el, false, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, section2, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertAfter, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, section2, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(3);
-		checkElement(el, false, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertAfter, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(4);
-		checkElement(el, false, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertAfter, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, table, tablenumbered, tree, ul]");
 		el = (Element)nl.item(5);
-		checkElement(el, false, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, section2, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertAfter, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, section2, table, tablenumbered, tree, ul]");
 		nl = doc.getElementsByTagName("section1");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[section1]");
+		checkElement(el, EditOperationType.InsertAfter, "[section1]");
 		el = (Element)nl.item(1);
-		checkElement(el, false, "[section1]");
+		checkElement(el, EditOperationType.InsertAfter, "[section1]");
 		nl = doc.getElementsByTagName("secTitle");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
+		checkElement(el, EditOperationType.InsertAfter, "[abbreviationsShownHere, annotationRef, blockquote, chart, dl, example, figure, framedUnit, hangingIndent, interlinear-text, landscape, ol, p, pc, prose-text, shortTitle, table, tablenumbered, tree, ul]");
 		nl = doc.getElementsByTagName("endnotes");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[]");
+		checkElement(el, EditOperationType.InsertAfter, "[]");
 		nl = doc.getElementsByTagName("references");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[authorContactInfo, index, keywordsShownHere, selectedBibliography]");
+		checkElement(el, EditOperationType.InsertAfter, "[authorContactInfo, index, keywordsShownHere, selectedBibliography]");
 		nl = doc.getElementsByTagName("refAuthor");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[refAuthor]");
+		checkElement(el, EditOperationType.InsertAfter, "[refAuthor]");
 		el = (Element)nl.item(1);
-		checkElement(el, false, "[annotatedBibliographyTypes, refAuthor]");
+		checkElement(el, EditOperationType.InsertAfter, "[annotatedBibliographyTypes, refAuthor]");
 		nl = doc.getElementsByTagName("refWork");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[refWork]");
+		checkElement(el, EditOperationType.InsertAfter, "[refWork]");
 		el = (Element)nl.item(1);
-		checkElement(el, false, "[refWork]");
+		checkElement(el, EditOperationType.InsertAfter, "[refWork]");
 		nl = doc.getElementsByTagName("languages");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[]");
+		checkElement(el, EditOperationType.InsertAfter, "[]");
 		nl = doc.getElementsByTagName("language");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[language]");
+		checkElement(el, EditOperationType.InsertAfter, "[language]");
 		nl = doc.getElementsByTagName("types");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[comment, contentControl, framedTypes, indexTerms, publishingInfo, validation]");
+		checkElement(el, EditOperationType.InsertAfter, "[comment, contentControl, framedTypes, indexTerms, publishingInfo, validation]");
 		nl = doc.getElementsByTagName("type");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[comment, type]");
+		checkElement(el, EditOperationType.InsertAfter, "[comment, type]");
 		nl = doc.getElementsByTagName("exampleRef");
 		el = (Element)nl.item(0);
-		checkElement(el, false, "[(text), abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		checkElement(el, EditOperationType.InsertAfter, "[(text), abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
 	}
 
-	protected void checkElement(Element el, boolean insertBefore, String expected) {
-		before = inspector.getValidAdjacentElements(el, manager, insertBefore);
-		actual = before.toString();
+	@Test
+	public void insertTests() {
+		nl = doc.getElementsByTagName("title");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Insert, "[abbrRef, appendixRef, br, citation, comment, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef, titleContentChoices]");
+		nl = doc.getElementsByTagName("author");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Insert, "[comment, endnote]");
+		nl = doc.getElementsByTagName("p");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Insert, "[abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		nl = doc.getElementsByTagName("chart");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Insert, "[abbrRef, appendixRef, br, citation, comment, dl, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, hangingIndent, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, langData, link, mediaObject, object, ol, q, sectionRef, tablenumberedRef, ul]");
+		nl = doc.getElementsByTagName("jVol");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Insert, "[]");
+	}
+
+	protected void checkElement(Element el, EditOperationType op, String expected) {
+		switch (op) {
+		case Convert:
+			break;
+		case ConvetWrap:
+			break;
+		case Insert:
+			result = inspector.getValidInsertElements(el, manager);
+			break;
+		case InsertAfter:
+			result = inspector.getValidAdjacentElements(el, manager, false);
+			break;
+		case InsertBefore:
+			result = inspector.getValidAdjacentElements(el, manager, true);
+			break;
+		case Replace:
+			break;
+		default:
+			break;
+		}
+		actual = result.toString();
 		assertEquals(expected, actual);
 	}
 

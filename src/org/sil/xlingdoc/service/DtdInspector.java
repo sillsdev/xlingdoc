@@ -13,6 +13,7 @@ import org.apache.xerces.util.SymbolTable;
 import org.apache.xerces.impl.dtd.DTDGrammar;
 import org.apache.xerces.impl.dtd.XMLDTDLoader;
 import org.apache.xerces.xni.parser.XMLInputSource;
+import org.sil.utility.StringUtilities;
 import org.w3c.dom.Element;
 
 import java.io.FileReader;
@@ -82,6 +83,24 @@ public class DtdInspector {
 //		System.out.println("\tresults size = " + validChoices.size());
 //		System.out.println("\tElements allowed " + dir + " " + targetName + ": " + validChoices);
 		return  validChoices;
+	}
+
+	public SortedSet<String> getValidInsertElements(Element targetElement, XmlDocumentManager manager) {
+		SortedSet<String> validChoices = new TreeSet<>();
+		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName());
+		// Every case we have is stand alone #PCDATA or a choice so we just use the string representation.
+		// This also means that we should only pass in the targetElement that has the cursor - i.e., is in n#PCDATA.
+		int targetIndex = grammar.getElementDeclIndex(targetName);
+		String rep = grammar.getContentSpecAsString(targetIndex);
+		if (!StringUtilities.isNullOrEmpty(rep)) {
+			// remove any parentheses
+			rep = rep.replace("(", "").replace(")", "");
+			String[] items = rep.split("\\|");
+			for (int i = 0; i < items.length; i++) {
+				validChoices.add(items[i]);
+			}
+		}
+		return validChoices;
 	}
 
 	public DTDGrammar getGrammar() {

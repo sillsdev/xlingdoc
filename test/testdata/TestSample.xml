@@ -65,6 +65,11 @@ num="xInterlinear"
 ref="rAdams1998"
 ></citation
 > has shown that more blah.</p
+><example
+num="xChart"
+><chart
+>I'm a chart</chart
+></example
 ><p
 >See the user documentation for much more on what you can do.</p
 ></section1
