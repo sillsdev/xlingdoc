@@ -8,6 +8,7 @@ module xmleditorplay {
 	requires jdk.jsobject;
 	requires xercesImplNo.org.w3c.dom.html;
 	requires junit;
+	requires org.sil.utility;
 
 	opens org.sil.xlingdoc to javafx.graphics, javafx.fxml;
 	opens org.sil.xlingdoc.view to javafx.graphics, javafx.fxml;
