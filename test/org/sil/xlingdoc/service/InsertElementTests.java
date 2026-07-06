@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
  * 
  */
 public class InsertElementTests {
-	private DtdInspector inspector;
+	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 	private Document doc;
 	String fileContent = "";
@@ -36,9 +36,9 @@ public class InsertElementTests {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		inspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
+		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
-		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, Constants.UNIT_TEST_DATA_FILE);
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
 		doc = manager.getMasterXmlDoc();
 	}
 
@@ -228,16 +228,16 @@ public class InsertElementTests {
 		case ConvetWrap:
 			break;
 		case Insert:
-			result = inspector.getValidInsertElements(el, manager);
+			result = dtdInspector.getValidInsertElements(el, manager);
 			break;
 		case InsertAfter:
-			result = inspector.getValidAdjacentElements(el, manager, false);
+			result = dtdInspector.getValidAdjacentElements(el, manager, false);
 			break;
 		case InsertBefore:
-			result = inspector.getValidAdjacentElements(el, manager, true);
+			result = dtdInspector.getValidAdjacentElements(el, manager, true);
 			break;
 		case Replace:
-			result = inspector.getValidReplaceElements(el, manager);
+			result = dtdInspector.getValidReplaceElements(el, manager);
 			break;
 		default:
 			break;

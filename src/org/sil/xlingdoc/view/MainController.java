@@ -54,7 +54,7 @@ public class MainController implements Initializable {
 	private final String kClass = "class";
 	private final String kComponentSelected = "component-selected";
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
-	private DtdInspector inspector;
+	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 
 	public MainController() {
@@ -78,10 +78,10 @@ public class MainController implements Initializable {
 			System.out.println(filePath + " not found");
 		}
 		manager = new XmlDocumentManager();
-		inspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
+		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
 //		String xmlFilePath = "data/SamplePaper.xml";
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
-		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, xmlFilePath);
+		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
 		webEngine.loadContent(htmlContent);
 
 
@@ -168,8 +168,8 @@ public class MainController implements Initializable {
 								sb.append(" > ");
 							} else {
 								System.out.println("Clicked on this element: '" + adjustedTagName + "'");
-								SortedSet<String> before = inspector.getValidAdjacentElements(domElement, manager, true);
-								SortedSet<String> after = inspector.getValidAdjacentElements(domElement, manager, false);
+								SortedSet<String> before = dtdInspector.getValidAdjacentElements(domElement, manager, true);
+								SortedSet<String> after = dtdInspector.getValidAdjacentElements(domElement, manager, false);
 							}
 						}
 					}

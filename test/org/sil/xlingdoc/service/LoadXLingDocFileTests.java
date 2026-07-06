@@ -20,12 +20,12 @@ import org.sil.xlingdoc.Constants;
  * 
  */
 public class LoadXLingDocFileTests {
-	private DtdInspector inspector;
+	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 
 	@Before
 	public void setUp() throws Exception {
-		inspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
+		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
 	}
 
@@ -38,7 +38,7 @@ public class LoadXLingDocFileTests {
 
 	@Test
 	public void loadValidFileTest() {
-		String html = XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, Constants.UNIT_TEST_DATA_FILE);
+		String html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
 		html = html.replace("\r", "");
 		Assert.assertEquals(0,  manager.errorsCount);
 		Assert.assertEquals(0,  manager.fatalErrorsCount);
@@ -55,7 +55,7 @@ public class LoadXLingDocFileTests {
 
 	@Test
 	public void loadInvalidFileTest() {
-		XLingDocLoader.loadFileIntoNeededHTML(manager, inspector, Constants.UNIT_TEST_INVALID_DATA_FILE);
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_DATA_FILE);
 		Assert.assertEquals(5,  manager.errorsCount);
 		Assert.assertEquals(0,  manager.fatalErrorsCount);
 		Assert.assertEquals(0,  manager.warningsCount);

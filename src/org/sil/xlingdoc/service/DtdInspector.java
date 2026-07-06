@@ -25,6 +25,7 @@ public class DtdInspector {
 	private DTDGrammar grammar;
 	private PcDataElementCollector dtdHandler;
 	private String pcDataIndicator = "(??)";
+	private final String kSplitRegExpr = "[,+?\\|\\*\\(\\)]";
 
 	public DtdInspector(String dtdPath, String pcDataIndicator) {
 		this.pcDataIndicator = pcDataIndicator;
@@ -43,29 +44,20 @@ public class DtdInspector {
 
 	public SortedSet<String> getValidAdjacentElements(Element targetElement, XmlDocumentManager manager, boolean insertBefore) {
 		SortedSet<String> validChoices = new TreeSet<>();
-		// 1. Identify the parent context and current sibling sequence
 		Element parentElement = (Element) targetElement.getParentNode();
 		if (parentElement == null)
-			return validChoices; // Root node has no siblings
-		String parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
-		if (parentName.equals("summary")) {
-			parentElement = (Element) parentElement.getParentNode();
-			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
-		}
-		if (parentName.equals("details")) {
-			parentElement = (Element) parentElement.getParentNode();
-			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
-		}
+			return validChoices;
+		String parentName = findParentNameToUse(parentElement);
 		int parentIndex = grammar.getElementDeclIndex(parentName);
 		if (parentIndex == -1) {
 			return validChoices;
 		}
 		if (dtdHandler.hasPcData(parentName)) {
-		validChoices.add(pcDataIndicator);
-	}
+			validChoices.add(pcDataIndicator);
+		}
 		String rep = grammar.getContentSpecAsString(parentIndex);
 		if (!StringUtilities.isNullOrEmpty(rep)) {
-			String[] items = rep.split("[,+?\\|\\*\\(\\)]");
+			String[] items = rep.split(kSplitRegExpr);
 			for (int i = 0; i < items.length; i++) {
 				if (!StringUtilities.isNullOrEmpty(items[i])) {
 					if (manager.isValidInsertion(manager.getBuilder(), targetElement, items[i], insertBefore)) {
@@ -83,15 +75,13 @@ public class DtdInspector {
 			return validChoices;
 		}
 		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName());
-		// Every case we have is stand alone #PCDATA or a choice so we just use the string representation.
-		// This also means that we should only pass in the targetElement that has the cursor - i.e., is in n#PCDATA.
 		int targetIndex = grammar.getElementDeclIndex(targetName);
 		if (targetIndex == -1) {
 			return validChoices;
 		}
 		String rep = grammar.getContentSpecAsString(targetIndex);
 		if (!StringUtilities.isNullOrEmpty(rep)) {
-			String[] items = rep.split("[,+?\\|\\*\\(\\)]");
+			String[] items = rep.split(kSplitRegExpr);
 			for (int i = 0; i < items.length; i++) {
 				if (!StringUtilities.isNullOrEmpty(items[i])) {
 					validChoices.add(items[i]);
@@ -106,22 +96,14 @@ public class DtdInspector {
 		Element parentElement = (Element) targetElement.getParentNode();
 		if (parentElement == null)
 			return validChoices; // Root node has no siblings
-		String parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
-		if (parentName.equals("summary")) {
-			parentElement = (Element) parentElement.getParentNode();
-			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
-		}
-		if (parentName.equals("details")) {
-			parentElement = (Element) parentElement.getParentNode();
-			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
-		}
+		String parentName = findParentNameToUse(parentElement);
 		int parentIndex = grammar.getElementDeclIndex(parentName);
 		if (parentIndex == -1) {
 			return validChoices;
 		}
 		String rep = grammar.getContentSpecAsString(parentIndex);
 		if (!StringUtilities.isNullOrEmpty(rep)) {
-			String[] items = rep.split("[,+?\\|\\*\\(\\)]");
+			String[] items = rep.split(kSplitRegExpr);
 			for (int i = 0; i < items.length; i++) {
 				if (!StringUtilities.isNullOrEmpty(items[i])) {
 					if (manager.isValidReplace(manager.getBuilder(), targetElement, items[i])) {
@@ -137,4 +119,17 @@ public class DtdInspector {
 		return grammar;
 	}
 
+	protected String findParentNameToUse(Element parentElement) {
+		String parentName;
+		parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
+		if (parentName.equals("summary")) {
+			parentElement = (Element) parentElement.getParentNode();
+			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
+		}
+		if (parentName.equals("details")) {
+			parentElement = (Element) parentElement.getParentNode();
+			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
+		}
+		return parentName;
+	}
 }
