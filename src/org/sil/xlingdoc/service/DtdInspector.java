@@ -17,7 +17,6 @@ import org.sil.utility.StringUtilities;
 import org.w3c.dom.Element;
 
 import java.io.FileReader;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -42,14 +41,6 @@ public class DtdInspector {
 		}
 	}
 
-	/**
-	 * Determines which elements can legally be inserted adjacent to the target
-	 * node.
-	 * @param  targetElement The element currently selected in the WebView
-	 * @parm   manager
-	 * @param  insertBefore True for "Insert After" context, False for "Insert Before"
-	 * @return List of valid element tag names
-	 */
 	public SortedSet<String> getValidAdjacentElements(Element targetElement, XmlDocumentManager manager, boolean insertBefore) {
 		SortedSet<String> validChoices = new TreeSet<>();
 		// 1. Identify the parent context and current sibling sequence
@@ -65,19 +56,24 @@ public class DtdInspector {
 			parentElement = (Element) parentElement.getParentNode();
 			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
 		}
-		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName());
-		Set<String> adjacents = DTDAdjacentAnalyzer.findAdjacentElements(
-				grammar, parentName, targetName, insertBefore);
-		if (dtdHandler.hasPcData(parentName)) {
-			validChoices.add(pcDataIndicator);
+		int parentIndex = grammar.getElementDeclIndex(parentName);
+		if (parentIndex == -1) {
+			return validChoices;
 		}
-		for (String elem : adjacents) {
-			if (manager.isValidInsertion(manager.getBuilder(), targetElement, elem, insertBefore)) {
-				validChoices.add(elem);
+		if (dtdHandler.hasPcData(parentName)) {
+		validChoices.add(pcDataIndicator);
+	}
+		String rep = grammar.getContentSpecAsString(parentIndex);
+		if (!StringUtilities.isNullOrEmpty(rep)) {
+			String[] items = rep.split("[,+?\\|\\*\\(\\)]");
+			for (int i = 0; i < items.length; i++) {
+				if (!StringUtilities.isNullOrEmpty(items[i])) {
+					if (manager.isValidInsertion(manager.getBuilder(), targetElement, items[i], insertBefore)) {
+						validChoices.add(items[i]);
+					}
+				}
 			}
 		}
-//		System.out.println("\tresults size = " + validChoices.size());
-//		System.out.println("\tElements allowed " + dir + " " + targetName + ": " + validChoices);
 		return  validChoices;
 	}
 
@@ -95,11 +91,11 @@ public class DtdInspector {
 		}
 		String rep = grammar.getContentSpecAsString(targetIndex);
 		if (!StringUtilities.isNullOrEmpty(rep)) {
-			// remove any parentheses
-			rep = rep.replace("(", "").replace(")", "");
-			String[] items = rep.split("\\|");
+			String[] items = rep.split("[,+?\\|\\*\\(\\)]");
 			for (int i = 0; i < items.length; i++) {
-				validChoices.add(items[i]);
+				if (!StringUtilities.isNullOrEmpty(items[i])) {
+					validChoices.add(items[i]);
+				}
 			}
 		}
 		return validChoices;
@@ -107,7 +103,6 @@ public class DtdInspector {
 
 	public SortedSet<String> getValidReplaceElements(Element targetElement, XmlDocumentManager manager) {
 		SortedSet<String> validChoices = new TreeSet<>();
-		// 1. Identify the parent context and current sibling sequence
 		Element parentElement = (Element) targetElement.getParentNode();
 		if (parentElement == null)
 			return validChoices; // Root node has no siblings
@@ -120,25 +115,21 @@ public class DtdInspector {
 			parentElement = (Element) parentElement.getParentNode();
 			parentName = XmlNameMapper.getMappedElementName(parentElement.getTagName());
 		}
-		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName());
-		Set<String> replacers = DTDReplaceAnalyzer.findReplaceElements(
-				grammar, parentName, targetName);
-//		if (dtdHandler.hasPcData(parentName)) {
-//			validChoices.add(pcDataIndicator);
-//		}
-//		validChoices.addAll(adjacents);
-		for (String elem : replacers) {
-			if (manager.isValidReplace(manager.getBuilder(), targetElement, elem)) {
-				validChoices.add(elem);
+		int parentIndex = grammar.getElementDeclIndex(parentName);
+		if (parentIndex == -1) {
+			return validChoices;
+		}
+		String rep = grammar.getContentSpecAsString(parentIndex);
+		if (!StringUtilities.isNullOrEmpty(rep)) {
+			String[] items = rep.split("[,+?\\|\\*\\(\\)]");
+			for (int i = 0; i < items.length; i++) {
+				if (!StringUtilities.isNullOrEmpty(items[i])) {
+					if (manager.isValidReplace(manager.getBuilder(), targetElement, items[i])) {
+						validChoices.add(items[i]);
+					}
+				}
 			}
 		}
-//		System.out.println("\tresults size = " + validChoices.size());
-//		System.out.println("\tElements allowed " + dir + " " + targetName + ": " + validChoices);
-
-		
-//		String targetName = XmlNameMapper.getMappedElementName(targetElement.getTagName());
-//		int targetIndex = grammar.getElementDeclIndex(targetName);
-//		String rep = grammar.getContentSpecAsString(targetIndex);
 		return validChoices;
 	}
 
