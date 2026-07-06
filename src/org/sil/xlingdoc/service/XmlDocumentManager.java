@@ -6,26 +6,17 @@
 
 package org.sil.xlingdoc.service;
 
-import org.sil.xlingdoc.Constants;
 /**
  * code drafted by Gemini and Leo
  */
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
 public class XmlDocumentManager {
 	private Document masterXmlDoc;
@@ -34,27 +25,6 @@ public class XmlDocumentManager {
 	int warningsCount = 0;
 	int errorsCount = 0;
 	int fatalErrorsCount = 0;
-	final String kOpenWedge = "<";
-	final String kEndingWedge = "</";
-	final String kCloseWedge = ">";
-	final String kClosingWedge = "/>";
-
-	// TODO: flesh out all required entries where an element has required subelements
-	Map<String,String> requiredSubElements = Map.ofEntries(
-			Map.entry("appendix","<secTitle/><p/>"),
-			Map.entry("example","<chart/>"),
-			Map.entry("frontMatter","<title/><author/>"),
-			Map.entry("glossary","<p/>"),
-			Map.entry("interlinear","<free/>"),
-			Map.entry("listDefinition","<definition/>"),
-			Map.entry("listInterlinear","<free/>"),
-			Map.entry("listSingle","<langData/>"),
-			Map.entry("listWord","<langData/>"),
-			Map.entry("refAuthor","<refWork><refDate/><refTitle/></refWork>"),
-			Map.entry("refWork","<refDate/><refTitle/>"),
-			Map.entry("single","<langData/>"),
-			Map.entry("word","<langData/>")
-			);
 
 	public Document getMasterXmlDoc() {
 		return masterXmlDoc;
@@ -66,6 +36,36 @@ public class XmlDocumentManager {
 
 	public DocumentBuilder getBuilder() {
 		return builder;
+	}
+
+	public int getWarningsCount() {
+		return warningsCount;
+	}
+
+	public void setWarningsCount(int warningsCount) {
+		this.warningsCount = warningsCount;
+	}
+
+	public int getErrorsCount() {
+		return errorsCount;
+	}
+
+	public void setErrorsCount(int errorsCount) {
+		this.errorsCount = errorsCount;
+	}
+
+	public int getFatalErrorsCount() {
+		return fatalErrorsCount;
+	}
+
+	public void setFatalErrorsCount(int fatalErrorsCount) {
+		this.fatalErrorsCount = fatalErrorsCount;
+	}
+
+	public void resetCounters() {
+		errorsCount = 0;
+		fatalErrorsCount = 0;
+		warningsCount = 0;
 	}
 
 	public void loadXmlDocument(File xmlFile) throws Exception {
@@ -128,155 +128,5 @@ public class XmlDocumentManager {
 //		}
 
 		return sb.toString();
-	}
-
-	public String findParentName(Element element) {
-//		System.out.println("findParentName on " + element.getNodeName());
-		String parentName = "";
-		if (element.getParentNode() instanceof Element parent) {
-			parentName = XmlNameMapper.getMappedElementName(parent.getNodeName());
-			while ("details".equals(parentName) || "summary".equals(parentName)) {
-				parent = (Element) parent.getParentNode();
-				parentName = XmlNameMapper.getMappedElementName(parent.getNodeName());
-			}
-//			System.out.println("\t" + parentName);
-		}
-		return parentName;
-	}
-
-	public String findSiblingName(Element element, boolean isPrevious) {
-		String siblingName = null;
-		Node immediateSibling;
-		if (isPrevious) {
-			immediateSibling = element.getPreviousSibling();
-		} else {
-			immediateSibling = element.getNextSibling();
-		}
-		if (immediateSibling instanceof Element sibling) {
-			siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
-			if ("summary".equals(siblingName)) {
-				sibling = (Element)sibling.getFirstChild();
-				siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
-			}
-		}
-		return siblingName;
-	}
-
-	public boolean isValidInsertion(DocumentBuilder builder, Element targetElement, String candidateName, boolean insertBefore) {
-		String parentName = findParentName(targetElement);
-		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName());
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append(Constants.ELEMENT_ONLY_DTD_LOCATION).append("\">");
-		sb.append(kOpenWedge).append(parentName).append(">");
-		// include all preceding siblings since one or more may be required.
-		includePrecedingSiblingNames(targetElement, sb);
-		if (insertBefore) {
-			appendElementName(candidateName, sb);
-		}
-		appendElementName(targetName, sb);
-		if (!insertBefore) {
-			appendElementName(candidateName, sb);
-		}
-		// include all following siblings since one or more may be required.
-		includeFollowingSiblingNames(targetElement, sb);
-		sb.append("</").append(parentName).append(">");
-		InputStream is = new ByteArrayInputStream(sb.toString().getBytes() );
-		try {
-			warningsCount = 0;
-			errorsCount = 0;
-			fatalErrorsCount = 0;
-			builder.parse(is);
-			if (errorsCount > 0) {
-//				System.out.println("\t" + sb.toString());
-				return false;
-			}
-			return true; // Validation passed
-		} catch (Exception e) {
-			// We actually never get here; any exceptions are caught in loadXmlDocument().
-			return false; // Validation failed
-		}
-	}
-
-	public boolean isValidReplace(DocumentBuilder builder, Element targetElement, String candidateName) {
-		String parentName = findParentName(targetElement);
-		String targetName = XmlNameMapper.getMappedElementName(targetElement.getNodeName());
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!DOCTYPE ").append(parentName).append(" SYSTEM \"").append(Constants.ELEMENT_ONLY_DTD_LOCATION).append("\">");
-		sb.append(kOpenWedge).append(parentName).append(">");
-		// include all preceding siblings since one or more may be required.
-		includePrecedingSiblingNames(targetElement, sb);
-		appendElementName(candidateName, sb);
-		// include all following siblings since one or more may be required.
-		includeFollowingSiblingNames(targetElement, sb);
-		sb.append("</").append(parentName).append(">");
-		InputStream is = new ByteArrayInputStream(sb.toString().getBytes() );
-		try {
-			warningsCount = 0;
-			errorsCount = 0;
-			fatalErrorsCount = 0;
-			builder.parse(is);
-			if (errorsCount > 0) {
-//				System.out.println("\t" + sb.toString());
-				return false;
-			}
-			return true; // Validation passed
-		} catch (Exception e) {
-			// We actually never get here; any exceptions are caught in loadXmlDocument().
-			return false; // Validation failed
-		}
-	}
-
-	protected void appendElementName(String elementName, StringBuilder sb) {
-//		System.out.println("\t\tappend looking for '" + elementName + "'");
-		if (requiredSubElements.containsKey(elementName)) {
-			sb.append(kOpenWedge).append(elementName).append(kCloseWedge);
-			sb.append(requiredSubElements.get(elementName));
-			sb.append(kEndingWedge).append(elementName).append(kCloseWedge);
-		} else {
-			sb.append(kOpenWedge).append(elementName).append(kClosingWedge);
-		}
-	}
-
-	protected void includeFollowingSiblingNames(Element targetElement, StringBuilder sb) {
-		String siblingName;
-		Node node;
-		List<String> followingNames = new ArrayList<String>();
-		node = targetElement.getNextSibling();
-		while (node != null) {
-			if (node instanceof Element el) {
-				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName());
-				if ("summary".equals(siblingName)) {
-					Element sibling = (Element)node.getFirstChild();
-					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
-				}
-				followingNames.add(siblingName);
-			}
-			node = node.getNextSibling();
-		}
-		for (String name : followingNames) {
-			appendElementName(name, sb);
-//			sb.append(kOpenWedge).append(name).append(kClosingWedge);
-		}
-	}
-
-	protected void includePrecedingSiblingNames(Element targetElement, StringBuilder sb) {
-		String siblingName;
-		List<String> precedingNames = new ArrayList<String>();
-		Node node = targetElement.getPreviousSibling();
-		while (node != null) {
-			if (node instanceof Element el) {
-				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName());
-				if ("summary".equals(siblingName)) {
-					Element sibling = (Element)node.getFirstChild();
-					siblingName = XmlNameMapper.getMappedElementName(sibling.getNodeName());
-				}
-				precedingNames.add(siblingName);
-			}
-			node = node.getPreviousSibling();
-		}
-		ListIterator<String> prevIter = precedingNames.listIterator(precedingNames.size());
-		while (prevIter.hasPrevious()) {
-			appendElementName(prevIter.previous(), sb);
-		}
 	}
 }
