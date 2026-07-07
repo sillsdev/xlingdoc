@@ -44,17 +44,29 @@ public class DtdInspector {
 
 	// TODO: flesh out all required entries where an element has required subelements
 	Map<String,String> requiredSubElements = Map.ofEntries(
+			Map.entry("abstract","<p/>"),
+			Map.entry("acknowledgements","<p/>"),
+			Map.entry("annotatedBibliographyTypes","<annotatedBibliographyType/>"),
 			Map.entry("appendix","<secTitle/><p/>"),
+			Map.entry("contentControl","<contentTypes><contentType/></contentTypes><contentControlChoices><contentControlChoice/></contentControlChoices>"),
 			Map.entry("example","<chart/>"),
+			Map.entry("framedTypes","<framedType/>"),
+			Map.entry("framedUnit","<p/>"),
 			Map.entry("frontMatter","<title/><author/>"),
 			Map.entry("glossary","<p/>"),
 			Map.entry("interlinear","<free/>"),
+			Map.entry("labelContentChoices","<labelContent/><labelContent/>"),
+			Map.entry("landscape","<p/>"),
+			Map.entry("languages","<language/>"),
 			Map.entry("listDefinition","<definition/>"),
 			Map.entry("listInterlinear","<free/>"),
 			Map.entry("listSingle","<langData/>"),
 			Map.entry("listWord","<langData/>"),
-			Map.entry("refAuthor","<refWork><refDate/><refTitle/></refWork>"),
-			Map.entry("refWork","<refDate/><refTitle/>"),
+			Map.entry("preface","<p/>"),
+			Map.entry("refAuthor","<refWork><refDate/><refTitle/><ms><empty/></ms></refWork>"),
+			Map.entry("referencedInterlinearTexts","<referencedInterlinearText><interlinear-text/></referencedInterlinearText>"),
+			Map.entry("refWork","<refDate/><refTitle/><ms><empty/></ms>"),
+			Map.entry("selectedBibliography","<citation/>"),
 			Map.entry("single","<langData/>"),
 			Map.entry("word","<langData/>")
 			);
@@ -88,6 +100,7 @@ public class DtdInspector {
 			validChoices.add(pcDataIndicator);
 		}
 		String rep = grammar.getContentSpecAsString(parentIndex);
+//		System.out.println("rep = " + rep);
 		if (!StringUtilities.isNullOrEmpty(rep)) {
 			StringBuilder sbBefore = new StringBuilder();
 			buildDoctype(parentName, sbBefore);

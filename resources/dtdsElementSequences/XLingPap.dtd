@@ -65,7 +65,7 @@
   -->
 <!ELEMENT lingPaper (comment*, frontMatter?, ((chapterBeforePart?, part*, (volume, part*)*) | ((volume?, chapter*)*) | ((volume?, chapterInCollection*)*) | section1*), backMatter?, referencedInterlinearTexts?, languages?, types?, framedTypes?, indexTerms*, comment*, publishingInfo?, contentControl?, validation?)>
 <!-- Languages groups a set of language definitions.  This is at the end because it looks better in a tool like XMLMind -->
-<!ELEMENT languages (language*)>
+<!ELEMENT languages (language+)>
 <!ELEMENT language (langName*)>
 <!-- a language name, which can be expressed in various languages -->
 <!ELEMENT langName (#PCDATA)>
@@ -78,8 +78,7 @@
 <!ELEMENT subtitle (#PCDATA | %embedded; | titleContentChoices)*>
 <!ELEMENT titleContentChoices (titleContent, titleContent+) >
 <!ELEMENT titleContent (#PCDATA | %embedded;)*>
-<!ELEMENT labelContentChoices (labelContent*) >
-<!--<!ELEMENT labelContentChoices (labelContent, labelContent+) >-->
+<!ELEMENT labelContentChoices (labelContent, labelContent+) >
 <!ELEMENT labelContent (#PCDATA)>
 <!-- ORCID is the Open Researcher and Contributor ID; see http://en.wikipedia.org/wiki/ORCID -->
 <!ELEMENT author (#PCDATA | comment | endnote)*>
@@ -91,9 +90,9 @@
 <!ELEMENT presentedAt (#PCDATA | %embedded;)*>
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT version (#PCDATA | %embedded;)*>
-<!ELEMENT acknowledgements (labelContentChoices?, shortTitle?, (%chunk;)*)>
-<!ELEMENT abstract (labelContentChoices?, shortTitle?, (%chunk;)*)>
-<!ELEMENT preface (labelContentChoices?, shortTitle?, (%chunk; | landscape | framedUnit | abbreviationsShownHere | listOfFiguresShownHere | listOfTablesShownHere | glossaryTermsShownHere | glossaryTermsShownHereAsDefinitionList | iso639-3codesShownHere)*)>
+<!ELEMENT acknowledgements (labelContentChoices?, shortTitle?, (%chunk;)+)>
+<!ELEMENT abstract (labelContentChoices?, shortTitle?, (%chunk;)+)>
+<!ELEMENT preface (labelContentChoices?, shortTitle?, (%chunk; | landscape | framedUnit | abbreviationsShownHere | listOfFiguresShownHere | listOfTablesShownHere | glossaryTermsShownHere | glossaryTermsShownHereAsDefinitionList | iso639-3codesShownHere)+)>
 <!ELEMENT contents (labelContentChoices?, shortTitle?)>
 <!-- an keywordsShownHere element can be placed in front matter or back matter.
     The list of keywords defined within publishingInfo will be listed one after the other separated by what is in the separationText attribute.
@@ -149,7 +148,7 @@
 <!ELEMENT object (#PCDATA | object | abbrRef)*>
 
 <!-- a set of one or more interlinear-text elements which will be referenced within the document, but not included in the output of the document -->
-<!ELEMENT referencedInterlinearTexts (referencedInterlinearText*) >
+<!ELEMENT referencedInterlinearTexts (referencedInterlinearText+) >
 <!-- a single interlinear-text which will be referenced, but not shown in the document  -->
 <!-- the url attribute is used for citing references to an interlinear within an interlinear-text -->
 <!ELEMENT referencedInterlinearText (interlinear-text) >
@@ -328,13 +327,13 @@
 <!-- selected bibliography 
        This is a place to put citations in the few cases where one wants to have more references than are actually cited in the document body.
 -->
-<!ELEMENT selectedBibliography (labelContentChoices?, shortTitle?, (citation*))>
+<!ELEMENT selectedBibliography (labelContentChoices?, shortTitle?, (citation+))>
 <!-- landscape mode: in PDF, output the material in landscape instead of portrait mode; will start a new page in the output -->
-<!ELEMENT landscape (%chunk;)*>
+<!ELEMENT landscape (%chunk;)+>
 
 <!-- framedUnit: output the material offset per attributes in the framedType -->
-<!ELEMENT framedUnit (%chunk;)*>
-<!ELEMENT framedTypes (framedType)*>
+<!ELEMENT framedUnit (%chunk;)+>
+<!ELEMENT framedTypes (framedType)+>
 <!ELEMENT framedType EMPTY>
 <!-- the tagging of some text or embedded elements as belonging to an index term;
 this is what goes in the content of the document

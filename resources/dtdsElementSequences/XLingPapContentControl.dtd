@@ -4,7 +4,7 @@
 <!-- contentControl has two containers, one for the set of content control choices 
         and the other for the types of content.
 -->
-<!ELEMENT contentControl (contentTypes, contentControlChoices)* >
+<!ELEMENT contentControl (contentTypes, contentControlChoices) >
 
 <!-- contentControlChoices has at least one contentControlChoice -->
 <!ELEMENT contentControlChoices (contentControlChoice+) >
