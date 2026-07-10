@@ -1,0 +1,3 @@
+# xlingdoc
+XLingDoc is a JavaFX app for writing lingusitic documents.  It is an experimental, stand-alone version of XLingPaper (https://github.com/sillsdev/XLingPap and https://software.sil.org/xlingpaper/).  It is under construction and probably will be for some time...
+
