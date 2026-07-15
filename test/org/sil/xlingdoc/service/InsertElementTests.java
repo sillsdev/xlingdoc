@@ -221,11 +221,44 @@ public class InsertElementTests {
 		checkElement(el, EditOperationType.Replace, "[jVol]");
 	}
 
+	@Test
+	public void convertTests() {
+		nl = doc.getElementsByTagName("title");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[]");
+		nl = doc.getElementsByTagName("author");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[]");
+		nl = doc.getElementsByTagName("p");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[blockquote, chart, hangingIndent, pc, shortTitle, tree]");
+		el = (Element)nl.item(1);
+		checkElement(el, EditOperationType.Convert, "[blockquote, chart, hangingIndent, pc, tree]");
+		nl = doc.getElementsByTagName("example");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[interlinear-text]");
+		el = (Element)nl.item(1);
+		checkElement(el, EditOperationType.Convert, "[blockquote, figure, framedUnit, landscape]");
+		nl = doc.getElementsByTagName("exampleRef");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[abbrRef, abbreviationsShownHere, appendixRef, br, citation, comment, definition, endnote, endnoteRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		nl = doc.getElementsByTagName("citation");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[abbrRef, abbreviationsShownHere, appendixRef, br, comment, definition, endnote, endnoteRef, exampleRef, figureRef, genericRef, genericTarget, gloss, glossaryTermRef, img, indexedItem, indexedRangeBegin, indexedRangeEnd, interlinearRefCitation, iso639-3codeRef, iso639-3codesShownHere, langData, link, mediaObject, object, q, sectionRef, tablenumberedRef]");
+		nl = doc.getElementsByTagName("chart");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[definition, tree]");
+		nl = doc.getElementsByTagName("jVol");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.Convert, "[]");
+	}
+
 	protected void checkElement(Element el, EditOperationType op, String expected) {
 		switch (op) {
 		case Convert:
+			result = dtdInspector.getValidConvertElements(el, manager);
 			break;
-		case ConvetWrap:
+		case ConvertWrap:
 			break;
 		case Insert:
 			result = dtdInspector.getValidInsertElements(el, manager);

@@ -11,7 +11,7 @@ package org.sil.xlingdoc.service;
  */
 public enum EditOperationType {
 	Convert,
-	ConvetWrap,
+	ConvertWrap,
 	Insert,
 	InsertAfter,
 	InsertBefore,

@@ -17,6 +17,7 @@ import org.sil.utility.StringUtilities;
 import org.sil.xlingdoc.Constants;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileReader;
@@ -185,8 +186,66 @@ public class DtdInspector {
 		return validChoices;
 	}
 
+	public SortedSet<String> getValidConvertElements(Element targetElement, XmlDocumentManager manager) {
+		SortedSet<String> validChoices = new TreeSet<>();
+		Element parentElement = (Element) targetElement.getParentNode();
+		if (parentElement == null)
+			return validChoices; // Root node has no siblings
+		String parentName = findParentNameToUse(parentElement);
+		int parentIndex = grammar.getElementDeclIndex(parentName);
+		if (parentIndex == -1) {
+			return validChoices;
+		}
+		String rep = grammar.getContentSpecAsString(parentIndex);
+		if (!StringUtilities.isNullOrEmpty(rep)) {
+			StringBuilder sbBefore = new StringBuilder();
+			buildDoctype(parentName, sbBefore);
+			// include all preceding siblings since one or more may be required.
+			includePrecedingSiblingNames(targetElement, sbBefore);
+			StringBuilder sbAfter = new StringBuilder();
+			// include all following siblings since one or more may be required.
+			includeFollowingSiblingNames(targetElement, sbAfter);
+			buildFinalElement(parentName, sbAfter);
+			String targetName = targetElement.getLocalName();
+			String[] items = rep.split(kSplitRegExpr);
+			for (int i = 0; i < items.length; i++) {
+				if (!StringUtilities.isNullOrEmpty(items[i])) {
+					StringBuilder sbCandidateConstruct = new StringBuilder();
+					String candidateName = items[i];
+					if (!candidateName.equals(targetName)) {
+						sbCandidateConstruct.append(kOpenWedge).append(candidateName).append(kCloseWedge);
+						for (int iChild = 0; iChild < targetElement.getChildNodes().getLength(); iChild++) {
+							Node n = targetElement.getChildNodes().item(iChild);
+							if (n instanceof Text t) {
+								sbCandidateConstruct.append("t");
+							} else if (n instanceof Element el) {
+								String childName = el.getLocalName();
+								appendElementName(childName, sbCandidateConstruct);
+							}
+						}
+						sbCandidateConstruct.append(kEndingWedge).append(candidateName).append(kCloseWedge);
+						if (isValidConvert(manager, sbBefore.toString(), sbCandidateConstruct.toString(), sbAfter.toString())) {
+							validChoices.add(items[i]);
+						}
+					}
+				}
+			}
+		}
+		return validChoices;
+	}
+
 	public DTDGrammar getGrammar() {
 		return grammar;
+	}
+
+	public boolean isValidConvert(XmlDocumentManager manager, String sBefore, String candidateConstruct, String sAfter) {
+		DocumentBuilder builder = manager.getBuilder();
+		StringBuilder sb = new StringBuilder();
+		sb.append(sBefore);
+		sb.append(candidateConstruct);
+		sb.append(sAfter);
+//		System.out.println(sb.toString());
+		return parseXmlSnippet(manager, builder, sb);
 	}
 
 	public boolean isValidInsertion(XmlDocumentManager manager, Element targetElement, String sBefore, String candidateName, String sAfter, boolean insertBefore) {
