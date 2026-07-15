@@ -39,9 +39,9 @@ public class DtdInspector {
 	private final String kSplitRegExpr = "[,+?\\|\\*\\(\\)]";
 
 	final String kOpenWedge = "<";
-	final String kEndingWedge = "</";
+	final String kEndingOpenWedge = "</";
 	final String kCloseWedge = ">";
-	final String kClosingWedge = "/>";
+	final String kEndingCloseWedge = "/>";
 
 	// TODO: flesh out all required entries where an element has required subelements
 	Map<String,String> requiredSubElements = Map.ofEntries(
@@ -223,7 +223,57 @@ public class DtdInspector {
 								appendElementName(childName, sbCandidateConstruct);
 							}
 						}
-						sbCandidateConstruct.append(kEndingWedge).append(candidateName).append(kCloseWedge);
+						sbCandidateConstruct.append(kEndingOpenWedge).append(candidateName).append(kCloseWedge);
+						if (isValidConvert(manager, sbBefore.toString(), sbCandidateConstruct.toString(), sbAfter.toString())) {
+							validChoices.add(items[i]);
+						}
+					}
+				}
+			}
+		}
+		return validChoices;
+	}
+
+	public SortedSet<String> getValidConvertWrapElements(Element targetElement, XmlDocumentManager manager) {
+		SortedSet<String> validChoices = new TreeSet<>();
+		Element parentElement = (Element) targetElement.getParentNode();
+		if (parentElement == null)
+			return validChoices; // Root node has no siblings
+		String parentName = findParentNameToUse(parentElement);
+		int parentIndex = grammar.getElementDeclIndex(parentName);
+		if (parentIndex == -1) {
+			return validChoices;
+		}
+		String rep = grammar.getContentSpecAsString(parentIndex);
+		if (!StringUtilities.isNullOrEmpty(rep)) {
+			StringBuilder sbBefore = new StringBuilder();
+			buildDoctype(parentName, sbBefore);
+			// include all preceding siblings since one or more may be required.
+			includePrecedingSiblingNames(targetElement, sbBefore);
+			StringBuilder sbAfter = new StringBuilder();
+			// include all following siblings since one or more may be required.
+			includeFollowingSiblingNames(targetElement, sbAfter);
+			buildFinalElement(parentName, sbAfter);
+			String targetName = targetElement.getLocalName();
+			String[] items = rep.split(kSplitRegExpr);
+			for (int i = 0; i < items.length; i++) {
+				if (!StringUtilities.isNullOrEmpty(items[i])) {
+					StringBuilder sbCandidateConstruct = new StringBuilder();
+					String candidateName = items[i];
+					if (!candidateName.equals(targetName)) {
+						sbCandidateConstruct.append(kOpenWedge).append(candidateName).append(kCloseWedge);
+						sbCandidateConstruct.append(kOpenWedge).append(targetName).append(kCloseWedge);
+						for (int iChild = 0; iChild < targetElement.getChildNodes().getLength(); iChild++) {
+							Node n = targetElement.getChildNodes().item(iChild);
+							if (n instanceof Text t) {
+								sbCandidateConstruct.append("t");
+							} else if (n instanceof Element el) {
+								String childName = el.getLocalName();
+								appendElementName(childName, sbCandidateConstruct);
+							}
+						}
+						sbCandidateConstruct.append(kEndingOpenWedge).append(targetName).append(kCloseWedge);
+						sbCandidateConstruct.append(kEndingOpenWedge).append(candidateName).append(kCloseWedge);
 						if (isValidConvert(manager, sbBefore.toString(), sbCandidateConstruct.toString(), sbAfter.toString())) {
 							validChoices.add(items[i]);
 						}
@@ -322,9 +372,9 @@ public class DtdInspector {
 		if (requiredSubElements.containsKey(elementName)) {
 			sb.append(kOpenWedge).append(elementName).append(kCloseWedge);
 			sb.append(requiredSubElements.get(elementName));
-			sb.append(kEndingWedge).append(elementName).append(kCloseWedge);
+			sb.append(kEndingOpenWedge).append(elementName).append(kCloseWedge);
 		} else {
-			sb.append(kOpenWedge).append(elementName).append(kClosingWedge);
+			sb.append(kOpenWedge).append(elementName).append(kEndingCloseWedge);
 		}
 	}
 

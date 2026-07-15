@@ -253,12 +253,45 @@ public class InsertElementTests {
 		checkElement(el, EditOperationType.Convert, "[]");
 	}
 
+	@Test
+	public void convertWrapTests() {
+		nl = doc.getElementsByTagName("title");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[]");
+		nl = doc.getElementsByTagName("author");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[]");
+		nl = doc.getElementsByTagName("p");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[blockquote, framedUnit, interlinear-text, landscape, prose-text, tree]");
+		el = (Element)nl.item(1);
+		checkElement(el, EditOperationType.ConvertWrap, "[blockquote, framedUnit, interlinear-text, landscape, prose-text, tree]");
+		nl = doc.getElementsByTagName("example");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[blockquote, framedUnit, landscape]");
+		el = (Element)nl.item(1);
+		checkElement(el, EditOperationType.ConvertWrap, "[blockquote, framedUnit, landscape]");
+		nl = doc.getElementsByTagName("exampleRef");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[comment, definition, genericRef, gloss, langData, link, q]");
+		nl = doc.getElementsByTagName("citation");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[comment, definition, genericRef, gloss, langData, link, q]");
+		nl = doc.getElementsByTagName("chart");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[]");
+		nl = doc.getElementsByTagName("jVol");
+		el = (Element)nl.item(0);
+		checkElement(el, EditOperationType.ConvertWrap, "[]");
+	}
+
 	protected void checkElement(Element el, EditOperationType op, String expected) {
 		switch (op) {
 		case Convert:
 			result = dtdInspector.getValidConvertElements(el, manager);
 			break;
 		case ConvertWrap:
+			result = dtdInspector.getValidConvertWrapElements(el, manager);
 			break;
 		case Insert:
 			result = dtdInspector.getValidInsertElements(el, manager);
