@@ -14,9 +14,10 @@ public class Constants {
 	public static final String VERSION_NUMBER = "0.1.0";
 	public static final int CURRENT_DATABASE_VERSION = 1;
 
-	public static final String CSS_LOCATION = "resources/XLingPaper.css";
+	public static final String CSS_LOCATION = "resources/XLingDoc.css";
 	public static final String DTD_LOCATION = "resources/dtds/XLingPap.dtd";
 	public static final String ELEMENT_ONLY_DTD_LOCATION = "resources/dtdsElementSequences/XLingPap.dtd";
+	public static final String JAVASCRIPT_LOCATION = "resources/XLingDoc.js";
 	public static final String RESOURCE_LOCATION = "org.sil.xlingdoc.resources.xlingdoc";
 
 	public static final String UNIT_TEST_DATA_FILE = "test/testdata/TestSample.xml";

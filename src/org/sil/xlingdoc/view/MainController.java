@@ -24,9 +24,11 @@ import org.sil.xlingdoc.service.XmlSerializer;
 import org.w3c.dom.Element;
 
 import javafx.application.Platform;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -83,10 +85,68 @@ public class MainController implements Initializable {
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
 		webEngine.loadContent(htmlContent);
-
+		webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+		    if (newState == Worker.State.SUCCEEDED) {
+		        // Allow use of console.log and console.error in JS
+		        JSObject window = (JSObject) webEngine.executeScript("window");
+		        window.setMember("javaOut", System.out);
+		        window.setMember("javaErr", System.err);
+		        String loggingRedirectScript =
+		            "console.log = function(message) { javaOut.println('[JS Log] ' + message); };\n" +
+		            "console.error = function(message) { javaErr.println('[JS Error] ' + message); };";
+		        webEngine.executeScript(loggingRedirectScript);
+		    }
+		});
 
 		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-			updateComponentPathBar(event);
+			if (event.getButton() == MouseButton.PRIMARY) {
+				updateComponentPathBar(event);
+			}
+			// Potential code for checking spelling of a word which has been right-clicked on
+			//else if (event.getButton() == MouseButton.SECONDARY) {
+
+//		        double x = event.getX();
+//		        double y = event.getY();
+//
+//		        // 1. Get the word clicked inside WebEngine
+//		        String script = String.format(
+//		            "var range = document.caretRangeFromPoint(%f, %f); " +
+//		            "if (range) { " +
+//		            "   range.expand('word'); " +
+//		            "   range.toString().trim(); " +
+//		            "} else { ''; }", x, y
+//		        );
+//		        String wordAtClick = (String) webEngine.executeScript(script);
+//		        System.out.println("word = '" + wordAtClick + "'");
+//
+////		        if (wordAtClick != null && !wordAtClick.isEmpty() && isMisspelled(wordAtClick)) {
+////		            event.consume(); // Suppress the default browser context menu
+////
+////		            // 2. Generate suggestions
+////		            List<String> suggestions = getSpellingSuggestions(wordAtClick);
+////		            ContextMenu spellMenu = new ContextMenu();
+////
+////		            // 3. Build context menu items
+////		            for (String suggestion : suggestions) {
+////		                MenuItem item = new MenuItem(suggestion);
+////		                item.setOnAction(e -> {
+////		                    // Replace the word in the DOM using JavaFX to JS call
+////		                    webEngine.executeScript(String.format(
+////		                        "var range = document.caretRangeFromPoint(%f, %f); " +
+////		                        "if (range) { " +
+////		                        "   range.expand('word'); " +
+////		                        "   range.deleteContents(); " +
+////		                        "   range.insertNode(document.createTextNode('%s')); " +
+////		                        "}", x, y, suggestion
+////		                    ));
+////		                });
+////		                spellMenu.getItems().add(item);
+////		            }
+////
+////		            // Show the context menu at the screen mouse position
+////		            spellMenu.show(webView, event.getScreenX(), event.getScreenY());
+////		        }
+//		    }
 		});
 
 		componentPathBar.setOnMouseClicked(event -> {
