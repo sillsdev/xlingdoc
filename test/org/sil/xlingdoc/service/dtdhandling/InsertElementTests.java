@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service;
+package org.sil.xlingdoc.service.dtdhandling;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sil.xlingdoc.Constants;
+import org.sil.xlingdoc.service.fileio.XLingDocLoader;
+import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
+import org.sil.xlingdoc.service.dtdhandling.EditOperationType;
+import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

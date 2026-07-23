@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service;
+package org.sil.xlingdoc.service.filio;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +15,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sil.xlingdoc.Constants;
+import org.sil.xlingdoc.service.fileio.XLingDocLoader;
+import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
+import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 
 /**
  * 
@@ -40,9 +43,9 @@ public class LoadXLingDocFileTests {
 	public void loadValidFileTest() {
 		String html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
 		html = html.replace("\r", "");
-		Assert.assertEquals(0,  manager.errorsCount);
-		Assert.assertEquals(0,  manager.fatalErrorsCount);
-		Assert.assertEquals(0,  manager.warningsCount);
+		Assert.assertEquals(0,  manager.getErrorsCount());
+		Assert.assertEquals(0,  manager.getFatalErrorsCount());
+		Assert.assertEquals(0,  manager.getWarningsCount());
 		File file = new File("test/testData/TestSampleExpectedHtml.html");
 		try {
 			String expected = new String(Files.readString(file.toPath()));
@@ -56,9 +59,9 @@ public class LoadXLingDocFileTests {
 	@Test
 	public void loadInvalidFileTest() {
 		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_DATA_FILE);
-		Assert.assertEquals(5,  manager.errorsCount);
-		Assert.assertEquals(0,  manager.fatalErrorsCount);
-		Assert.assertEquals(0,  manager.warningsCount);
+		Assert.assertEquals(5,  manager.getErrorsCount());
+		Assert.assertEquals(0,  manager.getFatalErrorsCount());
+		Assert.assertEquals(0,  manager.getWarningsCount());
 	}
 
 }

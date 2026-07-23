@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service;
+package org.sil.xlingdoc.service.dtdhandling;
 
 /**
  * code drafted by Gemini and Leo

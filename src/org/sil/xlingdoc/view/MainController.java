@@ -16,11 +16,11 @@ import java.util.SortedSet;
 
 import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.model.ComponentPathItem;
-import org.sil.xlingdoc.service.DtdInspector;
-import org.sil.xlingdoc.service.XLingDocLoader;
-import org.sil.xlingdoc.service.XmlDocumentManager;
-import org.sil.xlingdoc.service.XmlNameMapper;
-import org.sil.xlingdoc.service.XmlSerializer;
+import org.sil.xlingdoc.service.fileio.XLingDocLoader;
+import org.sil.xlingdoc.service.fileio.XmlSerializer;
+import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
+import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
+import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Element;
 
 import javafx.application.Platform;

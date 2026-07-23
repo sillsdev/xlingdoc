@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service;
+package org.sil.xlingdoc.service.dtdhandling;
 
 /**
  * code drafted by Gemini
@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+// TODO: 2026.07.23 we are not using this; do we need it?
 
 public class XmlValidator {
 

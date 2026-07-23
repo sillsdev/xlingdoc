@@ -4,12 +4,14 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service;
+package org.sil.xlingdoc.service.fileio;
 /**
  * code drafted by Gemini
  */
 
 import javafx.scene.web.WebEngine;
+
+import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
