@@ -18,7 +18,7 @@ import org.w3c.dom.Document;
 public class SpellingCheckerTests {
 
 	Locale locale;
-	List<String> words = new ArrayList<String>();
+	List<WordLocationInText> words = new ArrayList<WordLocationInText>();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -33,49 +33,54 @@ public class SpellingCheckerTests {
 	@Test
 	public void collectWordsTest() {
 		// empty
-		words = SpellngChecker.collectWordsInText("", locale);
+		words = SpellngChecker.collectWordsInText("", words, locale);
 		assertEquals(0, words.size());
 		// basic English
-		words = SpellngChecker.collectWordsInText("The quick brown fox jumped over the lazy dog.", locale);
+		words = SpellngChecker.collectWordsInText("The quick brown fox jumped over the lazy dog.", words, locale);
 		assertEquals(9, words.size());
-		assertEquals("The", words.get(0));
-		assertEquals("quick", words.get(1));
-		assertEquals("brown", words.get(2));
-		assertEquals("fox", words.get(3));
-		assertEquals("jumped", words.get(4));
-		assertEquals("over", words.get(5));
-		assertEquals("the", words.get(6));
-		assertEquals("lazy", words.get(7));
-		assertEquals("dog", words.get(8));
+		checkWordAndLocation(0, "The", 0);
+		checkWordAndLocation(1, "quick", 4);
+		checkWordAndLocation(2, "brown", 10);
+		checkWordAndLocation(3, "fox", 16);
+		checkWordAndLocation(4, "jumped", 20);
+		checkWordAndLocation(5, "over", 27);
+		checkWordAndLocation(6, "the", 32);
+		checkWordAndLocation(7, "lazy", 36);
+		checkWordAndLocation(8, "dog", 41);
 		// English with lots of punctuation marks.
-		words = SpellngChecker.collectWordsInText("He shouted, “John says, ‘Mary's home!’ and \"(Can I believe it?\"  No!!) It's way too soon.”", locale);
+		words = SpellngChecker.collectWordsInText("He shouted, “John says, ‘Mary's home!’ and \"(Can I believe it?\"  No!!) It's way too soon.”", words, locale);
 		assertEquals(16, words.size());
-		assertEquals("He", words.get(0));
-		assertEquals("shouted", words.get(1));
-		assertEquals("John", words.get(2));
-		assertEquals("says", words.get(3));
-		assertEquals("Mary's", words.get(4));
-		assertEquals("home", words.get(5));
-		assertEquals("and", words.get(6));
-		assertEquals("Can", words.get(7));
-		assertEquals("I", words.get(8));
-		assertEquals("believe", words.get(9));
-		assertEquals("it", words.get(10));
-		assertEquals("No", words.get(11));
-		assertEquals("It's", words.get(12));
-		assertEquals("way", words.get(13));
-		assertEquals("too", words.get(14));
-		assertEquals("soon", words.get(15));
+		checkWordAndLocation(0, "He", 0);
+		checkWordAndLocation(1, "shouted", 3);
+		checkWordAndLocation(2, "John", 13);
+		checkWordAndLocation(3, "says", 18);
+		checkWordAndLocation(4, "Mary's", 25);
+		checkWordAndLocation(5, "home", 32);
+		checkWordAndLocation(6, "and", 39);
+		checkWordAndLocation(7, "Can", 45);
+		checkWordAndLocation(8, "I", 49);
+		checkWordAndLocation(9, "believe", 51);
+		checkWordAndLocation(10, "it", 59);
+		checkWordAndLocation(11, "No", 65);
+		checkWordAndLocation(12, "It's", 71);
+		checkWordAndLocation(13, "way", 76);
+		checkWordAndLocation(14, "too", 80);
+		checkWordAndLocation(15, "soon", 84);
 		// Spanish punctuation
 		locale = Locale.of("es");
-		words = SpellngChecker.collectWordsInText("¿Como estas, niño? ¡Bien!", locale);
+		words = SpellngChecker.collectWordsInText("¿Como estas, niño? ¡Bien!", words, locale);
 		assertEquals(4, words.size());
-		assertEquals("Como", words.get(0));
-		assertEquals("estas", words.get(1));
-		assertEquals("niño", words.get(2));
-		assertEquals("Bien", words.get(3));
+		checkWordAndLocation(0, "Como", 1);
+		checkWordAndLocation(1, "estas", 6);
+		checkWordAndLocation(2, "niño", 13);
+		checkWordAndLocation(3, "Bien", 20);
 	}
-	
+
+	private void checkWordAndLocation(int index,  String word, int location) {
+		assertEquals(word, words.get(index).word());
+		assertEquals(location, words.get(index).location());
+	}
+
 	@Test
 	public void checkSpellingInDocumentTest() {
 		XmlDocumentManager manager = new XmlDocumentManager();
