@@ -85,7 +85,7 @@ public class MainController implements Initializable {
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
 		webEngine.loadContent(htmlContent);
-		webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
 		    if (newState == Worker.State.SUCCEEDED) {
 		        // Allow use of console.log and console.error in JS
 		        JSObject window = (JSObject) webEngine.executeScript("window");

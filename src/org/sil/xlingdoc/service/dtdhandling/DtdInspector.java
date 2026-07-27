@@ -216,7 +216,7 @@ public class DtdInspector {
 						sbCandidateConstruct.append(kOpenWedge).append(candidateName).append(kCloseWedge);
 						for (int iChild = 0; iChild < targetElement.getChildNodes().getLength(); iChild++) {
 							Node n = targetElement.getChildNodes().item(iChild);
-							if (n instanceof Text t) {
+							if (n instanceof Text) {
 								sbCandidateConstruct.append("t");
 							} else if (n instanceof Element el) {
 								String childName = el.getLocalName();
@@ -265,7 +265,7 @@ public class DtdInspector {
 						sbCandidateConstruct.append(kOpenWedge).append(targetName).append(kCloseWedge);
 						for (int iChild = 0; iChild < targetElement.getChildNodes().getLength(); iChild++) {
 							Node n = targetElement.getChildNodes().item(iChild);
-							if (n instanceof Text t) {
+							if (n instanceof Text) {
 								sbCandidateConstruct.append("t");
 							} else if (n instanceof Element el) {
 								String childName = el.getLocalName();
@@ -384,7 +384,7 @@ public class DtdInspector {
 		List<String> followingNames = new ArrayList<String>();
 		node = targetElement.getNextSibling();
 		while (node != null) {
-			if (node instanceof Element el) {
+			if (node instanceof Element) {
 				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName());
 				if ("summary".equals(siblingName)) {
 					Element sibling = (Element)node.getFirstChild();
@@ -405,7 +405,7 @@ public class DtdInspector {
 		List<String> precedingNames = new ArrayList<String>();
 		Node node = targetElement.getPreviousSibling();
 		while (node != null) {
-			if (node instanceof Element el) {
+			if (node instanceof Element) {
 				siblingName = XmlNameMapper.getMappedElementName(node.getNodeName());
 				if ("summary".equals(siblingName)) {
 					Element sibling = (Element)node.getFirstChild();

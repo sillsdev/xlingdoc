@@ -39,7 +39,7 @@ public class XmlValidator {
 
             DocumentBuilder builder = factory.newDocumentBuilder();
             // Point the entity resolver to your local DTD file path if it's stored locally
-            builder.setEntityResolver((publicId, systemId) -> {
+            builder.setEntityResolver((_, systemId) -> {
                 if (systemId.contains(dtdSystemId)) {
                     return new org.xml.sax.InputSource(new java.io.FileReader("data/" + dtdSystemId));
                 }
