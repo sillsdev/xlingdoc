@@ -19,11 +19,13 @@ public class SpellingCheckerTests {
 
 	Locale locale;
 	List<WordLocationInText> words = new ArrayList<WordLocationInText>();
+	SpellngChecker checker;
 	
 	@Before
 	public void setUp() throws Exception {
 		locale = Locale.of("en");
 		words.clear();
+		checker = new SpellngChecker();
 	}
 
 	@After
@@ -33,10 +35,12 @@ public class SpellingCheckerTests {
 	@Test
 	public void collectWordsTest() {
 		// empty
-		words = SpellngChecker.collectWordsInText("", words, locale);
+		checker.collectWordsInText("", locale);
+		words = checker.getWords();
 		assertEquals(0, words.size());
 		// basic English
-		words = SpellngChecker.collectWordsInText("The quick brown fox jumped over the lazy dog.", words, locale);
+		checker.collectWordsInText("The quick brown fox jumped over the lazy dog.", locale);
+		words = checker.getWords();
 		assertEquals(9, words.size());
 		checkWordAndLocation(0, "The", 0);
 		checkWordAndLocation(1, "quick", 4);
@@ -48,7 +52,8 @@ public class SpellingCheckerTests {
 		checkWordAndLocation(7, "lazy", 36);
 		checkWordAndLocation(8, "dog", 41);
 		// English with lots of punctuation marks.
-		words = SpellngChecker.collectWordsInText("He shouted, “John says, ‘Mary's home!’ and \"(Can I believe it?\"  No!!) It's way too soon.”", words, locale);
+		checker.collectWordsInText("He shouted, “John says, ‘Mary's home!’ and \"(Can I believe it?\"  No!!) It's way too soon.”", locale);
+		words = checker.getWords();
 		assertEquals(16, words.size());
 		checkWordAndLocation(0, "He", 0);
 		checkWordAndLocation(1, "shouted", 3);
@@ -68,7 +73,8 @@ public class SpellingCheckerTests {
 		checkWordAndLocation(15, "soon", 84);
 		// Spanish punctuation
 		locale = Locale.of("es");
-		words = SpellngChecker.collectWordsInText("¿Como estas, niño? ¡Bien!", words, locale);
+		checker.collectWordsInText("¿Como estas, niño? ¡Bien!", locale);
+		words = checker.getWords();
 		assertEquals(4, words.size());
 		checkWordAndLocation(0, "Como", 1);
 		checkWordAndLocation(1, "estas", 6);
@@ -87,10 +93,17 @@ public class SpellingCheckerTests {
 		DtdInspector dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
 		Document doc = manager.getMasterXmlDoc();
-		int mispelledWordsCount = -1;
-		mispelledWordsCount = SpellngChecker.checkSpellingInDocument(doc, locale);
-		assertEquals(8, mispelledWordsCount);
-
+		checker.checkSpellingInDocument(doc, locale);
+		List<WordLocationInText> misspelledWords = checker.getMisspelledWords();
+		assertEquals(8, misspelledWords.size());
+		assertEquals("XLingPaper", misspelledWords.get(0).word());
+		assertEquals("XLingPaper", misspelledWords.get(1).word());
+		assertEquals("XLingPaper", misspelledWords.get(2).word());
+		assertEquals("XLingPaper", misspelledWords.get(3).word());
+		assertEquals("XLingPaper", misspelledWords.get(4).word());
+		assertEquals("XLingPaper", misspelledWords.get(5).word());
+		assertEquals("sectionRef", misspelledWords.get(6).word());
+		assertEquals("exampleRef", misspelledWords.get(7).word());
 	}
 
 }

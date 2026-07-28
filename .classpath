@@ -2,60 +2,116 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="lib" path="C:/Users/Andy Black/.p2/pool/plugins/org.junit_4.13.2.v20230809-1000.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/xerces-2_12_2/xercesImplNo.org.w3c.dom.html.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Andy Black/.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/LibJavaDev/libjavadev-1.7.1.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/JAXB/jakarta.xml.bind-api.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/JAXB/jakarta.activation.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/jna/jna-5.11.0.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/json/json-20230618.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/ControlsFX/controlsfx-11.0.2.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="libs/jna/jna-platform-5.11.0.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Andy Black/.p2/pool/plugins/org.junit_4.13.2.v20230809-1000.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Andy Black/.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+	<classpathentry kind="lib" path="libs/LibJavaDev/libjavadev-1.7.1.jar"/>
+	<classpathentry kind="lib" path="libs/JAXB/jakarta.xml.bind-api.jar"/>
+	<classpathentry kind="lib" path="libs/JAXB/jakarta.activation.jar"/>
+	<classpathentry kind="lib" path="libs/jna/jna-5.11.0.jar"/>
+	<classpathentry kind="lib" path="libs/json/json-20230618.jar"/>
+	<classpathentry kind="lib" path="libs/ControlsFX/controlsfx-11.0.2.jar"/>
+	<classpathentry kind="lib" path="libs/jna/jna-platform-5.11.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="libs/languagetool/aho-corasick-double-array-trie-1.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/angus-activation-2.0.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/animal-sniffer-annotations-1.24.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/annotations-4.1.1.4.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/annotations-12.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/commons-digester-2.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/commons-lang3-3.18.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/commons-logging-1.3.4.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/commons-pool2-2.12.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/commons-text-1.12.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/commons-validator-1.9.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/english-pos-dict-0.6.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/error_prone_annotations-2.41.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/failureaccess-1.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/fastutil-core-8.5.14.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/french-pos-dict-0.7.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-api-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-context-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-core-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-netty-shaded-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-protobuf-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-protobuf-lite-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-stub-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/grpc-util-1.75.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/gson-2.11.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/guava-33.5.0-jre.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/HdrHistogram-2.1.12.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/hppc-0.8.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/hunspell-2.1.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/indriya-1.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/istack-commons-runtime-4.1.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/j2objc-annotations-3.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jackson-annotations-2.18.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jackson-core-2.18.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jackson-databind-2.18.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jakarta.activation-1.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jakarta.activation-api-2.1.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jakarta.xml.bind-api-2.3.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/java-diff-utils-4.12.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/javax.activation-api-1.2.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/javax.annotation-api-1.3.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jaxb-api-2.3.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jaxb-core-2.3.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jaxb-core-4.0.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jaxb-impl-2.3.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jaxb-runtime-4.0.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jna-5.12.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jna-platform-5.12.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/json-20240303.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jsonic-1.2.11.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jspecify-1.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/jsr305-3.0.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/language-detector-0.6.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/language-en-6.8.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/language-es-6.8.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/language-fr-6.8.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/languagetool-core-6.8.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/LatencyUtils-2.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/lucene-backward-codecs-5.5.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/lucene-core-5.5.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/micrometer-core-1.7.12.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/micrometer-registry-prometheus-1.7.12.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/morfologik-fsa-2.1.9.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/morfologik-fsa-builders-2.1.9.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/morfologik-speller-2.1.9.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/morfologik-stemming-2.1.9.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opennlp-chunk-models-1.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opennlp-postag-models-1.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opennlp-tokenize-models-1.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opennlp-tools-1.9.4.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/openregex-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opentelemetry-api-1.42.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opentelemetry-context-1.42.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/opentelemetry-semconv-1.30.1-alpha.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/perfmark-api-0.27.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/protobuf-java-3.25.8.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/proto-google-common-protos-2.59.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/resilience4j-circuitbreaker-1.7.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/resilience4j-core-1.7.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/resilience4j-micrometer-1.7.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/segment-2.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/simpleclient_common-0.10.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/simpleclient_guava-0.16.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/simpleclient_tracer_common-0.16.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/simpleclient_tracer_otel_agent-0.16.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/simpleclient_tracer_otel-0.16.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/simpleclient-0.16.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/slf4j-api-2.0.16.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/slf4j-nop-2.0.16.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/spanish-pos-dict-2.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/txw2-4.0.5.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/unit-api-1.0.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/uom-lib-common-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/vavr-0.10.2.jar"/>
+	<classpathentry kind="lib" path="libs/languagetool/vavr-match-0.10.2.jar"/>
+	<classpathentry kind="lib" path="libs/xerces-2_12_2/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="output" path="mods"/>
 </classpath>

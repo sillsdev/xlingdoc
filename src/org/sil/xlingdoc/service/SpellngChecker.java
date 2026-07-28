@@ -6,11 +6,16 @@
 
 package org.sil.xlingdoc.service;
 
+import java.io.IOException;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.languagetool.JLanguageTool;
+import org.languagetool.Languages;
+import org.languagetool.rules.Rule;
+import org.languagetool.rules.RuleMatch;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,14 +26,44 @@ import org.w3c.dom.NodeList;
  */
 public class SpellngChecker {
 
-	/**
-	 * 
-	 */
+	JLanguageTool langTool;
+	List<String> elementExceptions = List.of(
+			"langData",
+			"tree",
+			"url"
+			);
+	List<WordLocationInText> words = new ArrayList<WordLocationInText>();
+	List<WordLocationInText> misspelledWords = new ArrayList<WordLocationInText>();
+
 	public SpellngChecker() {
-		// TODO Auto-generated constructor stub
+		initializeSpellingChecker("en-US");
 	}
 
-	public static List<WordLocationInText> collectWordsInText(String text, List<WordLocationInText> words, Locale locale) {
+	public SpellngChecker(Locale locale) {
+		initializeSpellingChecker(locale.getLanguage());
+	}
+
+	private void initializeSpellingChecker(String code) {
+		// Force Java's SAXParserFactory to use the built-in JDK parser for rule loading
+		System.setProperty("javax.xml.parsers.SAXParserFactory",
+		                   "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
+		langTool = new JLanguageTool(Languages.getLanguageForShortCode(code));
+		for (Rule rule : langTool.getAllRules()) {
+			if (!rule.isDictionaryBasedSpellingRule()) {
+				langTool.disableRule(rule.getId());
+			}
+		}
+	}
+
+	public List<WordLocationInText> getMisspelledWords() {
+		return misspelledWords;
+	}
+
+	public List<WordLocationInText> getWords() {
+		return words;
+	}
+
+	public void collectWordsInText(String text, Locale locale) {
 		words.clear();
 		// taken from answer from Leo AI on July 22, 2026
 		// Get a BreakIterator for word boundaries specific to the locale
@@ -46,44 +81,47 @@ public class SpellngChecker {
 			start = end;
 			end = iterator.next();
 		}
-		return words;
 	}
 
-	public static int checkSpellingInDocument(Document doc, Locale locale) {
-		List<WordLocationInText> words = new ArrayList<WordLocationInText>();
-		// mispelledWordsCount is mainly for testing
-		int mispelledWordsCount = 0;
+	public void checkSpellingInDocument(Document doc, Locale locale) {
+		words.clear();
+		misspelledWords.clear();
 		NodeList tops = doc.getElementsByTagName("lingPaper");
 		Element element = (Element) tops.item(0);
-		mispelledWordsCount = checkElement(element, words, mispelledWordsCount, locale);
-		return mispelledWordsCount;
+		checkElement(element, locale);
 	}
 
-	private static int checkElement(Element element, List<WordLocationInText> words, int mispellings, Locale locale) {
+	private void checkElement(Element element, Locale locale) {
 		words.clear();
 		NodeList children = element.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 			if (child.getNodeType() == Node.TEXT_NODE) {
-				words = collectWordsInText(child.getTextContent(), words, locale);
-				mispellings += checkSpelling(words, locale);
+				collectWordsInText(child.getTextContent(), locale);
+				checkSpelling();
 			}
 			if (child.getNodeType() == Node.ELEMENT_NODE) {
-				mispellings = checkElement((Element) child, words, mispellings, locale);
+				if (elementExceptions.contains(child.getNodeName())) {
+					continue;
+				}
+				checkElement((Element) child, locale);
 			}
 		}
-		return mispellings;
 	}
 
-	private static int checkSpelling(List<WordLocationInText> words, Locale locale) {
-		// TODO: use Hunspell or Java sumpin to look up words
-		List<String> badSpellings = List.of("XLingPaper", "sectionRef", "exampleRef");
-		int count = 0;
-		for (WordLocationInText wl : words) {
-			if (badSpellings.contains(wl.word())) {
-				count++;
+	private void checkSpelling() {
+		for (WordLocationInText word : words) {
+			try {
+				List<RuleMatch> matches = langTool.check(word.word());
+				if (matches.size() > 0) {
+					misspelledWords.add(word);
+//					System.out.println("typo: '" + match.getMessage() + "; word ='" + word.word() + "'");
+//					System.out.println("\tsuggested correction(s):" + match.getSuggestedReplacements());
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		return count;
 	}
 }
