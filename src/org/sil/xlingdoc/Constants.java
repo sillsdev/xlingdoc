@@ -21,7 +21,9 @@ public class Constants {
 	public static final String RESOURCE_LOCATION = "org.sil.xlingdoc.resources.xlingdoc";
 
 	public static final String UNIT_TEST_DATA_FILE = "test/testdata/TestSample.xml";
+	public static final String UNIT_TEST_XINCLUDE_DATA_FILE = "test/testdata/SamplePaperXInclude.xml";
 	public static final String UNIT_TEST_INVALID_DATA_FILE = "test/testdata/SamplePaperDtdErrors.xml";
+	public static final String UNIT_TEST_INVALID_XINCLUDE_DATA_FILE = "test/testdata/SamplePaperXIncludeDtdErrors.xml";
 
 
 }

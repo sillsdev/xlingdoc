@@ -54,14 +54,35 @@ public class LoadXLingDocFileTests {
 			} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+
+		html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_XINCLUDE_DATA_FILE);
+		html = html.replace("\r", "");
+		Assert.assertEquals(0,  manager.getErrorsCount());
+		Assert.assertEquals(0,  manager.getFatalErrorsCount());
+		Assert.assertEquals(0,  manager.getWarningsCount());
+		file = new File("test/testData/TestSampleXIncludeExpectedHtml.html");
+		try {
+			String expected = new String(Files.readString(file.toPath()));
+			expected = expected.replaceAll("\r", "");
+			Assert.assertEquals(expected, html);
+			} catch (IOException e) {
+			e.printStackTrace();
+		}
+}
 
 	@Test
 	public void loadInvalidFileTest() {
+//		System.out.println("first ========================================================");
 		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_DATA_FILE);
 		Assert.assertEquals(5,  manager.getErrorsCount());
 		Assert.assertEquals(0,  manager.getFatalErrorsCount());
 		Assert.assertEquals(0,  manager.getWarningsCount());
-	}
+
+//		System.out.println("second ========================================================");
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_XINCLUDE_DATA_FILE);
+		Assert.assertEquals(7,  manager.getErrorsCount());
+		Assert.assertEquals(0,  manager.getFatalErrorsCount());
+		Assert.assertEquals(0,  manager.getWarningsCount());
+}
 
 }

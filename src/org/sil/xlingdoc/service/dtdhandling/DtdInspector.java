@@ -325,7 +325,11 @@ public class DtdInspector {
 	}
 
 	protected boolean parseXmlSnippet(XmlDocumentManager manager, DocumentBuilder builder, StringBuilder sb) {
-		InputStream is = new ByteArrayInputStream(sb.toString().getBytes() );
+		return parseXmlSnippet(manager, builder, sb.toString());
+	}
+
+	protected boolean parseXmlSnippet(XmlDocumentManager manager, DocumentBuilder builder, String content) {
+		InputStream is = new ByteArrayInputStream(content.getBytes() );
 		try {
 			manager.resetCounters();
 			builder.parse(is);
