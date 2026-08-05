@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service.filio;
+package org.sil.xlingdoc.service.fileio;
 
 import java.io.File;
 import java.io.IOException;
