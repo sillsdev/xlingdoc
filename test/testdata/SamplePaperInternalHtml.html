@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<HTML
+><HEAD
+>
+</HEAD
+>
+<BODY
+>
+<LINGPAPER
+version="1.13.0"
+><COMMENT
+>Note: this is a sample of an XLingPaper document to give you an idea of what one might look like.<BR
+></BR
+>To see the content of a section (or one of the other items below), click on the "plus sign in a box" icon.<BR
+></BR
+>Please be sure to read section 1"Introduction" in the user documentation; to see it, use XLingPaper menu item / Show XLingPaper user Documentation.<BR
+></BR
+>To create a new XLingPaper document for yourself, please use Start / Program Files / XLingPaper / New XLingPaper Paper (or see the user documentation).</COMMENT
+><FRONTMATTER
+><TITLE
+>Sample Title</TITLE
+><AUTHOR
+>Sample Author</AUTHOR
+></FRONTMATTER
+><SECTION1
+id="s1"
+><DETAILS
+><SUMMARY
+><SECTITLE
+>The First Section</SECTITLE
+></SUMMARY
+><P
+>Here is the first paragraph of this section.</P
+><EXAMPLE
+num="xInterlinear"
+><INTERLINEAR
+><LINEGROUP
+><LINE
+><LANGDATA
+lang="lVernacular"
+>Juan ve el gato.</LANGDATA
+></LINE
+><LINE
+><GLOSS
+lang="lGloss"
+>John see.3sgPres Def cat</GLOSS
+></LINE
+></LINEGROUP
+><FREE
+>'John sees the cat'</FREE
+></INTERLINEAR
+></EXAMPLE
+><P
+>This is another paragraph after the interlinear example.</P
+></DETAILS
+></SECTION1
+><SECTION1
+id="s2"
+><DETAILS
+><SUMMARY
+><SECTITLE
+>The Second Section</SECTITLE
+></SUMMARY
+><P
+>This paragraph introduces the second section. To refer to another section, use a sectionRef element like this: See <SECTIONREF
+sec="s1"
+></SECTIONREF
+>.</P
+><P
+>To refer to an example, you use the exampleRef element like this: As we saw in example <EXAMPLEREF
+num="xInterlinear"
+letter="xInterlinear"
+></EXAMPLEREF
+>, blah blah blah.</P
+><P
+>To cite a work, use the citation element like this: <CITATION
+ref="rAdams1998"
+></CITATION
+> has shown that more blah.</P
+><EXAMPLE
+num="xChart"
+><CHART
+>I'm a chart</CHART
+></EXAMPLE
+><P
+>See the user documentation for much more on what you can do.</P
+></DETAILS
+></SECTION1
+><BACKMATTER
+><ENDNOTES
+></ENDNOTES
+><REFERENCES
+><REFAUTHOR
+name="Adams, Paul"
+citename="Adams"
+><REFWORK
+id="rAdams1998"
+><REFDATE
+>1998</REFDATE
+><REFTITLE
+>The title of Paul Adam's article</REFTITLE
+><ARTICLE
+><JTITLE
+>The Journal Name</JTITLE
+><JVOL
+>20</JVOL
+><JPAGES
+>223-245</JPAGES
+></ARTICLE
+></REFWORK
+><REFWORK
+id="rAdams2003"
+><REFDATE
+>2003</REFDATE
+><REFTITLE
+>The title of Paul Adam's book</REFTITLE
+><BOOK
+><LOCATION
+>Chicago</LOCATION
+><PUBLISHER
+>Adams Publishing, Inc</PUBLISHER
+></BOOK
+></REFWORK
+></REFAUTHOR
+><REFAUTHOR
+name="Billings, Judith"
+citename="Billings"
+><REFWORK
+id="rBillings2004"
+><REFDATE
+>2004</REFDATE
+><REFTITLE
+>Judith's manuscript title goes here</REFTITLE
+><MS
+><INSTITUTION
+>The institution name goes here</INSTITUTION
+></MS
+></REFWORK
+></REFAUTHOR
+></REFERENCES
+></BACKMATTER
+><LANGUAGES
+><DETAILS
+><SUMMARY
+>Languages</SUMMARY
+><LANGUAGE
+name="vernacular"
+id="lVernacular"
+></LANGUAGE
+><LANGUAGE
+name="gloss"
+id="lGloss"
+></LANGUAGE
+></DETAILS
+></LANGUAGES
+><TYPES
+><DETAILS
+><SUMMARY
+>Types</SUMMARY
+><COMMENT
+>The following types are provided as pre-set examples. You may well want to create your own types that refer to one or more of these. You do that by typing in the names of the types in the types attribute of your type.</COMMENT
+><TYPE
+id="tBold"
+font-weight="bold"
+></TYPE
+><TYPE
+font-weight="bold"
+font-style="italic"
+id="tBoldItalic"
+></TYPE
+><TYPE
+id="tEmphasis"
+font-weight="bold"
+></TYPE
+><TYPE
+types="tSmallCaps"
+id="tGrammaticalGloss"
+></TYPE
+><TYPE
+id="tItalic"
+font-style="italic"
+></TYPE
+><TYPE
+id="tNoOverline"
+cssspecial="text-decoration:none"
+xsl-fospecial="text-decoration=&quot;no-overline&quot;"
+></TYPE
+><TYPE
+id="tNoSmallCaps"
+font-variant="normal"
+></TYPE
+><TYPE
+id="tNoStrikethrough"
+cssspecial="text-decoration:none"
+xsl-fospecial="text-decoration=&quot;no-line-through&quot;"
+></TYPE
+><TYPE
+id="tNoUnderline"
+cssspecial="text-decoration:none"
+xsl-fospecial="text-decoration=&quot;no-underline&quot;"
+></TYPE
+><TYPE
+id="tOverline"
+cssspecial="text-decoration:overline"
+xsl-fospecial="text-decoration=&quot;overline&quot;"
+></TYPE
+><TYPE
+font-variant="normal"
+id="tRegular"
+font-weight="normal"
+font-style="normal"
+></TYPE
+><TYPE
+id="tSmallCaps"
+font-family="Charis SIL Small Caps"
+></TYPE
+><TYPE
+id="tStrikethrough"
+cssspecial="text-decoration:line-through"
+xsl-fospecial="text-decoration=&quot;line-through&quot;"
+></TYPE
+><TYPE
+font-size="65%"
+xsl-fospecial="baseline-shift='sub'"
+id="tSubscript"
+cssspecial="vertical-align:sub;"
+></TYPE
+><TYPE
+font-size="65%"
+xsl-fospecial="baseline-shift='super'"
+id="tSuperscript"
+cssspecial="vertical-align:super;"
+></TYPE
+><TYPE
+id="tUnderline"
+cssspecial="text-decoration:underline"
+xsl-fospecial="text-decoration=&quot;underline&quot;"
+></TYPE
+><COMMENT
+>Add your custom types here.</COMMENT
+></DETAILS
+></TYPES
+></LINGPAPER
+>
+
+
+</BODY
+></HTML
+>

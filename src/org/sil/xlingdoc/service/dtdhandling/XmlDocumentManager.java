@@ -6,7 +6,6 @@
 
 package org.sil.xlingdoc.service.dtdhandling;
 
-import org.sil.xlingdoc.Constants;
 /**
  * code drafted by Gemini and Leo
  */
@@ -84,35 +83,6 @@ public class XmlDocumentManager {
 
 	    builder = factory.newDocumentBuilder();
 	    
-//	    builder.setEntityResolver((publicId, systemId) -> {
-//	        if (systemId != null && systemId.endsWith("XLingPap.dtd")) {
-//	        	System.out.println("FOUND!");
-//	            InputStream stream = getClass().getResourceAsStream("/resources/dtds/XLingPap.dtd");
-//	        	System.out.println("\tstream = " + stream);
-//	            return new org.xml.sax.InputSource(stream);
-//	        }
-//	        return null; // Fall back to default
-//	    });
-//
-//	    // Set an error handler to catch SAX/structural errors during initial parsing
-//	    builder.setErrorHandler(new org.xml.sax.ErrorHandler() {
-//	        public void warning(org.xml.sax.SAXParseException e) {
-//	            System.out.println("Warning:\n" + buildExceptionMessage(e));
-//	            warningsCount++;
-//	        }
-//
-//	        public void error(org.xml.sax.SAXParseException e) {
-////	            System.out.println("Error:\n" + buildExceptionMessage(e));
-//	            errorsCount++;
-//	        }
-//
-//	        public void fatalError(org.xml.sax.SAXParseException e) {
-//	            System.out.println("Fatal error:\n" + buildExceptionMessage(e));
-//	            fatalErrorsCount++;
-//	        }
-//	    });
-
-	    // 2. Parse the file into memory and resolve all XIncludes
 	    this.masterXmlDoc = builder.parse(xmlFile);
 
 	    // Capture the DTD identifiers for later use
@@ -165,37 +135,6 @@ public class XmlDocumentManager {
 	    transformer.transform(source, result);
 	    return writer.toString();
 	}
-//	/**
-//	 * Validates the in-memory DOM tree against its declared DTD after XInclude expansion.
-//	 */
-//	private void validateExpandedDocument(Document doc) throws Exception {
-//	    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.XML_DTD_NS_URI);
-//	    
-//	    // Set entity resolver on the schema factory if you use local DTD files
-//	    // schemaFactory.setResourceResolver(...);
-//	    schemaFactory.setResourceResolver(null);
-//
-//	    Validator validator = schemaFactory.newSchema().newValidator();
-//	    validator.setErrorHandler(new org.xml.sax.ErrorHandler() {
-//	        public void warning(org.xml.sax.SAXParseException e) {
-//	            System.out.println("DTD Validation Warning:\n" + buildExceptionMessage(e));
-//	            warningsCount++;
-//	        }
-//
-//	        public void error(org.xml.sax.SAXParseException e) {
-//	            System.out.println("DTD Validation Error:\n" + buildExceptionMessage(e));
-//	            errorsCount++;
-//	        }
-//
-//	        public void fatalError(org.xml.sax.SAXParseException e) {
-//	            System.out.println("DTD Validation Fatal Error:\n" + buildExceptionMessage(e));
-//	            fatalErrorsCount++;
-//	        }
-//	    });
-//
-//	    // Validates the expanded DOM tree in memory
-//	    validator.validate(new DOMSource(doc));
-//	}
 
 	String buildExceptionMessage(SAXParseException e) {
 		StringBuilder sb = new StringBuilder();

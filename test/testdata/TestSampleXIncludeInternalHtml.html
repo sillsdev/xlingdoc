@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+</HEAD>
+<BODY contenteditable="true">
+<LINGPAPER
+version="1.13.0"
+><COMMENT
+>Note: this is a sample of an XLingPaper document to give you an idea of what one might look like.<XLP-BR
+></XLP-BR
+>To see the content of a section (or one of the other items below), click on the "plus sign in a box" icon.<XLP-BR
+></XLP-BR
+>Please be sure to read section 1"Introduction" in the user documentation; to see it, use XLingPaper menu item / Show XLingPaper user Documentation.<XLP-BR
+></XLP-BR
+>To create a new XLingPaper document for yourself, please use Start / Program Files / XLingPaper / New XLingPaper Paper (or see the user documentation).</COMMENT
+><FRONTMATTER
+><TITLE
+>Sample Title</TITLE
+><AUTHOR
+>Sample Author</AUTHOR
+></FRONTMATTER
+><SECTION1
+id="s1"
+><DETAILS><SUMMARY><SECTITLE
+>The First Section</SECTITLE></SUMMARY
+><P
+>Here is the first paragraph of this section.</P
+><EXAMPLE
+num="xInterlinear"
+><INTERLINEAR
+><LINEGROUP
+><LINE
+><LANGDATA
+lang="lVernacular"
+>Juan ve el gato.</LANGDATA
+></LINE
+><LINE
+><GLOSS
+lang="lGloss"
+>John see.3sgPres Def cat</GLOSS
+></LINE
+></LINEGROUP
+><FREE
+>'John sees the cat'</FREE
+></INTERLINEAR
+></EXAMPLE
+><P
+>This is another paragraph after the interlinear example.</P
+></DETAILS></SECTION1
+><SECTION1
+id="s2"
+><DETAILS><SUMMARY><SECTITLE
+>The Second Section</SECTITLE></SUMMARY
+><P
+>This paragraph introduces the second section. To refer to another section, use a sectionRef element like this: See <SECTIONREF
+sec="s1"
+></SECTIONREF
+>.</P
+><P
+>Errors: <SECTIONREF
+sec="s2"
+></SECTIONREF
+> and <EXAMPLEREF
+letter="xInterlinear"
+num="xInterlinear"
+></EXAMPLEREF
+>.</P
+><EXAMPLE
+num="xInterlinear2"
+><INTERLINEAR
+><LINEGROUP
+><LINE
+><GLOSS
+lang="lGloss"
+>John see.3sgPres Def cat</GLOSS
+></LINE
+></LINEGROUP
+><FREE
+>'John sees the cat'</FREE
+></INTERLINEAR
+></EXAMPLE
+><P
+>To refer to an example, you use the exampleRef element like this: As we saw in example <EXAMPLEREF
+letter="xInterlinear"
+num="xInterlinear"
+></EXAMPLEREF
+>, blah blah blah.</P
+><P
+>To cite a work, use the citation element like this: <CITATION
+ref="rAdams1998"
+></CITATION
+> has shown that more blah.</P
+><P
+>See the user documentation for much more on what you can do.</P
+></DETAILS></SECTION1
+><BACKMATTER
+><ENDNOTES
+></ENDNOTES
+><REFERENCES
+><REFAUTHOR
+citename="Adams"
+name="Adams, Paul"
+><REFWORK
+id="rAdams1998"
+><REFDATE
+>1998</REFDATE
+><REFTITLE
+>The title of Paul Adam's article</REFTITLE
+><ARTICLE
+><JTITLE
+>The Journal Name</JTITLE
+><JVOL
+>20</JVOL
+><JPAGES
+>223-245</JPAGES
+></ARTICLE
+></REFWORK
+><REFWORK
+id="rAdams2003"
+><REFDATE
+>2003</REFDATE
+><REFTITLE
+>The title of Paul Adam's book</REFTITLE
+><BOOK
+><SERIESED
+>Joe</SERIESED
+><SERIES
+>OPAC</SERIES
+></BOOK
+></REFWORK
+></REFAUTHOR
+><REFAUTHOR
+citename="Billings"
+name="Billings, Judith"
+><REFWORK
+id="rBillings2004"
+><REFDATE
+>2004</REFDATE
+><REFTITLE
+>Judith's manuscript title goes here</REFTITLE
+><MS
+><INSTITUTION
+>The institution name goes here</INSTITUTION
+></MS
+></REFWORK
+></REFAUTHOR
+></REFERENCES
+></BACKMATTER
+><xi:include
+href="Languages.xml"
+xmlns:xi="http://www.w3.org/2001/XInclude"
+xpointer="element(/1)"
+></xi:include
+><xi:include
+href="Types.xml"
+xmlns:xi="http://www.w3.org/2001/XInclude"
+xpointer="element(/1)"
+></xi:include
+></LINGPAPER
+>
+</BODY>
+</HTML>

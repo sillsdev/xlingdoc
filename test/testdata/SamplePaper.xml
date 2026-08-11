@@ -55,29 +55,6 @@ sec="s1"
 ></sectionRef
 >.</p
 ><p
->Errors: <sectionRef
-sec="s2"
-></sectionRef
-> and <exampleRef
-letter="xInterlinear"
-num="xInterlinear"
-></exampleRef
->.</p
-><example
-num="xInterlinear2"
-><interlinear
-><lineGroup
-><line
-><gloss
-lang="lGloss"
->John see.3sgPres Def cat</gloss
-></line
-></lineGroup
-><free
->'John sees the cat'</free
-></interlinear
-></example
-><p
 >To refer to an example, you use the exampleRef element like this: As we saw in example <exampleRef
 letter="xInterlinear"
 num="xInterlinear"
@@ -88,6 +65,11 @@ num="xInterlinear"
 ref="rAdams1998"
 ></citation
 > has shown that more blah.</p
+><example
+num="xChart"
+><chart
+>I'm a chart</chart
+></example
 ><p
 >See the user documentation for much more on what you can do.</p
 ></section1
@@ -120,10 +102,10 @@ id="rAdams2003"
 ><refTitle
 >The title of Paul Adam's book</refTitle
 ><book
-><seriesEd
->Joe</seriesEd
-><series
->OPAC</series
+><location
+>Chicago</location
+><publisher
+>Adams Publishing, Inc</publisher
 ></book
 ></refWork
 ></refAuthor
@@ -144,15 +126,98 @@ id="rBillings2004"
 ></refAuthor
 ></references
 ></backMatter
-><xi:include
-href="Languages.xml"
-xmlns:xi="http://www.w3.org/2001/XInclude"
-xpointer="element(/1)"
-></xi:include
-><xi:include
-href="Types.xml"
-xmlns:xi="http://www.w3.org/2001/XInclude"
-xpointer="element(/1)"
-></xi:include
+><languages
+><language
+id="lVernacular"
+name="vernacular"
+></language
+><language
+id="lGloss"
+name="gloss"
+></language
+></languages
+><types
+><comment
+>The following types are provided as pre-set examples. You may well want to create your own types that refer to one or more of these. You do that by typing in the names of the types in the types attribute of your type.</comment
+><type
+font-weight="bold"
+id="tBold"
+></type
+><type
+font-style="italic"
+font-weight="bold"
+id="tBoldItalic"
+></type
+><type
+font-weight="bold"
+id="tEmphasis"
+></type
+><type
+id="tGrammaticalGloss"
+types="tSmallCaps"
+></type
+><type
+font-style="italic"
+id="tItalic"
+></type
+><type
+cssSpecial="text-decoration:none"
+id="tNoOverline"
+xsl-foSpecial="text-decoration=&quot;no-overline&quot;"
+></type
+><type
+font-variant="normal"
+id="tNoSmallCaps"
+></type
+><type
+cssSpecial="text-decoration:none"
+id="tNoStrikethrough"
+xsl-foSpecial="text-decoration=&quot;no-line-through&quot;"
+></type
+><type
+cssSpecial="text-decoration:none"
+id="tNoUnderline"
+xsl-foSpecial="text-decoration=&quot;no-underline&quot;"
+></type
+><type
+cssSpecial="text-decoration:overline"
+id="tOverline"
+xsl-foSpecial="text-decoration=&quot;overline&quot;"
+></type
+><type
+font-style="normal"
+font-variant="normal"
+font-weight="normal"
+id="tRegular"
+></type
+><type
+font-family="Charis SIL Small Caps"
+id="tSmallCaps"
+></type
+><type
+cssSpecial="text-decoration:line-through"
+id="tStrikethrough"
+xsl-foSpecial="text-decoration=&quot;line-through&quot;"
+></type
+><type
+cssSpecial="vertical-align:sub;"
+font-size="65%"
+id="tSubscript"
+xsl-foSpecial="baseline-shift='sub'"
+></type
+><type
+cssSpecial="vertical-align:super;"
+font-size="65%"
+id="tSuperscript"
+xsl-foSpecial="baseline-shift='super'"
+></type
+><type
+cssSpecial="text-decoration:underline"
+id="tUnderline"
+xsl-foSpecial="text-decoration=&quot;underline&quot;"
+></type
+><comment
+>Add your custom types here.</comment
+></types
 ></lingPaper
 >

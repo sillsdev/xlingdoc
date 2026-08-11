@@ -41,8 +41,6 @@ public class XLingDocLoader {
 		} else {
 			try {
 				manager.loadXmlDocument(f);
-				// See if it has all of the DTDs
-				XmlNameMapper.populateMapsFromDtd(inspector.getGrammar());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

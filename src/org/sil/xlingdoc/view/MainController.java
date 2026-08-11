@@ -17,7 +17,7 @@ import java.util.SortedSet;
 import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.fileio.XLingDocLoader;
-import org.sil.xlingdoc.service.fileio.XmlSerializer;
+import org.sil.xlingdoc.service.fileio.XLingDocSaver;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
@@ -83,6 +83,7 @@ public class MainController implements Initializable {
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
 //		String xmlFilePath = "data/SamplePaper.xml";
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
+//		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
 		webEngine.loadContent(htmlContent);
 		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
@@ -230,6 +231,8 @@ public class MainController implements Initializable {
 								System.out.println("Clicked on this element: '" + adjustedTagName + "'");
 								SortedSet<String> before = dtdInspector.getValidAdjacentElements(domElement, manager, true);
 								SortedSet<String> after = dtdInspector.getValidAdjacentElements(domElement, manager, false);
+								if (before.size() == -1 || after.size() == -1)
+									System.out.println("-1 found");
 							}
 						}
 					}
@@ -262,7 +265,7 @@ public class MainController implements Initializable {
 	private void handleSave() {
 		File f = new File("data/SamplePaperSaved.xml");
 		try {
-			XmlSerializer.exportWebViewToXml(webEngine, f, "XLingPap.dtd");
+			XLingDocSaver.saveXLingDoc(webEngine.getDocument(), f);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
