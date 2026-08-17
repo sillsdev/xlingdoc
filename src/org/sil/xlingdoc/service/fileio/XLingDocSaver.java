@@ -91,7 +91,8 @@ public class XLingDocSaver {
 	}
 
 	private static boolean isXInclude(Element element, StringBuilder sb) {
-		Attr xinclude = element.getAttributeNode("xml:base");
+		// We use xInclude because CSS cannot see "xml:base"
+		Attr xinclude = element.getAttributeNode("xInclude");
 		if (xinclude != null) {
 			sb.append("<xi:include\nhref=\"");
 			sb.append(xinclude.getValue());

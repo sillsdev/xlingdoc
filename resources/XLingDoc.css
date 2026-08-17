@@ -24,6 +24,10 @@
     cursor: help;
 }
 
+[xInclude] {
+	background-color:#FF8888;
+	color:gray;
+}
 article
 {
 	display:inline;
@@ -224,8 +228,9 @@ language:before
 language
 {
 	display:block;
-	padding-left: 0.125in;
-	padding-top: 0.05in;
+	text-indent: 0.125in;
+/*	padding-left: 0.125in;*/
+/*	padding-top: 0.05in;*/
 /*	property-group: isCollapsible( yes, 1);*/
 }
 
@@ -431,8 +436,9 @@ type:before
 type
 {
 	display:block;
-	padding-left: 0.125in;
-	padding-top: 0.05in;
+	text-indent: 0.125in;
+/*	padding-left: 0.125in;*/
+/*	padding-top: 0.05in;*/
 /*	property-group: isCollapsible( yes, 1);*/
 /*	property-group: fontColor();*/
 }

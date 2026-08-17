@@ -46,10 +46,10 @@ public class XLingDocLoader {
 				e.printStackTrace();
 			}
 			try {
-				fileContent = Files.readString(Paths.get(filePath));
+				fileContent = manager.documentToString(manager.getMasterXmlDoc());
 				int iBegin = fileContent.indexOf("<lingPaper");
 				fileContent = fileContent.substring(iBegin);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

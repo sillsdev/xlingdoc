@@ -110,6 +110,8 @@ public class XmlNameMapper {
 //		fileContent = mapElementName(fileContent, "th");
 //		fileContent = mapElementName(fileContent, "tr");
 		fileContent = insertWrapping(fileContent);
+		// We use xInclude for the attribute name so CSS can see it; "xml:base" is not visible to CSS
+		fileContent = fileContent.replaceAll(" xml:base=\"", " contenteditable=\"false\" xInclude=\"");
 		return fileContent;
 	}
 
@@ -132,7 +134,8 @@ public class XmlNameMapper {
 	}
 
 	protected static String wrapElement(String fileContent, String elementToWrap, String wrapSummary) {
-		fileContent = fileContent.replace("<" + elementToWrap, "<" + elementToWrap + ">" + kDetailsSummaryBegin + wrapSummary + kSummaryEnd);
+		// Be sure to include any attributes on the element to wrap
+		fileContent = fileContent.replaceAll("<" + elementToWrap + "(.*?>)", "<" + elementToWrap + "$1" + kDetailsSummaryBegin + wrapSummary + kSummaryEnd + ">");
 		fileContent = fileContent.replace("</" + elementToWrap, kDetailsEnd + "</" + elementToWrap);
 		return fileContent;
 	}
