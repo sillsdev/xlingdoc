@@ -24,6 +24,23 @@
     cursor: help;
 }
 
+.text-box-editor {
+	display: inline-block;
+	margin: 4px 0;
+	font-family: monospace;
+	font-size: 10pt;
+/*	background-color: var(--section-background-color);*/
+	background-color: #BFD0FF;
+}
+.text-box-editor input {
+/*	border: 1px solid #ccc;*/
+	border: 1px solid black;
+	border-radius: 3px;
+	padding: 2px 5px;
+	font-family: inherit;
+/*	background-color: var(--section-background-color);*/
+}
+
 [xInclude] {
 	background-color:#FF8888;
 	color:gray;
@@ -143,6 +160,9 @@ gloss
 	font-weight: concatenate(xpath("id(@lang)/@font-weight"));*/
 }
 
+input {
+	display: inline;
+}
 institution
 {
 	display:inline;

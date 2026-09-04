@@ -8,6 +8,7 @@ package org.sil.xlingdoc.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.classfile.Attribute;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,14 @@ import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.fileio.XLingDocLoader;
 import org.sil.xlingdoc.service.fileio.XLingDocSaver;
+import org.sil.xlingdoc.service.WebPageInteractor;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
@@ -58,6 +63,7 @@ public class MainController implements Initializable {
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
+	private WebPageInteractor webPageInteractor;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -81,6 +87,7 @@ public class MainController implements Initializable {
 		}
 		manager = new XmlDocumentManager();
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
+		webPageInteractor = new WebPageInteractor();
 //		String xmlFilePath = "data/SamplePaper.xml";
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
@@ -96,6 +103,37 @@ public class MainController implements Initializable {
 		            "console.log = function(message) { javaOut.println('[JS Log] ' + message); };\n" +
 		            "console.error = function(message) { javaErr.println('[JS Error] ' + message); };";
 		        webEngine.executeScript(loggingRedirectScript);
+				window.setMember("xLingDocApp", webPageInteractor);
+				// TODO: if we get this working, split this out to a new class or some such
+				Document doc = webEngine.getDocument();
+				webPageInteractor.setDocument(doc);
+				Element sec1 = doc.getElementById("s1");
+				System.out.println("sec1 = " + sec1);
+				NodeList nl = doc.getElementsByTagName("section1");
+				for (int i =0; i < nl.getLength(); i++) {
+					Node n = nl.item(i);
+					if (n instanceof Element el) {
+						String sId = el.getAttribute("id");
+						Element input = doc.createElement("input");
+						input.setAttribute("type", "text");
+						input.setAttribute("value", sId);
+						String sArgs = "xLingDocApp.updateAttribute('" + el.getNodeName() + "', 'id', '" + sId +  "', this.value)";
+						input.setAttribute("oninput", sArgs);
+						input.setAttribute("class", "text-box-editor");
+						input.setAttribute("style", "background-color:#BFD0FF");
+						Node summary = el.getFirstChild().getFirstChild();
+						summary.insertBefore(input, summary.getFirstChild());
+					}
+				}
+				try {
+					String newHtml = manager.documentToString(doc);
+					System.out.println("new html ==============================");
+					System.out.println(newHtml);
+					System.out.println("new html ==============================");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		    }
 		});
 
