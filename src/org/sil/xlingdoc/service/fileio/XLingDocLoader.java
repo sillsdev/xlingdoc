@@ -7,9 +7,6 @@
 package org.sil.xlingdoc.service.fileio;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;

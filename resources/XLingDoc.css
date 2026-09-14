@@ -12,10 +12,27 @@
 	outline: 1.5px solid red;
 }
 :root {
-	--citation-background-color: #F09FF0;
+	--abbreviation-background-color:#FFFFBB;
+	--annotatedbibliographytype-background-color:#FBDFFB;
+	--annotation-background-color:#F6CAF6;
+	--appendix-background-color:#D8BFD8;
+	--authorContact-background-color:#FFD788;
+	--chapter-background-color:#D8BFD8;
+	--citation-background-color:#F09FF0;
 	--comment-background-color: yellow;
-	--example-background-color: #F5DEB3;
-	--section-background-color: #BFD0FF;
+	--endnote-background-color:#E0E0E0;
+	--example-background-color:#F5DEB3;
+	--figure-background-color:#FFCCA0;
+	--generic-background-color:#AFEEEE;
+	--glossaryterm-background-color:#FFB6C1;
+	--index-background-color:#ccffcc;
+	--indexRange-background-color:#ccffaa;
+	--interlinearSource-background-color:#F0D0B0;
+	--iso639-3code-background-color:#B0E0E6;
+	--object-background-color:#CCCCCC;
+	--part-background-color:#B0B0F0;
+	--section-background-color:#BFD0FF;
+	--tablenumbered-background-color:#F0CCA0;
 }
 
 .spelling-error {
@@ -24,20 +41,31 @@
     cursor: help;
 }
 
+.text-box-editor::before {
+	content:"(";
+}
+.text-box-editor::after {
+	content:")";
+}
 .text-box-editor {
 	display: inline-block;
 	margin: 4px 0;
 	font-family: monospace;
 	font-size: 10pt;
+	font-weight:bold;
+/*	width:200px;*/
+/*	color:black;*/
 /*	background-color: var(--section-background-color);*/
-	background-color: #BFD0FF;
+/*	background-color: #BFD0FF;*/
 }
-.text-box-editor input {
+.text-box-editor input[type="text"] {
 /*	border: 1px solid #ccc;*/
 	border: 1px solid black;
 	border-radius: 3px;
 	padding: 2px 5px;
-	font-family: inherit;
+	font-family: Arial, Helvetica, sans-serif;
+/*	width:200px;*/
+/*	color:yellow;*/
 /*	background-color: var(--section-background-color);*/
 }
 
@@ -104,12 +132,9 @@ endnotes
 	display:block;
 }
 
-example:before
+/*example:before
 {
-	content: "(" attr(num) ")";
-	background-color: var(--example-background-color);
-	
-/* if show counters
+ if show counters
 	counter-increment:example;
 	content: "(" 
 	counter(example)
@@ -117,8 +142,11 @@ example:before
 	text-field(attribute, num, columns, 10, font-size, small) 
 	" " 
 	;
-	background-color:example-background-color(); */
-}
+	background-color:example-background-color();
+}*/
+example:before {
+	content:"(";
+	}
 example
 {
 	display:block;
@@ -348,18 +376,11 @@ refTitle:after
 	content: ". ";
 }
 
-refWork:before
-{
-	content: attr(id);
-	background-color: var(--citation-background-color);
-	font-size: small;
-}
-
 refWork
 {
 	display:block;
 	padding-left: .25in;
-	text-indent: -.25in;
+/*	text-indent: -.25in;*/
 }
 
 references:before
@@ -447,8 +468,8 @@ title {
 type:before
 {
 	content:"type: " 
-	attr(id)
-	" "
+/*	attr(id)*/
+/*	" "*/
 	;
 	font-size: small;
 	background-color: white;

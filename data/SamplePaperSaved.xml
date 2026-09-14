@@ -2,15 +2,29 @@
 <!DOCTYPE lingPaper PUBLIC "-//XMLmind//DTD XLingPap//EN"
 "../../resources/dtds/XLingPap.dtd">
 <lingPaper
+appendixRefDefault="none"
+automaticallywrapinterlinears="no"
+figureLabelAndCaptionLocation="after"
+figureRefDefault="none"
+includemediaobjects="no"
+sectionRefDefault="none"
+showExampleIdOnHoverInWebpage="no"
+showcommentinoutput="no"
+showindexeditemsineditor="yes"
+showiso639-3codeininterlinear="no"
+sortRefsAbbrsByDocumentLanguage="no"
+tablenumberedLabelAndCaptionLocation="before"
+tablenumberedRefDefault="none"
+useImageWidthSetToWidthOfExampleFigureOrChart="no"
 version="1.13.0"
 ><comment
 >Note: this is a sample of an XLingPaper document to give you an idea of what one might look like.<br
-></br
 >To see the content of a section (or one of the other items below), click on the "plus sign in a box" icon.<br
-></br
 >Please be sure to read section 1"Introduction" in the user documentation; to see it, use XLingPaper menu item / Show XLingPaper user Documentation.<br
+>To create a new XLingPaper document for yourself, please use Start / Program Files / XLingPaper / New XLingPaper Paper (or see the user documentation).</br
 ></br
->To create a new XLingPaper document for yourself, please use Start / Program Files / XLingPaper / New XLingPaper Paper (or see the user documentation).</comment
+></br
+></comment
 ><frontMatter
 ><title
 >Sample Title</title
@@ -18,14 +32,19 @@ version="1.13.0"
 >Sample Author</author
 ></frontMatter
 ><section1
+excludeShortSubsectionsFromContents="yes"
 id="s1"
+showinlandscapemode="no"
+subsectionsAreShort="no"
 ><secTitle
 >The First Section</secTitle
 ><p
+pagecontrol="letFormatterDecide"
 >Here is the first paragraph of this section.</p
 ><example
 num="xInterlinear"
-><interlinear
+showiso639-3codes="no"
+>)<interlinear
 ><lineGroup
 ><line
 ><langData
@@ -43,45 +62,66 @@ lang="lGloss"
 ></interlinear
 ></example
 ><p
+pagecontrol="letFormatterDecide"
 >This is another paragraph after the interlinear example.</p
 ></section1
 ><section1
+excludeShortSubsectionsFromContents="yes"
 id="s2"
+showinlandscapemode="no"
+subsectionsAreShort="no"
 ><secTitle
 >The Second Section</secTitle
 ><p
+pagecontrol="letFormatterDecide"
 >This paragraph introduces the second section. To refer to another section, use a sectionRef element like this: See <sectionRef
 sec="s1"
-></sectionRef
->.</p
+showTitle="numberOnly"
+textBefore="useDefault"
+>.</sectionRef
+></p
 ><p
+pagecontrol="letFormatterDecide"
 >To refer to an example, you use the exampleRef element like this: As we saw in example <exampleRef
+equal="no"
 letter="xInterlinear"
+letterOnly="no"
 num="xInterlinear"
-></exampleRef
->, blah blah blah.</p
+>, blah blah blah.</exampleRef
+></p
 ><p
+pagecontrol="letFormatterDecide"
 >To cite a work, use the citation element like this: <citation
+author="yes"
+date="yes"
 ref="rAdams1998"
-></citation
-> has shown that more blah.</p
+> has shown that more blah.</citation
+></p
 ><example
 num="xChart"
-><chart
+showiso639-3codes="no"
+>)<chart
 >I'm a chart</chart
 ></example
 ><p
+pagecontrol="letFormatterDecide"
 >See the user documentation for much more on what you can do.</p
 ></section1
 ><backMatter
 ><endnotes
-></endnotes
 ><references
+authorformtoshowineditor="full"
+showinlandscapemode="no"
+showrefTitleInBoldInEditor="no"
+showrefWorkIconsInEditor="no"
+titleformtoshowineditor="uppercase"
 ><refAuthor
 citename="Adams"
 name="Adams, Paul"
+showAuthorName="yes"
 ><refWork
 id="rAdams1998"
+showiso639-3codes="no"
 ><refDate
 >1998</refDate
 ><refTitle
@@ -97,6 +137,7 @@ id="rAdams1998"
 ></refWork
 ><refWork
 id="rAdams2003"
+showiso639-3codes="no"
 ><refDate
 >2003</refDate
 ><refTitle
@@ -112,8 +153,10 @@ id="rAdams2003"
 ><refAuthor
 citename="Billings"
 name="Billings, Judith"
+showAuthorName="yes"
 ><refWork
 id="rBillings2004"
+showiso639-3codes="no"
 ><refDate
 >2004</refDate
 ><refTitle
@@ -125,6 +168,7 @@ id="rBillings2004"
 ></refWork
 ></refAuthor
 ></references
+></endnotes
 ></backMatter
 ><languages
 ><language

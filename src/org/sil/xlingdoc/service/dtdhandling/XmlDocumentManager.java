@@ -95,7 +95,10 @@ public class XmlDocumentManager {
 	    String content = documentToString(masterXmlDoc);
 //	    content = content.replace("?><", "?><!DOCTYPE lingPaper PUBLIC \"-//XMLmind//DTD XLingPap//EN\" \"../resources/dtds/XLingPap.dtd\"><");
 	    content = content.replace("?><", "?><!DOCTYPE lingPaper PUBLIC \"-//XMLmind//DTD XLingPap//EN\" \"test/testdata/XLingPap.dtd\"><");
+//	    System.out.println("manager ===============");
+//	    // is OK here
 //	    System.out.println(content);
+//    	    System.out.println("manager ===============");
 //	    DtdInspector dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 	    DtdInspector dtdInspector = new DtdInspector("test/testdata/XLingPap.dtd", "(text)");
 	    factory.setValidating(true);

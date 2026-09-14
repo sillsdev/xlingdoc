@@ -8,6 +8,7 @@ package org.sil.xlingdoc.service.fileio;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Attr;
@@ -23,6 +24,13 @@ import org.w3c.dom.NodeList;
  */
 public class XLingDocSaver {
 	
+	private static final List<String> elementsToIgnore = List.of(
+			"details",
+			"input",
+			"span",
+			"summary"
+);
+
 	public static void saveXLingDoc(Document doc, File outputFile) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		NodeList rootElements = doc.getElementsByTagName("xlingpaper");
@@ -43,7 +51,7 @@ public class XLingDocSaver {
 		}
 	}
 
-	private static void serializeElement(Element element, StringBuilder sb) {
+	public static void serializeElement(Element element, StringBuilder sb) {
 		if (isXInclude(element, sb)) {
 			return;
 		}
@@ -52,7 +60,8 @@ public class XLingDocSaver {
 		if (tagName.startsWith("xlp-")) {
 			tagName = tagName.substring(4);
 		}
-		boolean use = !tagName.equals("details") && !tagName.equals("summary");
+		boolean use = !elementsToIgnore.contains(tagName);
+//		System.out.println("\tuse = " + use);
 		if (use)
 		{
 			sb.append("<").append(tagName);
@@ -77,6 +86,7 @@ public class XLingDocSaver {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 			if (child.getNodeType() == Node.ELEMENT_NODE) {
+//				System.out.println("\tserializing " + child.getNodeName());
 				serializeElement((Element) child, sb);
 			} else if (child.getNodeType() == Node.TEXT_NODE) {
 				if (!tagName.equals("summary")) {
@@ -86,6 +96,7 @@ public class XLingDocSaver {
 			}
 		}
 		if (use) {
+//			System.out.println("\tclosing " +tagName);
 			sb.append("</").append(tagName).append("\n>");
 		}
 	}

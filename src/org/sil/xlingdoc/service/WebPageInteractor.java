@@ -54,9 +54,7 @@ public class WebPageInteractor {
 	        	NodeList nodes = (NodeList)xPath.evaluate(sXPath, document, XPathConstants.NODESET);
 	        	if (nodes.getLength() > 0) {
 	        		Element element = (Element) nodes.item(0);
-	            	String sIdBefore = element.getAttribute(attributeName);
 	            	element.setAttribute(attributeName, newValue);
-	            	String sIdAfter = element.getAttribute(attributeName);
 //	            	System.out.println(element.getNodeName() + " " + attributeName + " changed from " + sIdBefore + " to " + sIdAfter);
 	        	}
 			} catch (XPathExpressionException e) {

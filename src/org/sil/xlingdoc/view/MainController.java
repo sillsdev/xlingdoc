@@ -8,7 +8,6 @@ package org.sil.xlingdoc.view;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.classfile.Attribute;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +19,12 @@ import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.fileio.XLingDocLoader;
 import org.sil.xlingdoc.service.fileio.XLingDocSaver;
 import org.sil.xlingdoc.service.WebPageInteractor;
+import org.sil.xlingdoc.service.WebPageUtilities;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
@@ -92,48 +90,32 @@ public class MainController implements Initializable {
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
+		// type elements are not nested and have details and summary
+		System.out.println("load file into html ==============================");
+		// type elements are good here
+//		System.out.println(sb.toString());
+		System.out.println(htmlContent);
+		System.out.println("load file into html ==============================");
+
 		webEngine.loadContent(htmlContent);
 		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
 		    if (newState == Worker.State.SUCCEEDED) {
-		        // Allow use of console.log and console.error in JS
-		        JSObject window = (JSObject) webEngine.executeScript("window");
-		        window.setMember("javaOut", System.out);
-		        window.setMember("javaErr", System.err);
-		        String loggingRedirectScript =
-		            "console.log = function(message) { javaOut.println('[JS Log] ' + message); };\n" +
-		            "console.error = function(message) { javaErr.println('[JS Error] ' + message); };";
-		        webEngine.executeScript(loggingRedirectScript);
-				window.setMember("xLingDocApp", webPageInteractor);
-				// TODO: if we get this working, split this out to a new class or some such
+		        webEngine = WebPageUtilities.allowConsoleLogViaJavaScript(webEngine, webPageInteractor);
 				Document doc = webEngine.getDocument();
+				doc = WebPageUtilities.removeIncorrectEmbedding(doc);
 				webPageInteractor.setDocument(doc);
-				Element sec1 = doc.getElementById("s1");
-				System.out.println("sec1 = " + sec1);
-				NodeList nl = doc.getElementsByTagName("section1");
-				for (int i =0; i < nl.getLength(); i++) {
-					Node n = nl.item(i);
-					if (n instanceof Element el) {
-						String sId = el.getAttribute("id");
-						Element input = doc.createElement("input");
-						input.setAttribute("type", "text");
-						input.setAttribute("value", sId);
-						String sArgs = "xLingDocApp.updateAttribute('" + el.getNodeName() + "', 'id', '" + sId +  "', this.value)";
-						input.setAttribute("oninput", sArgs);
-						input.setAttribute("class", "text-box-editor");
-						input.setAttribute("style", "background-color:#BFD0FF");
-						Node summary = el.getFirstChild().getFirstChild();
-						summary.insertBefore(input, summary.getFirstChild());
-					}
-				}
 				try {
-					String newHtml = manager.documentToString(doc);
-					System.out.println("new html ==============================");
-					System.out.println(newHtml);
-					System.out.println("new html ==============================");
+					// already have nested type elements
+					String html = manager.documentToString(doc);
+					System.out.println("load succeeded html ==============================");
+//					System.out.println(sb.toString());
+					System.out.println(html);
+					System.out.println("load succeeded html ==============================");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				WebPageUtilities.addInputBoxes(webEngine);
 		    }
 		});
 
