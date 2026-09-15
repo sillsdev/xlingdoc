@@ -27,7 +27,6 @@ public class XLingDocSaver {
 	private static final List<String> elementsToIgnore = List.of(
 			"details",
 			"input",
-			"span",
 			"summary"
 );
 
@@ -59,6 +58,9 @@ public class XLingDocSaver {
 //		System.out.println("element = '" + tagName + "'");
 		if (tagName.startsWith("xlp-")) {
 			tagName = tagName.substring(4);
+		}
+		if (tagName.equals("span")) {
+			return;
 		}
 		boolean use = !elementsToIgnore.contains(tagName);
 //		System.out.println("\tuse = " + use);

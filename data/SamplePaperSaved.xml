@@ -44,7 +44,7 @@ pagecontrol="letFormatterDecide"
 ><example
 num="xInterlinear"
 showiso639-3codes="no"
->)<interlinear
+><interlinear
 ><lineGroup
 ><line
 ><langData
@@ -100,7 +100,7 @@ ref="rAdams1998"
 ><example
 num="xChart"
 showiso639-3codes="no"
->)<chart
+><chart
 >I'm a chart</chart
 ></example
 ><p
@@ -109,6 +109,7 @@ pagecontrol="letFormatterDecide"
 ></section1
 ><backMatter
 ><endnotes
+></endnotes
 ><references
 authorformtoshowineditor="full"
 showinlandscapemode="no"
@@ -168,7 +169,6 @@ showiso639-3codes="no"
 ></refWork
 ></refAuthor
 ></references
-></endnotes
 ></backMatter
 ><languages
 ><language
