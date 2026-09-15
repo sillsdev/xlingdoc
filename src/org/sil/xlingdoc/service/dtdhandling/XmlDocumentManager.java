@@ -11,6 +11,7 @@ package org.sil.xlingdoc.service.dtdhandling;
  */
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,6 +22,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import java.io.File;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 public class XmlDocumentManager {
@@ -161,4 +163,13 @@ public class XmlDocumentManager {
 
 		return sb.toString();
 	}
+
+	public Document loadXMLFromString(String xml) throws Exception {
+	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true);
+	    DocumentBuilder builder = factory.newDocumentBuilder();
+	    InputSource inputSource = new InputSource(new StringReader(xml));
+	    return builder.parse(inputSource);
+	}
+
 }

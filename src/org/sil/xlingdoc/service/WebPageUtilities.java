@@ -106,9 +106,9 @@ public class WebPageUtilities {
 	// for some as yet unknown reason some EMPTY elements have what comes after embedded in them
 	// after the HTNML is loaded into the web engine
 	public static Document removeIncorrectEmbedding(Document doc) {
-		doc = removeEmbedding(doc, "endnotes", true);
-		doc = removeEmbedding(doc, "language", false);
-		doc = removeEmbedding(doc, "type", false);
+		doc = removeEmbedding(doc, "ENDNOTES", true);
+		doc = removeEmbedding(doc, "LANGUAGE", false);
+		doc = removeEmbedding(doc, "TYPE", false);
 		return doc;
 	}
 
@@ -125,15 +125,15 @@ public class WebPageUtilities {
 				}
 				Element elNew = (Element) el.cloneNode(false);
 				parent.appendChild(elNew);
-				System.out.println("elnew = " + elNew.getLocalName());
-				System.out.println("parent = " + parent.getLocalName());
+//				System.out.println("elnew = " + elNew.getLocalName());
+//				System.out.println("parent = " + parent.getLocalName());
 				if (el.hasChildNodes()) {
 					switch(elementToUnembed) {
-					case "type":
-						includeFirstChild(parent, el, "comment");
-						break;
-					case "endnotes":
+					case "ENDNOTES":
 						includeFirstChild(parent, el, "references");
+						break;
+					case "TYPE":
+						includeFirstChild(parent, el, "comment");
 						break;
 					}
 				}
@@ -146,7 +146,8 @@ public class WebPageUtilities {
 	}
 
 	private static void includeFirstChild(Element parent, Element el, String childName) {
-		if (el.getFirstChild().getLocalName().equals(childName)) {
+		String name = el.getFirstChild().getLocalName();
+		if (name.equals(childName) || name.equals(childName.toUpperCase())) {
 			Element comment = (Element) el.getFirstChild().cloneNode(true);
 			parent.appendChild(comment);
 		}

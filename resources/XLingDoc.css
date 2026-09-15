@@ -338,22 +338,25 @@ publisher:after
 	content: ". ";
 }
 
-refAuthor:before
-{
-	content: collapser(collapsed-icon, icon(url(resources/plus-box.png)), expanded-icon, icon(url(resources/minus-box.png)))
-	" name: "
-	text-field(attribute, name, columns, 40)
-	" cite as: "
-	text-field(attribute, citename, columns 15)
-	;
-}
+/*refAuthor:before*/
+/*{*/
+/*	content: collapser(collapsed-icon, icon(url(resources/plus-box.png)), expanded-icon, icon(url(resources/minus-box.png)))*/
+/*	" name: "*/
+/*	text-field(attribute, name, columns, 40)*/
+/*	" cite as: "*/
+/*	text-field(attribute, citename, columns 15)*/
+/*	;*/
+/*}*/
 refAuthor
 {
 	display:block;
 	padding-left: .25in;
 /*	property-group: isCollapsible( no, 1);*/
 }
-
+refAuthor details summary {
+	font-weight: normal;
+	font-size: smaller;
+}
 refDate:before
 {
 	content: " ";
@@ -383,17 +386,21 @@ refWork
 /*	text-indent: -.25in;*/
 }
 
-references:before
-{
+/*references:before*/
+/*{*/
 /*	property-group: labelNotPresent( " References" ); */
-	font-weight:bold;
-	font-size:larger;
-}
+/*	font-weight:bold;*/
+/*	font-size:larger;*/
+/*}*/
 references
 {
 	display:block;
     padding-top: 1ex;
 /*	property-group: isCollapsible( no, 1); */
+}
+references summary {
+	font-weight: bold;
+	font-size:larger;
 }
 
 secTitle:before
@@ -455,7 +462,7 @@ sectionRef:before
 	background-color: var(--section-background-color);
 }
 
-title { 
+title {
     display: block;
     text-align: center;
     font-weight: bold;

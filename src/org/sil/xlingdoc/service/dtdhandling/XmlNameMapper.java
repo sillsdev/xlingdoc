@@ -55,9 +55,10 @@ public class XmlNameMapper {
 		fileContent = fileContent.replaceAll("</section1", kDetailsEnd + "</section1");
 
 		// TODO: be sure to use localized value for the wrap summary string
+		fileContent = wrapElement(fileContent, "references", "References", false);
+		fileContent = wrapElement(fileContent, "refAuthor", "works", true);
 		fileContent = wrapElement(fileContent, "languages", "Languages", false);
 		fileContent = wrapElement(fileContent, "types", "Types", false);
-		fileContent = wrapElement(fileContent, "refAuthor", "works", true);
 
 		return fileContent;
 	}
