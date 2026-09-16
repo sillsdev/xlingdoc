@@ -22,11 +22,9 @@ import org.sil.xlingdoc.service.WebPageInteractor;
 import org.sil.xlingdoc.service.WebPageUtilities;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
-import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,12 +32,10 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import netscape.javascript.JSObject;
 
 /**
  * 
@@ -54,14 +50,13 @@ public class MainController implements Initializable {
 	private Button btnSave;
 	@FXML
 	private TextFlow componentPathBar;
-	private final String kComponentGap = " " + Character.toString(0x227a);
-	private final Color kComponentPathItemColor = Color.MAROON;
 	private final String kClass = "class";
 	private final String kComponentSelected = "component-selected";
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 	private WebPageInteractor webPageInteractor;
+	private ComponentPathBarHandler componentPathBarHandler;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -86,16 +81,10 @@ public class MainController implements Initializable {
 		manager = new XmlDocumentManager();
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
 		webPageInteractor = new WebPageInteractor();
-//		String xmlFilePath = "data/SamplePaper.xml";
+		componentPathBarHandler = new ComponentPathBarHandler();
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
-		// type elements are not nested and have details and summary
-		System.out.println("load file into html ==============================");
-		// type elements are good here
-//		System.out.println(sb.toString());
-		System.out.println(htmlContent);
-		System.out.println("load file into html ==============================");
 
 		webEngine.loadContent(htmlContent);
 		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
@@ -104,24 +93,21 @@ public class MainController implements Initializable {
 				Document doc = webEngine.getDocument();
 				doc = WebPageUtilities.removeIncorrectEmbedding(doc);
 				webPageInteractor.setDocument(doc);
-				try {
-					// already have nested type elements
-					String html = manager.documentToString(doc);
-					System.out.println("load succeeded html ==============================");
-//					System.out.println(sb.toString());
-					System.out.println(html);
-					System.out.println("load succeeded html ==============================");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				WebPageUtilities.addInputBoxes(webEngine);
 		    }
 		});
 
 		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
 			if (event.getButton() == MouseButton.PRIMARY) {
-				updateComponentPathBar(event);
+				componentPathBarHandler.updateComponentPathBar(webEngine, componentPathBar, event);
+				componentsInPathBar = componentPathBarHandler.getComponentsInPathBar();
+				Element selectedElement = componentPathBarHandler.getElementSelected();
+				if (selectedElement != null) {
+					SortedSet<String> before = dtdInspector.getValidAdjacentElements(selectedElement, manager, true);
+					SortedSet<String> after = dtdInspector.getValidAdjacentElements(selectedElement, manager, false);
+					if (before.size() == -1 || after.size() == -1)
+						System.out.println("-1 found");
+				}
 			}
 			// Potential code for checking spelling of a word which has been right-clicked on
 			//else if (event.getButton() == MouseButton.SECONDARY) {
@@ -181,85 +167,12 @@ public class MainController implements Initializable {
 				}
 			}
 		});
+		// TODO: use correct top item name (xlingpaper or lingPaper)
 		Text top = new Text(" lingPaper");
-		top.setFill(kComponentPathItemColor);
+		top.setFill(componentPathBarHandler.getComponentPathItemColor());
 		componentPathBar.getChildren().add(top);
 
 //		webView.setOnContextMenuRequested(null);
-	}
-
-	protected void updateComponentPathBar(MouseEvent event) {
-		Platform.runLater(() -> {
-			// Always use coordinate locations relative strictly to the WebView viewport
-			// boundaries
-			double x = event.getX();
-			double y = event.getY();
-			// 1. Execute the plural elementsFromPoint script
-			String script = String.format("document.elementsFromPoint(%f, %f);", x, y);
-			Object result = webEngine.executeScript(script);
-			// 2. The browser returns an array-like collection wrapped as a JSObject
-			if (result instanceof JSObject) {
-				JSObject elementList = (JSObject) result;
-				// Evaluate the length of the array returned by WebKit
-				Object lengthObj = elementList.getMember("length");
-				if (lengthObj instanceof Number) {
-					int length = ((Number) lengthObj).intValue();
-					StringBuilder sb = new StringBuilder();
-					sb.append(" ");
-					componentPathBar.getChildren().clear();
-					componentsInPathBar.clear();
-					// 3. Iterate through the array slots from topmost to bottommost
-					for (int i = length-1; i >= 0; i--) {
-						Object arrayItem = elementList.getSlot(i);
-						// Each item inside the slot implements the standard org.w3c.dom.Element
-						// interface!
-						if (arrayItem instanceof Element) {
-							Element domElement = (Element) arrayItem;
-							String tagName = domElement.getTagName();
-							if (tagName.equals("BODY") || tagName.equals("HTML")
-									|| tagName.equals("DETAILS") || tagName.equals("SUMMARY")) {
-								continue;
-							}
-							if (tagName.equals("TH") || tagName.equals("TD")) {
-								sb.append("tr > ");
-								Text tTr = new Text(" tr");
-								tTr.setFill(kComponentPathItemColor);
-								Text tTrGap = new Text(kComponentGap);
-								ComponentPathItem trItem = new ComponentPathItem("tr", (Element)domElement.getParentNode());
-								tTr.setUserData(trItem);
-								componentPathBar.getChildren().addAll(tTr, tTrGap);
-								componentsInPathBar.add(trItem);
-							}
-							String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
-									//InternalToExternalNameMapper.mapName(tagName);
-							sb.append(adjustedTagName);
-							Text t = new Text(" " + adjustedTagName);
-							t.setFill(kComponentPathItemColor);
-							if (i == 0) {
-								t.setStyle("-fx-font-weight: bold;");
-							}
-							componentPathBar.getChildren().add(t);
-							ComponentPathItem cpItem = new ComponentPathItem(adjustedTagName, domElement);
-							componentsInPathBar.add(cpItem);
-							t.setUserData(cpItem);
-							if (i > 0) {
-								Text tGap = new Text(kComponentGap);
-								tGap.setUserData("gap");
-								componentPathBar.getChildren().add(tGap);
-								sb.append(" > ");
-							} else {
-								System.out.println("Clicked on this element: '" + adjustedTagName + "'");
-								SortedSet<String> before = dtdInspector.getValidAdjacentElements(domElement, manager, true);
-								SortedSet<String> after = dtdInspector.getValidAdjacentElements(domElement, manager, false);
-								if (before.size() == -1 || after.size() == -1)
-									System.out.println("-1 found");
-							}
-						}
-					}
-//					System.out.println(sb.toString());
-				}
-			}
-		});
 	}
 
 	public void highlightDomElement(ComponentPathItem cpItem) {
