@@ -35,18 +35,7 @@ public class WebPageInteractor {
 		this.document = document;
 	}
 
-	/**
-     * Called directly from JavaScript when a text box value changes.
-     * 
-     * @param elementId The internal ID or path identifying the XML element.
-     * @param attributeName The attribute being edited (e.g., "id").
-     * @param newValue The new value typed into the text box by the user.
-	 * @throws XPathExpressionException 
-     */
     public void updateAttribute(String elementName, String attributeName, String attributeValue, String newValue) {
-//        System.out.println("Updating XML element [" + elementName + "] " + attributeName + " = " + newValue);
-
-//        Element el = document.getElementById(elementId);
         if (StringUtilities.isNullOrEmpty(elementName)) {
 			try {
 	        	XPath xPath = XPathFactory.newInstance().newXPath();
@@ -55,7 +44,6 @@ public class WebPageInteractor {
 	        	if (nodes.getLength() > 0) {
 	        		Element element = (Element) nodes.item(0);
 	            	element.setAttribute(attributeName, newValue);
-//	            	System.out.println(element.getNodeName() + " " + attributeName + " changed from " + sIdBefore + " to " + sIdAfter);
 	        	}
 			} catch (XPathExpressionException e) {
 				// TODO Auto-generated catch block
