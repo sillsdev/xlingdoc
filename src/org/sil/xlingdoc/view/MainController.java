@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.SortedSet;
 
 import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.model.ComponentPathItem;
@@ -24,13 +23,13 @@ import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.events.EventTarget;
 
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -88,27 +87,36 @@ public class MainController implements Initializable {
 
 		webEngine.loadContent(htmlContent);
 		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
-		    if (newState == Worker.State.SUCCEEDED) {
-		        webEngine = WebPageUtilities.allowConsoleLogViaJavaScript(webEngine, webPageInteractor);
+			if (newState == Worker.State.SUCCEEDED) {
+				webEngine = WebPageUtilities.allowConsoleLogViaJavaScript(webEngine, webPageInteractor);
 				Document doc = webEngine.getDocument();
 				doc = WebPageUtilities.removeIncorrectEmbedding(doc);
 				webPageInteractor.setDocument(doc);
 				WebPageUtilities.addInputBoxes(webEngine);
-		    }
-		});
-
-		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-			if (event.getButton() == MouseButton.PRIMARY) {
-				componentPathBarHandler.updateComponentPathBar(webEngine, componentPathBar, event);
-				componentsInPathBar = componentPathBarHandler.getComponentsInPathBar();
-				Element selectedElement = componentPathBarHandler.getElementSelected();
-				if (selectedElement != null) {
-					SortedSet<String> before = dtdInspector.getValidAdjacentElements(selectedElement, manager, true);
-					SortedSet<String> after = dtdInspector.getValidAdjacentElements(selectedElement, manager, false);
-					if (before.size() == -1 || after.size() == -1)
-						System.out.println("-1 found");
+				Element target = doc.getDocumentElement();
+				if (target != null) {
+					((EventTarget) target).addEventListener("click", (org.w3c.dom.events.Event ev) -> {
+						Element clicked = (Element) ev.getTarget();
+						System.out.println("New Clicked: " + clicked.getTagName());
+						componentPathBarHandler.updateComponentPathBar(clicked, componentPathBar);
+					}, false);
 				}
 			}
+		});
+
+//		TODO: is this needed in any way now??
+//		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+//			if (event.getButton() == MouseButton.PRIMARY) {
+//				componentPathBarHandler.updateComponentPathBar(webEngine, componentPathBar, event);
+//				componentsInPathBar = componentPathBarHandler.getComponentsInPathBar();
+//				Element selectedElement = componentPathBarHandler.getElementSelected();
+//				if (selectedElement != null) {
+//					SortedSet<String> before = dtdInspector.getValidAdjacentElements(selectedElement, manager, true);
+//					SortedSet<String> after = dtdInspector.getValidAdjacentElements(selectedElement, manager, false);
+//					if (before.size() == -1 || after.size() == -1)
+//						System.out.println("-1 found");
+//				}
+//			}
 			// Potential code for checking spelling of a word which has been right-clicked on
 			//else if (event.getButton() == MouseButton.SECONDARY) {
 
@@ -154,7 +162,7 @@ public class MainController implements Initializable {
 ////		            spellMenu.show(webView, event.getScreenX(), event.getScreenY());
 ////		        }
 //		    }
-		});
+//		});
 
 		componentPathBar.setOnMouseClicked(event -> {
 			if (event.getTarget() instanceof Text) {
@@ -176,22 +184,28 @@ public class MainController implements Initializable {
 	}
 
 	public void highlightDomElement(ComponentPathItem cpItem) {
-		Element targetElement = cpItem.getElement();
-		if (componentsInPathBar.contains(cpItem)) {
-			int index = componentsInPathBar.lastIndexOf(cpItem);
-			System.out.println("\tindex = " + index);
-			for (int i = index + 1; i < componentsInPathBar.size(); i++) {
-				Element el = componentsInPathBar.get(i).getElement();
-				String cssClass = el.getAttribute(kClass);
-				System.out.println("\tel = " + el.getTagName() + "; class='" + cssClass + "'");
-				if (cssClass != null && cssClass.length() > 0) {
-					cssClass = cssClass.replaceAll(kComponentSelected, "");
-					el.setAttribute(kClass, cssClass);
+		Platform.runLater(() -> {
+			Element targetElement = cpItem.getElement();
+			System.out.println("highlightDomElement before");
+			if (componentsInPathBar.contains(cpItem)) {
+				int index = componentsInPathBar.lastIndexOf(cpItem);
+				System.out.println("\tindex = " + index);
+				for (int i = index + 1; i < componentsInPathBar.size(); i++) {
+					Element el = componentsInPathBar.get(i).getElement();
+					String cssClass = el.getAttribute(kClass);
+					System.out.println("\tel = " + el.getTagName() + "; class='" + cssClass + "'");
+					if (cssClass != null && cssClass.length() > 0) {
+						cssClass = cssClass.replaceAll(kComponentSelected, "");
+						el.setAttribute(kClass, cssClass);
+					}
+					Text t = componentsInPathBar.get(i).getText();
+					componentPathBar.getChildren().remove(t);
 				}
+				componentPathBar.layout();
 			}
-		}
-		// TODO: what if there are more CSS names in the class attribute?
-		targetElement.setAttribute(kClass, kComponentSelected);
+			// TODO: what if there are more CSS names in the class attribute?
+			targetElement.setAttribute(kClass, kComponentSelected);
+		});
 	}
 
 	@FXML

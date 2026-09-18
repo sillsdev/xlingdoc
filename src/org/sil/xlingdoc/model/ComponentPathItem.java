@@ -8,6 +8,8 @@ package org.sil.xlingdoc.model;
 
 import org.w3c.dom.Element;
 
+import javafx.scene.text.Text;
+
 /**
  * 
  */
@@ -15,11 +17,13 @@ public class ComponentPathItem {
 
 	String name;
 	Element element;
+	Text text;
 	/**
 	 * @param name
 	 * @param element
+	 * @param text TODO
 	 */
-	public ComponentPathItem(String name, Element element) {
+	public ComponentPathItem(String name, Element element, Text text) {
 		super();
 		this.name = name;
 		this.element = element;
@@ -35,6 +39,12 @@ public class ComponentPathItem {
 	}
 	public void setElement(Element element) {
 		this.element = element;
+	}
+	public Text getText() {
+		return text;
+	}
+	public void setText(Text text) {
+		this.text = text;
 	}
 
 }

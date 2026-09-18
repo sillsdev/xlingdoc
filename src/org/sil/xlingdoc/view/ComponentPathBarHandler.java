@@ -16,12 +16,9 @@ import org.w3c.dom.Element;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.web.WebEngine;
-import netscape.javascript.JSObject;
 
 /**
  * 
@@ -29,7 +26,8 @@ import netscape.javascript.JSObject;
 public class ComponentPathBarHandler {
 //	private final String kClass = "class";
 	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
-	final String kComponentGap = " " + Character.toString(0x227a);
+	public final String kComponentGap = " " + Character.toString(0x227a);
+	public final String kStyleOfFinal = "-fx-font-weight: bold;";
 	final String kComponentBreak = " > ";
 	final Color kComponentPathItemColor = Color.MAROON;
 	Element elementSelected = null;
@@ -37,7 +35,7 @@ public class ComponentPathBarHandler {
 			"BODY",
 			"DETAILS",
 			"HTML",
-//			"INPUT",
+			"INPUT",
 			"SUMMARY"
 			);
 
@@ -53,77 +51,61 @@ public class ComponentPathBarHandler {
 		return componentsInPathBar;
 	}
 
-	public void updateComponentPathBar(WebEngine webEngine, TextFlow componentPathBar, MouseEvent event) {
+	public void updateComponentPathBar(Element element, TextFlow componentPathBar) {
 		Platform.runLater(() -> {
-			// Always use coordinate locations relative strictly to the WebView viewport
-			// boundaries
-			double x = event.getX();
-			double y = event.getY();
-			// 1. Execute the plural elementsFromPoint script
-			String script = String.format("document.elementsFromPoint(%f, %f);", x, y);
-			Object result = webEngine.executeScript(script);
-			// 2. The browser returns an array-like collection wrapped as a JSObject
-			if (result instanceof JSObject) {
-				JSObject elementList = (JSObject) result;
-				// Evaluate the length of the array returned by WebKit
-				Object lengthObj = elementList.getMember("length");
-				if (lengthObj instanceof Number) {
-					int length = ((Number) lengthObj).intValue();
-					componentPathBar.getChildren().clear();
-					componentsInPathBar.clear();
-					// 3. Iterate through the array slots from topmost to bottommost
-					for (int i = length-1; i >= 0; i--) {
-						Object arrayItem = elementList.getSlot(i);
-						if (arrayItem instanceof Element) {
-							Element domElement = (Element) arrayItem;
-							String tagName = domElement.getTagName();
-							if (elementsToIgnore.contains(tagName)) {
-								continue;
-							}
-							if (tagName.equals("INPUT")) {
-								ObservableList<Node> children = componentPathBar.getChildren();
-								int lastChild = children.size();
-								Node lastNode = children.get(lastChild - 2);
-								if (lastNode instanceof Text lastText) {
-									lastText.setStyle("-fx-font-weight: bold;");
-									children.removeLast();
-									children.removeLast();
-									children.add(lastText);
-									elementSelected = domElement;
-								}
-								return;
-							}
-							if (tagName.equals("TH") || tagName.equals("TD")) {
-								Text tTr = new Text(" tr");
-								tTr.setFill(kComponentPathItemColor);
-								Text tTrGap = new Text(kComponentGap);
-								ComponentPathItem trItem = new ComponentPathItem("tr", (Element)domElement.getParentNode());
-								tTr.setUserData(trItem);
-								componentPathBar.getChildren().addAll(tTr, tTrGap);
-								componentsInPathBar.add(trItem);
-							}
-							String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
-							Text t = new Text(" " + adjustedTagName);
-							t.setFill(kComponentPathItemColor);
-							if (i == 0) {
-								t.setStyle("-fx-font-weight: bold;");
-							}
-							componentPathBar.getChildren().add(t);
-							ComponentPathItem cpItem = new ComponentPathItem(adjustedTagName, domElement);
-							componentsInPathBar.add(cpItem);
-							t.setUserData(cpItem);
-							if (i > 0) {
-								Text tGap = new Text(kComponentGap);
-								tGap.setUserData("gap");
-								componentPathBar.getChildren().add(tGap);
-							} else {
-								System.out.println("Clicked on this element via handler: '" + adjustedTagName + "'");
-								elementSelected = domElement;
-							}
-						}
-					}
-				}
-			}
+			componentPathBar.getChildren().clear();
+			componentsInPathBar.clear();
+			addElementToComponentPathBar(element, componentPathBar);
+			markLastElement(element, componentPathBar);
 		});
+	}
+
+	// public for testing
+	public void addElementToComponentPathBar(Element element, TextFlow componentPathBar) {
+		String tagName = element.getTagName();
+		if (tagName.equals("BODY")) {
+			// no need to look further
+			return;
+		}
+		addElementToComponentPathBar((Element) element.getParentNode(), componentPathBar);
+		if (elementsToIgnore.contains(tagName)) {
+			return;
+		}
+		if (tagName.equals("TH") || tagName.equals("TD")) {
+			Text tTr = new Text(" tr");
+			tTr.setFill(kComponentPathItemColor);
+			Text tTrGap = new Text(kComponentGap);
+			ComponentPathItem trItem = new ComponentPathItem("tr", (Element) element.getParentNode(), tTr);
+			tTr.setUserData(trItem);
+			componentPathBar.getChildren().addAll(tTr, tTrGap);
+			componentsInPathBar.add(trItem);
+		}
+		String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
+		Text t = new Text(" " + adjustedTagName);
+		t.setUserData(element);
+		t.setFill(kComponentPathItemColor);
+		componentPathBar.getChildren().add(t);
+//		ComponentPathItem cpItem = new ComponentPathItem(adjustedTagName, element, t);
+//		componentsInPathBar.add(cpItem);
+//		t.setUserData(cpItem);
+			Text tGap = new Text(kComponentGap);
+			tGap.setUserData("gap");
+			componentPathBar.getChildren().add(tGap);
+//			System.out.println("Clicked on this element via handler: '" + adjustedTagName + "'");
+//			elementSelected = element;
+	}
+
+	// public for testing
+	public void markLastElement(Element element, TextFlow componentPathBar) {
+		ObservableList<Node> children = componentPathBar.getChildren();
+		int lastChild = children.size();
+		Node lastNode = children.get(lastChild - 2);
+		if (lastNode instanceof Text lastText) {
+			lastText.setStyle(kStyleOfFinal);
+			children.removeLast();
+			children.removeLast();
+			children.add(lastText);
+			elementSelected = element;
+		}
 	}
 }
