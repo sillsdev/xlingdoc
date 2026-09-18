@@ -6,10 +6,8 @@
 
 package org.sil.xlingdoc.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Element;
 
@@ -25,11 +23,15 @@ import javafx.scene.text.TextFlow;
  */
 public class ComponentPathBarHandler {
 //	private final String kClass = "class";
-	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
+//	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 	public final String kComponentGap = " " + Character.toString(0x227a);
 	public final String kStyleOfFinal = "-fx-font-weight: bold;";
 	final String kComponentBreak = " > ";
 	final Color kComponentPathItemColor = Color.MAROON;
+	private final String kClass = "class";
+	private final String kComponentSelected = "component-selected";
+	Element lastElementHighlighted = null;
+
 	Element elementSelected = null;
 	private final List<String> elementsToIgnore = List.of(
 			"BODY",
@@ -47,14 +49,15 @@ public class ComponentPathBarHandler {
 		return kComponentPathItemColor;
 	}
 
-	public List<ComponentPathItem> getComponentsInPathBar() {
-		return componentsInPathBar;
-	}
+//	public List<ComponentPathItem> getComponentsInPathBar() {
+//		return componentsInPathBar;
+//	}
 
 	public void updateComponentPathBar(Element element, TextFlow componentPathBar) {
 		Platform.runLater(() -> {
+			removeHighlightFromLastElementHighlighted();
 			componentPathBar.getChildren().clear();
-			componentsInPathBar.clear();
+//			componentsInPathBar.clear();
 			addElementToComponentPathBar(element, componentPathBar);
 			markLastElement(element, componentPathBar);
 		});
@@ -75,24 +78,19 @@ public class ComponentPathBarHandler {
 			Text tTr = new Text(" tr");
 			tTr.setFill(kComponentPathItemColor);
 			Text tTrGap = new Text(kComponentGap);
-			ComponentPathItem trItem = new ComponentPathItem("tr", (Element) element.getParentNode(), tTr);
-			tTr.setUserData(trItem);
+//			ComponentPathItem trItem = new ComponentPathItem("tr", (Element) element.getParentNode(), tTr);
+			tTr.setUserData(element.getParentNode());
 			componentPathBar.getChildren().addAll(tTr, tTrGap);
-			componentsInPathBar.add(trItem);
+//			componentsInPathBar.add(trItem);
 		}
 		String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
 		Text t = new Text(" " + adjustedTagName);
 		t.setUserData(element);
 		t.setFill(kComponentPathItemColor);
 		componentPathBar.getChildren().add(t);
-//		ComponentPathItem cpItem = new ComponentPathItem(adjustedTagName, element, t);
-//		componentsInPathBar.add(cpItem);
-//		t.setUserData(cpItem);
 			Text tGap = new Text(kComponentGap);
 			tGap.setUserData("gap");
 			componentPathBar.getChildren().add(tGap);
-//			System.out.println("Clicked on this element via handler: '" + adjustedTagName + "'");
-//			elementSelected = element;
 	}
 
 	// public for testing
@@ -108,4 +106,25 @@ public class ComponentPathBarHandler {
 			elementSelected = element;
 		}
 	}
+
+	public void highlightSelectedElement(Element element) {
+		Platform.runLater(() -> {
+			System.out.println("highlightSelectedElement; element = " + element.getTagName());
+			// TODO: what if there are more CSS names in the class attribute?
+			String sClass = element.getAttribute(kClass);
+			sClass = sClass + " " + kComponentSelected;
+			element.setAttribute(kClass, sClass);
+			removeHighlightFromLastElementHighlighted();
+			lastElementHighlighted = element;
+		});
+	}
+
+	private void removeHighlightFromLastElementHighlighted() {
+		if (lastElementHighlighted != null) {
+			String cssClass = lastElementHighlighted.getAttribute(kClass);
+			cssClass = cssClass.replaceAll(kComponentSelected, "");
+			lastElementHighlighted.setAttribute(kClass, cssClass);
+		}
+	}
+
 }

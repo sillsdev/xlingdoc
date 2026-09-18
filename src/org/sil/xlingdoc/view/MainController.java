@@ -9,12 +9,9 @@ package org.sil.xlingdoc.view;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.sil.xlingdoc.Constants;
-import org.sil.xlingdoc.model.ComponentPathItem;
 import org.sil.xlingdoc.service.fileio.XLingDocLoader;
 import org.sil.xlingdoc.service.fileio.XLingDocSaver;
 import org.sil.xlingdoc.service.WebPageInteractor;
@@ -25,7 +22,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
 
-import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -49,9 +45,6 @@ public class MainController implements Initializable {
 	private Button btnSave;
 	@FXML
 	private TextFlow componentPathBar;
-	private final String kClass = "class";
-	private final String kComponentSelected = "component-selected";
-	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 	private WebPageInteractor webPageInteractor;
@@ -104,7 +97,7 @@ public class MainController implements Initializable {
 			}
 		});
 
-//		TODO: is this needed in any way now??
+		//		TODO: is this needed in any way now??
 //		webView.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
 //			if (event.getButton() == MouseButton.PRIMARY) {
 //				componentPathBarHandler.updateComponentPathBar(webEngine, componentPathBar, event);
@@ -169,9 +162,10 @@ public class MainController implements Initializable {
 				Text clickedText = (Text) event.getTarget();
 				System.out.println("\nClicked text: " + clickedText.getText());
 				Object obj = clickedText.getUserData();
-				if (obj instanceof ComponentPathItem cpItem) {
-					System.out.println("cpItem = '" + cpItem.getName());
-					highlightDomElement(cpItem);
+				if (obj instanceof Element el) {
+					System.out.println("el = '" + el.getTagName());
+					componentPathBarHandler.highlightSelectedElement(el);
+//					highlightDomElement(cpItem);
 				}
 			}
 		});
@@ -181,31 +175,6 @@ public class MainController implements Initializable {
 		componentPathBar.getChildren().add(top);
 
 //		webView.setOnContextMenuRequested(null);
-	}
-
-	public void highlightDomElement(ComponentPathItem cpItem) {
-		Platform.runLater(() -> {
-			Element targetElement = cpItem.getElement();
-			System.out.println("highlightDomElement before");
-			if (componentsInPathBar.contains(cpItem)) {
-				int index = componentsInPathBar.lastIndexOf(cpItem);
-				System.out.println("\tindex = " + index);
-				for (int i = index + 1; i < componentsInPathBar.size(); i++) {
-					Element el = componentsInPathBar.get(i).getElement();
-					String cssClass = el.getAttribute(kClass);
-					System.out.println("\tel = " + el.getTagName() + "; class='" + cssClass + "'");
-					if (cssClass != null && cssClass.length() > 0) {
-						cssClass = cssClass.replaceAll(kComponentSelected, "");
-						el.setAttribute(kClass, cssClass);
-					}
-					Text t = componentsInPathBar.get(i).getText();
-					componentPathBar.getChildren().remove(t);
-				}
-				componentPathBar.layout();
-			}
-			// TODO: what if there are more CSS names in the class attribute?
-			targetElement.setAttribute(kClass, kComponentSelected);
-		});
 	}
 
 	@FXML
