@@ -68,11 +68,6 @@ public class XmlNameMapper {
 		Node nodeImported = docNew.importNode(nodeNew, false);
 		return nodeImported;
 	}
-//	private static Element cloneElement(Element el, Document docNew) {
-//		Element elNew = (Element) el.cloneNode(false);
-//		Element elImported = (Element) docNew.importNode(elNew, false);
-//		return elImported;
-//	}
 
 	private static Document mapAndWrapInDivSpanOrDetails(Document doc, Element el, Document docNew, Element elNew) {
 		String elName = el.getTagName();
@@ -88,12 +83,15 @@ public class XmlNameMapper {
 			Element summary = docNew.createElement("summary");
 			summary.setTextContent(elName);
 			details.appendChild(summary);
-			Element elNew2 = docNew.createElement(elName);
-			for (int j = 0; j < el.getChildNodes().getLength(); j++) {
-				Element copy = (Element) el.getChildNodes().item(j);
-				Element childNew = docNew.createElement(copy.getTagName());
-				details.appendChild(childNew);
-			}
+//			Element elNew = (Element) cloneANode(el, docNew);
+			elNew.appendChild(details);
+			docNew = mapAndWrapInDivSpanOrDetails(doc, el, docNew, details);
+//			docNew = mapAndWrapInDivSpanOrDetails(doc, el, docNew, details);
+//			for (int j = 0; j < el.getChildNodes().getLength(); j++) {
+//				Element copy = (Element) el.getChildNodes().item(j);
+//				Element childNew = docNew.createElement(copy.getTagName());
+//				details.appendChild(childNew);
+//			}
 			elNew.appendChild(details);
 			parentNew.appendChild(elNew);
 		} else*/ if (elementsToWrapInDiv.contains(elName)) {
@@ -111,14 +109,23 @@ public class XmlNameMapper {
 	}
 
 	private static Document wrapElementIn(String sWrapperName, Document doc, Element el, Document docNew, Element parentNew) {
-		System.out.println("\twrap in " + sWrapperName);
+		System.out.println("\twrap in " + sWrapperName + " for " + el.getTagName() + " within parentNew = " + parentNew.getTagName());
 		Element wrapper = docNew.createElement(sWrapperName);
 		Element elNew = (Element) cloneANode(el, docNew);//docNew.createElement(el.getTagName());
+		Element subEl = elNew;
+		if (elementsToWrapInDetailsSummary.containsKey(el.getTagName())) {
+			Element details = docNew.createElement("details");
+			Element summary = docNew.createElement("summary");
+			summary.setTextContent(el.getTagName());
+			details.appendChild(summary);
+			elNew.appendChild(details);
+			subEl = summary;
+		}
 		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
 			Node node = el.getChildNodes().item(i);
 			if (node instanceof Element el2) {
 				System.out.println("\tel2 = " + el2.getTagName());
-				docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, elNew);
+				docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, subEl);
 			} else if (node instanceof Text text) {
 				System.out.println("\ttext = '" + text.getTextContent() + "'");
 				elNew.appendChild(cloneANode(text, docNew));
@@ -809,6 +816,7 @@ public class XmlNameMapper {
 			"interlinear",
 			"interlinear-text",
 			"language",
+			"languages",
 			"line",
 			"lineGroup",
 			"lingPaper",
@@ -819,11 +827,13 @@ public class XmlNameMapper {
 			"refAuthor",
 			"refWork",
 			"references",
+			"section1",
 			"table",
 			"tablenumbered",
 			"title",
 			"tree",
 			"type",
+			"types",
 			"ul",
 			"xlingpaper"
 			);
@@ -835,13 +845,30 @@ public class XmlNameMapper {
 			"article",
 			"authorRole",
 			"book",
+			"bookTotalPages",
+			"bookversion",
 			"br",
+			"bVol",
 			"citation",
 			"collection",
+			"collCitation",
+			"collEd",
+			"collEdInitials",
+			"collEdSurnameGivenName",
+			"collPages",
+			"collTitle",
+			"collTitleLowerCase",
+			"collVol",
 			"comment",
-			"comment",
+			"conference",
 			"dateAccessed",
 			"dissertation",
+			"doi",
+			"edition",
+			"editor",
+			"editorInitials",
+			"editorSurnameGivenName",
+			"empty",
 			"endnote",
 			"endnoteRef",
 			"exampleRef",
@@ -855,25 +882,54 @@ public class XmlNameMapper {
 			"indexedItem",
 			"indexedRangeBegin",
 			"indexedRangeEnd",
+			"institution",
 			"interlinearRefCitation",
 			"iso639-3code",
 			"iso639-3codeRef",
+			"jArticleNumber",
+			"jIssueNumber",
+			"jPages",
+			"jTitle",
+			"jVol",
 			"keywords",
 			"langData",
 			"link",
+			"location",
 			"mediaObject",
 			"ms",
+			"msVersion",
+			"multivolumeWork",
 			"object",
 			"paper",
 			"proceedings",
+			"procCitation",
+			"procEd",
+			"procEdInitials",
+			"procEdSurnameGivenName",
+			"procPages",
+			"procTitle",
+			"procTitleLowerCase",
+			"procVol",
+			"published",
+			"publisher",
 			"q",
 			"refDate",
 			"refTitle",
 			"refTitleLowerCase",
+			"reprintInfo",
 			"sectionRef",
-			"secTtitle",
+			"secTitle",
+			"series",
+			"seriesEd",
+			"seriesEdInitials",
+			"seriesEdSurnameGivenName",
 			"tablenumberedRef",
 			"thesis",
+			"series",
+			"seriesEd",
+			"seriesEdInitials",
+			"seriesEdSurnameGivenName",
+			"translatedBy",
 			"url",
 			"webPage",
 			"CMOSNandBShortCitationTitle"

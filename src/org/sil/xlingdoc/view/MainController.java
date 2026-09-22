@@ -83,9 +83,9 @@ public class MainController implements Initializable {
 			if (newState == Worker.State.SUCCEEDED) {
 				webEngine = WebPageUtilities.allowConsoleLogViaJavaScript(webEngine, webPageInteractor);
 				Document doc = webEngine.getDocument();
-				doc = WebPageUtilities.removeIncorrectEmbedding(doc);
+//				doc = WebPageUtilities.removeIncorrectEmbedding(doc);
 				webPageInteractor.setDocument(doc);
-				WebPageUtilities.addInputBoxes(webEngine);
+//				WebPageUtilities.addInputBoxes(webEngine);
 				Element target = doc.getDocumentElement();
 				if (target != null) {
 					((EventTarget) target).addEventListener("click", (org.w3c.dom.events.Event ev) -> {

@@ -55,14 +55,16 @@ public class XLingDocLoader {
 				System.out.println("After doc change ========================================");
 				System.out.println(fileContent);
 				System.out.println("After doc change ========================================");
-				int iBegin = fileContent.indexOf("<lingPaper");
-				fileContent = fileContent.substring(iBegin);
+//				int iBegin = fileContent.indexOf("<lingPaper");
+//				int iBegin = fileContent.indexOf("<div>");
+//				iBegin = fileContent.substring(iBegin).indexOf("<div>");
+//				fileContent = fileContent.substring(iBegin);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		fileContent = XmlNameMapper.mapInputFromXLingPaperToHTML(fileContent);
+//		fileContent = XmlNameMapper.mapInputFromXLingPaperToHTML(fileContent);
 		sb.append(fileContent);
 		sb.append("</body>\n");
 		sb.append("</html>\n");
