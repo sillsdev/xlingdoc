@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.sil.xlingdoc.model.InputBoxInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,6 +41,7 @@ public class XmlNameMapper {
 		return attributeNameMap.getOrDefault(nameToUse, nameToUse);
 	}
 
+	// TODO: add parameter for light vs. dark mode so we get the right colors for the input boxes
 	public static Document mapInputFromXLingPaperToHTML(Document doc) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -49,9 +51,6 @@ public class XmlNameMapper {
 			docNew.appendChild(topDiv);
 			Element root = doc.getDocumentElement();
 			System.out.println("Start: root = " + root.getTagName() /*+ "; topDiv = " + topDiv.getTagName()*/);
-//			Element newRoot = (Element) cloneANode(root, docNew);
-//			docNew.appendChild(newRoot);
-//			docNew = mapAndWrapInDivSpanOrDetails(doc, root, docNew, newRoot);
 			docNew = mapAndWrapInDivSpanOrDetails(doc, root, docNew, topDiv);
 			System.out.println("returning new doc");
 			return docNew;
@@ -78,33 +77,11 @@ public class XmlNameMapper {
 		} else {
 			parentNew = (Element) elNew.getParentNode();
 		}
-		/*if (elementsToWrapInDetailsSummary.containsKey(elName)) {
-			Element details = docNew.createElement("details");
-			Element summary = docNew.createElement("summary");
-			summary.setTextContent(elName);
-			details.appendChild(summary);
-//			Element elNew = (Element) cloneANode(el, docNew);
-			elNew.appendChild(details);
-			docNew = mapAndWrapInDivSpanOrDetails(doc, el, docNew, details);
-//			docNew = mapAndWrapInDivSpanOrDetails(doc, el, docNew, details);
-//			for (int j = 0; j < el.getChildNodes().getLength(); j++) {
-//				Element copy = (Element) el.getChildNodes().item(j);
-//				Element childNew = docNew.createElement(copy.getTagName());
-//				details.appendChild(childNew);
-//			}
-			elNew.appendChild(details);
-			parentNew.appendChild(elNew);
-		} else*/ if (elementsToWrapInDiv.contains(elName)) {
+		if (elementsToWrapInDiv.contains(elName)) {
 			docNew = wrapElementIn("div", doc, el, docNew, parentNew);
 		} else if(elementsToWrapInSpan.contains(elName)) {
 			docNew = wrapElementIn("span", doc, el, docNew, parentNew);
 		}
-//		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
-//			Node node = el.getChildNodes().item(i);
-//			if (node instanceof Element el2) {
-//				doc = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, elNew);
-//			}
-//		}
 		return docNew;
 	}
 
@@ -113,13 +90,24 @@ public class XmlNameMapper {
 		Element wrapper = docNew.createElement(sWrapperName);
 		Element elNew = (Element) cloneANode(el, docNew);//docNew.createElement(el.getTagName());
 		Element subEl = elNew;
-		if (elementsToWrapInDetailsSummary.containsKey(el.getTagName())) {
+		String tagName = el.getTagName();
+		if (elementsToWrapInDetailsSummary.containsKey(tagName)) {
 			Element details = docNew.createElement("details");
 			Element summary = docNew.createElement("summary");
-			summary.setTextContent(el.getTagName());
+			summary.setTextContent(tagName);
 			details.appendChild(summary);
 			elNew.appendChild(details);
 			subEl = summary;
+		}
+		if (elementInputBoxAttributeLightModeMap.containsKey(tagName)) {
+			InputBoxInfo info = elementInputBoxAttributeLightModeMap.get(tagName);
+			addInputBox(elNew, info, docNew);
+			if (tagName.equals("refAuthor")) {
+				// refAutor exceptionally needs two input boxes
+				// we add the name of the attribute to the tagname to avoid a duplicate in the map
+				info = elementInputBoxAttributeLightModeMap.get("refAuthorname");
+				addInputBox(elNew, info, docNew);
+			}
 		}
 		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
 			Node node = el.getChildNodes().item(i);
@@ -131,10 +119,47 @@ public class XmlNameMapper {
 				elNew.appendChild(cloneANode(text, docNew));
 			}
 		}
-//		docNew = mapAndWrapInDivSpanOrDetails(doc, el, docNew, elNew);
 		wrapper.appendChild(elNew);
 		parentNew.appendChild(wrapper);
 		return docNew;
+	}
+
+	private static void addInputBox(Element elNew, InputBoxInfo info, Document docNew) {
+		String sId = elNew.getAttribute(info.idAttribute());
+		Element input = docNew.createElement("input");
+		input.setAttribute("type", "text");
+		input.setAttribute("value", sId);
+		String sArgs = buildArguments(elNew, info.idAttribute(), sId);
+		input.setAttribute("oninput", sArgs);
+		input.setAttribute("class", "text-box-editor");
+		input.setAttribute("style", "background-color:" + info.backgoundColor());
+		// set the number of characters to show in the input box
+		input.setAttribute("size", info.boxTextSize());
+		if (info.hasDetails()) {
+			Node summary = elNew.getFirstChild().getFirstChild();
+			summary.insertBefore(input, summary.getFirstChild());
+		} else {
+			System.out.println("\t\ttext after = '" + info.textAfterBox() + "'");
+			if (info.textAfterBox().length() > 0) {
+				Element spanAfter = docNew.createElement("span");
+				spanAfter.setTextContent(info.textAfterBox());
+				spanAfter.setAttribute("contenteditable", "false");
+				elNew.insertBefore(spanAfter, elNew.getFirstChild());
+			}
+			elNew.insertBefore(input, elNew.getFirstChild());
+		}
+
+	}
+
+	private static String buildArguments(Element el, String sIdAttribute, String sId) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("xLingDocApp.updateAttribute('");
+		sb.append(el.getNodeName());
+		sb.append("', '");
+		sb.append(sIdAttribute);
+		sb.append(sId);
+		sb.append("', this.value)");
+		return sb.toString();
 	}
 
 	public static String mapInputFromXLingPaperToHTML(String fileContent) {
@@ -933,5 +958,20 @@ public class XmlNameMapper {
 			"url",
 			"webPage",
 			"CMOSNandBShortCitationTitle"
+	);
+
+	private static final Map<String, InputBoxInfo> elementInputBoxAttributeLightModeMap = Map.ofEntries(
+			Map.entry("example", new InputBoxInfo("num", "15", "#F5DEB3", false, ")")),
+			Map.entry("language", new InputBoxInfo("id", "15", "", false, "")),
+			Map.entry("refAuthor", new InputBoxInfo("citename", "15", "#F09FF0", false, "")),
+			Map.entry("refAuthorname", new InputBoxInfo("name", "40", "", false, "\u00a0\u00a0\u00a0")),
+			Map.entry("refWork", new InputBoxInfo("id", "15", "#F09FF0", false, "")),
+			Map.entry("section1", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("section2", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("section3", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("section4", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("section5", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("section6", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("type", new InputBoxInfo("id", "15", "", false, ""))
 	);
 }
