@@ -9,7 +9,17 @@ package org.sil.xlingdoc.service.dtdhandling;
  * 
  */
 
+import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 public class XmlNameMapper {
 
@@ -28,6 +38,96 @@ public class XmlNameMapper {
 	public static String mapAttributeName(String name) {
 		String nameToUse = name.toLowerCase();
 		return attributeNameMap.getOrDefault(nameToUse, nameToUse);
+	}
+
+	public static Document mapInputFromXLingPaperToHTML(Document doc) {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder builder = factory.newDocumentBuilder();
+	        Document docNew = builder.newDocument();
+			Element topDiv = docNew.createElement("div");
+			docNew.appendChild(topDiv);
+			Element root = doc.getDocumentElement();
+			System.out.println("Start: root = " + root.getTagName() /*+ "; topDiv = " + topDiv.getTagName()*/);
+//			Element newRoot = (Element) cloneANode(root, docNew);
+//			docNew.appendChild(newRoot);
+//			docNew = mapAndWrapInDivSpanOrDetails(doc, root, docNew, newRoot);
+			docNew = mapAndWrapInDivSpanOrDetails(doc, root, docNew, topDiv);
+			System.out.println("returning new doc");
+			return docNew;
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("returning orig doc");
+		return doc;
+	}
+
+	private static Node cloneANode(Node node, Document docNew) {
+		Node nodeNew = node.cloneNode(false);
+		Node nodeImported = docNew.importNode(nodeNew, false);
+		return nodeImported;
+	}
+//	private static Element cloneElement(Element el, Document docNew) {
+//		Element elNew = (Element) el.cloneNode(false);
+//		Element elImported = (Element) docNew.importNode(elNew, false);
+//		return elImported;
+//	}
+
+	private static Document mapAndWrapInDivSpanOrDetails(Document doc, Element el, Document docNew, Element elNew) {
+		String elName = el.getTagName();
+		System.out.println("mapAnd: el = " + el.getTagName() + "; elNew = " + elNew.getTagName());
+		Element parentNew;
+		if (elNew.getParentNode() == null || elNew.getParentNode().getNodeType() == Node.DOCUMENT_NODE) {
+			parentNew = elNew;
+		} else {
+			parentNew = (Element) elNew.getParentNode();
+		}
+		/*if (elementsToWrapInDetailsSummary.containsKey(elName)) {
+			Element details = docNew.createElement("details");
+			Element summary = docNew.createElement("summary");
+			summary.setTextContent(elName);
+			details.appendChild(summary);
+			Element elNew2 = docNew.createElement(elName);
+			for (int j = 0; j < el.getChildNodes().getLength(); j++) {
+				Element copy = (Element) el.getChildNodes().item(j);
+				Element childNew = docNew.createElement(copy.getTagName());
+				details.appendChild(childNew);
+			}
+			elNew.appendChild(details);
+			parentNew.appendChild(elNew);
+		} else*/ if (elementsToWrapInDiv.contains(elName)) {
+			docNew = wrapElementIn("div", doc, el, docNew, parentNew);
+		} else if(elementsToWrapInSpan.contains(elName)) {
+			docNew = wrapElementIn("span", doc, el, docNew, parentNew);
+		}
+//		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
+//			Node node = el.getChildNodes().item(i);
+//			if (node instanceof Element el2) {
+//				doc = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, elNew);
+//			}
+//		}
+		return docNew;
+	}
+
+	private static Document wrapElementIn(String sWrapperName, Document doc, Element el, Document docNew, Element parentNew) {
+		System.out.println("\twrap in " + sWrapperName);
+		Element wrapper = docNew.createElement(sWrapperName);
+		Element elNew = (Element) cloneANode(el, docNew);//docNew.createElement(el.getTagName());
+		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
+			Node node = el.getChildNodes().item(i);
+			if (node instanceof Element el2) {
+				System.out.println("\tel2 = " + el2.getTagName());
+				docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, elNew);
+			} else if (node instanceof Text text) {
+				System.out.println("\ttext = '" + text.getTextContent() + "'");
+				elNew.appendChild(cloneANode(text, docNew));
+			}
+		}
+//		docNew = mapAndWrapInDivSpanOrDetails(doc, el, docNew, elNew);
+		wrapper.appendChild(elNew);
+		parentNew.appendChild(wrapper);
+		return docNew;
 	}
 
 	public static String mapInputFromXLingPaperToHTML(String fileContent) {
@@ -683,4 +783,99 @@ public class XmlNameMapper {
 			Map.entry("whichvolumetoshowincontents", "whichVolumeToShowInContents"),
 			Map.entry("xsl-fospecial", "xsl-foSpecial")
 			);
+
+	private static final Map<String, Boolean> elementsToWrapInDetailsSummary = Map.ofEntries(
+			Map.entry("languages", true),
+			Map.entry("references", true),
+			Map.entry("refAuthor", false),
+			Map.entry("section1", true),
+			Map.entry("types", true)
+			);
+
+	private final static List<String> elementsToWrapInDiv = List.of(
+			"annotationRef",
+			"author",
+			"backMatter",
+			"blockquote",
+			"chart",
+			"chart",
+			"dl",
+			"endnotes",
+			"example",
+			"figure",
+			"free",
+			"frontMatter",
+			"hangingIndent",
+			"interlinear",
+			"interlinear-text",
+			"language",
+			"line",
+			"lineGroup",
+			"lingPaper",
+			"ol",
+			"p",
+			"pc",
+			"prose-text",
+			"refAuthor",
+			"refWork",
+			"references",
+			"table",
+			"tablenumbered",
+			"title",
+			"tree",
+			"type",
+			"ul",
+			"xlingpaper"
+			);
+
+	private final static List<String> elementsToWrapInSpan = List.of(
+			"abbrRef",
+			"annotations",
+			"appendixRef",
+			"article",
+			"authorRole",
+			"book",
+			"br",
+			"citation",
+			"collection",
+			"comment",
+			"comment",
+			"dateAccessed",
+			"dissertation",
+			"endnote",
+			"endnoteRef",
+			"exampleRef",
+			"fieldNotes",
+			"figureRef",
+			"genericRef",
+			"genericTarget",
+			"gloss",
+			"glossaryTermRef",
+			"img",
+			"indexedItem",
+			"indexedRangeBegin",
+			"indexedRangeEnd",
+			"interlinearRefCitation",
+			"iso639-3code",
+			"iso639-3codeRef",
+			"keywords",
+			"langData",
+			"link",
+			"mediaObject",
+			"ms",
+			"object",
+			"paper",
+			"proceedings",
+			"q",
+			"refDate",
+			"refTitle",
+			"refTitleLowerCase",
+			"sectionRef",
+			"secTtitle",
+			"tablenumberedRef",
+			"thesis",
+			"url",
+			"webPage",
+			"CMOSNandBShortCitationTitle"
+	);
 }

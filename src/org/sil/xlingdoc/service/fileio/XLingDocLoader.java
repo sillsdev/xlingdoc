@@ -11,6 +11,7 @@ import java.io.File;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
+import org.w3c.dom.Document;
 
 /**
  * 
@@ -43,7 +44,17 @@ public class XLingDocLoader {
 				e.printStackTrace();
 			}
 			try {
-				fileContent = manager.documentToString(manager.getMasterXmlDoc());
+				Document doc = manager.getMasterXmlDoc();
+				Document newDoc;
+				fileContent = manager.documentToString(doc);
+				System.out.println("before doc change ========================================");
+				System.out.println(fileContent);
+				System.out.println("before doc change ========================================");
+				newDoc =  XmlNameMapper.mapInputFromXLingPaperToHTML(manager.getMasterXmlDoc());
+				fileContent = manager.documentToString(newDoc /*manager.getMasterXmlDoc()*/);
+				System.out.println("After doc change ========================================");
+				System.out.println(fileContent);
+				System.out.println("After doc change ========================================");
 				int iBegin = fileContent.indexOf("<lingPaper");
 				fileContent = fileContent.substring(iBegin);
 			} catch (Exception e) {
