@@ -7,8 +7,13 @@
 package org.sil.xlingdoc.model;
 
 /**
+ * @param beginCollapsed = whether the item is to begin in a collapsed state
+ * @param localizationKey = the key on the properties file
+ * @param includeElementInSummary = an element within the parent element that should be included in the summary element rather than in the details element
+ * @param attributeOverride = the attribute to use for the text content of the summary element
  * 
+ * The attributeOverride is to be used instead of the localizationKey
  */
-public record CollapsingInfo(boolean beginCollapsed, String labelKey, String includeElementInSummary) {
+public record CollapsingInfo(boolean beginCollapsed, String localizationKey, String includeElementInSummary, String attributeOverride) {
 
 }

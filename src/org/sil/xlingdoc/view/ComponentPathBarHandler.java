@@ -70,6 +70,9 @@ public class ComponentPathBarHandler {
 			// no need to look further
 			return;
 		}
+		if (!(element.getParentNode() instanceof Element)) {
+			return;
+		}
 		addElementToComponentPathBar((Element) element.getParentNode(), componentPathBar);
 		if (elementsToIgnore.contains(tagName)) {
 			return;
@@ -97,13 +100,15 @@ public class ComponentPathBarHandler {
 	public void markLastElement(Element element, TextFlow componentPathBar) {
 		ObservableList<Node> children = componentPathBar.getChildren();
 		int lastChild = children.size();
-		Node lastNode = children.get(lastChild - 2);
-		if (lastNode instanceof Text lastText) {
-			lastText.setStyle(kStyleOfFinal);
-			children.removeLast();
-			children.removeLast();
-			children.add(lastText);
-			elementSelected = element;
+		if (lastChild > 1) {
+			Node lastNode = children.get(lastChild - 2);
+			if (lastNode instanceof Text lastText) {
+				lastText.setStyle(kStyleOfFinal);
+				children.removeLast();
+				children.removeLast();
+				children.add(lastText);
+				elementSelected = element;
+			}
 		}
 	}
 

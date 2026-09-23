@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.sil.utility.StringUtilities;
 import org.sil.xlingdoc.model.CollapsingInfo;
 import org.sil.xlingdoc.model.InputBoxInfo;
 import org.w3c.dom.Document;
@@ -62,9 +63,9 @@ public class XmlNameMapper {
 		return doc;
 	}
 
-	private static Node cloneANode(Node node, Document docNew) {
-		Node nodeNew = node.cloneNode(false);
-		Node nodeImported = docNew.importNode(nodeNew, false);
+	private static Node cloneANode(Node node, Document docNew, boolean deepClone) {
+		Node nodeNew = node.cloneNode(deepClone);
+		Node nodeImported = docNew.importNode(nodeNew, deepClone);
 		return nodeImported;
 	}
 
@@ -86,19 +87,16 @@ public class XmlNameMapper {
 
 	private static Document wrapElementIn(String sWrapperName, Document doc, Element el, Document docNew, Element parentNew, ResourceBundle bundle) {
 		Element wrapper = docNew.createElement(sWrapperName);
-		Element elNew = (Element) cloneANode(el, docNew);//docNew.createElement(el.getTagName());
+		Element elNew = (Element) cloneANode(el, docNew, false);//docNew.createElement(el.getTagName());
 		Element subEl = elNew;
+		String ignoreElementInSummary = "";
 		String tagName = el.getTagName();
+		CollapsingInfo collapseInfo = elementsToWrapInDetailsSummaryMap.get(tagName);
+		if (collapseInfo != null) {
+			ignoreElementInSummary = collapseInfo.includeElementInSummary();
+		}
 		if (elementsToWrapInDetailsSummaryMap.containsKey(tagName)) {
-			CollapsingInfo info = elementsToWrapInDetailsSummaryMap.get(tagName);
-			Element details = docNew.createElement("details");
-			Element summary = docNew.createElement("summary");
-			String labelKey = info.labelKey();
-			if (labelKey.length() > 0) {
-				summary.setTextContent(bundle.getString(labelKey));
-			}
-			details.appendChild(summary);
-			elNew.appendChild(details);
+			Element summary = handleWrapInDetailsSummary(el, docNew, bundle, elNew, tagName, collapseInfo);
 			subEl = summary;
 		}
 		if (elementInputBoxAttributeLightModeMap.containsKey(tagName)) {
@@ -114,14 +112,50 @@ public class XmlNameMapper {
 		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
 			Node node = el.getChildNodes().item(i);
 			if (node instanceof Element el2) {
-				docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, subEl, bundle);
+				if (!ignoreElementInSummary.equals(el2.getTagName())) {
+					docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, subEl, bundle);
+				}
 			} else if (node instanceof Text text) {
-				elNew.appendChild(cloneANode(text, docNew));
+				elNew.appendChild(cloneANode(text, docNew, false));
 			}
 		}
 		wrapper.appendChild(elNew);
 		parentNew.appendChild(wrapper);
 		return docNew;
+	}
+
+	private static Element handleWrapInDetailsSummary(Element el, Document docNew, ResourceBundle bundle, Element elNew,
+			String tagName, CollapsingInfo info) {
+		Element details = docNew.createElement("details");
+		Element summary = docNew.createElement("summary");
+		String attributeOverride = info.attributeOverride();
+		if (!StringUtilities.isNullOrEmpty(attributeOverride)) {
+			summary.setTextContent(el.getAttribute(attributeOverride));
+		} else {
+			String localizationKey = info.localizationKey();
+			if (!StringUtilities.isNullOrEmpty(localizationKey)) {
+				summary.setTextContent(bundle.getString(localizationKey));
+			}  else {
+				String elementInSummary = info.includeElementInSummary();
+				if (!StringUtilities.isNullOrEmpty(elementInSummary)) {
+					for (int i = 0; i < el.getChildNodes().getLength(); i++) {
+						Node node = el.getChildNodes().item(i);
+						if (node instanceof Element elSum) {
+							if (elSum.getTagName().equals(elementInSummary)) {
+								summary.appendChild(cloneANode(elSum, docNew, true));
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		if (!info.beginCollapsed()) {
+			details.setAttribute("open", "true");
+		}
+		details.appendChild(summary);
+		elNew.appendChild(details);
+		return summary;
 	}
 
 	private static void addInputBox(Element elNew, InputBoxInfo info, Document docNew) {
@@ -815,11 +849,11 @@ public class XmlNameMapper {
 			);
 
 	private static final Map<String, CollapsingInfo> elementsToWrapInDetailsSummaryMap = Map.ofEntries(
-			Map.entry("languages", new CollapsingInfo(true, "collapsing.languages", "")),
-			Map.entry("references", new CollapsingInfo(true, "collapsing.references", "")),
-			Map.entry("refAuthor", new CollapsingInfo(false, "collapsing.refworks", "")),
-			Map.entry("section1", new CollapsingInfo(true, "", "secTitle")),
-			Map.entry("types", new CollapsingInfo(true, "collapsing.types", ""))
+			Map.entry("languages", new CollapsingInfo(true, "collapsing.languages", "", "")),
+			Map.entry("references", new CollapsingInfo(true, "collapsing.references", "", "label")),
+			Map.entry("refAuthor", new CollapsingInfo(false, "collapsing.refworks", "", "")),
+			Map.entry("section1", new CollapsingInfo(true, "", "secTitle", "")),
+			Map.entry("types", new CollapsingInfo(true, "collapsing.types", "", ""))
 			);
 
 	private final static List<String> elementsToWrapInDiv = List.of(
