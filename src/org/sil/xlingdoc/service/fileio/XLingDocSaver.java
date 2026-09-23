@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
+import org.sil.utility.StringUtilities;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -34,9 +35,13 @@ public class XLingDocSaver {
 
 	public static void saveXLingDoc(Document doc, File outputFile) throws Exception {
 		StringBuilder sb = new StringBuilder();
-		NodeList rootElements = doc.getElementsByTagName("xlingpaper");
+		NodeList rootElements = doc.getElementsByTagName("XLINGPAPER");
 		if (rootElements.getLength() == 0) {
 			rootElements = doc.getElementsByTagName("LINGPAPER");
+			if (rootElements.getLength() == 0) {
+				// round trip testing uses correct casing
+				rootElements = doc.getElementsByTagName("lingPaper");
+			}
 		}
 		Element root = (Element) rootElements.item(0);
 //		Element root = doc.getDocumentElement();
@@ -61,9 +66,13 @@ public class XLingDocSaver {
 		if (tagName.startsWith("xlp-")) {
 			tagName = tagName.substring(4);
 		}
-//		if (tagName.equals("span")) {
-//			return;
-//		}
+		if (tagName.equals("span")) {
+			String contentEditable = element.getAttribute("contenteditable");
+			if (!StringUtilities.isNullOrEmpty(contentEditable)) {
+				// ignore uneditable spans we insert for visual effect
+				return;
+			}
+		}
 		boolean use = !elementsToIgnore.contains(tagName);
 //		System.out.println("\tuse = " + use);
 		if (use)
@@ -107,12 +116,12 @@ public class XLingDocSaver {
 
 	private static boolean isXInclude(Element element, StringBuilder sb) {
 		// We use xInclude because CSS cannot see "xml:base"
-		Attr xinclude = element.getAttributeNode("xInclude");
+		Attr xinclude = element.getAttributeNode("xml:base");
 		if (xinclude != null) {
 			sb.append("<xi:include\nhref=\"");
 			sb.append(xinclude.getValue());
-			sb.append("\"\nxpointer=\"element(/1)\"\n");
-			sb.append("xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n");
+			sb.append("\"\nxmlns:xi=\"http://www.w3.org/2001/XInclude\"\n");
+			sb.append("xpointer=\"element(/1)\"\n");
 			sb.append("></xi:include\n>");
 			return true;
 		}

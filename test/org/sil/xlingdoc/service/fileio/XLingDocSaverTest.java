@@ -8,6 +8,8 @@ package org.sil.xlingdoc.service.fileio;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,16 +18,22 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.sil.xlingdoc.Constants;
+import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
+import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-public class SaveXLingDocFileTest {
+public class XLingDocSaverTest {
+	private DtdInspector dtdInspector;
+	private XmlDocumentManager manager;
+	private ResourceBundle resources;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
 	public void setUp() throws Exception {
+		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
+		manager = new XmlDocumentManager();
+		resources = ResourceBundle.getBundle(Constants.RESOURCE_LOCATION, Locale.of("en"));
 	}
 
 	/**
@@ -37,14 +45,14 @@ public class SaveXLingDocFileTest {
 
 	@Test
 	public void saveTest() {
-		checkHtmlToExpected("test/testData/SamplePaperInternalHtml.html", "test/testData/SamplePaper.xml");
-		checkHtmlToExpected("test/testData/TestSampleXIncludeInternalHtml.html", "test/testData/SamplePaperXInclude.xml");
+		String html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE, resources);
+		checkHtmlToExpected(html, Constants.UNIT_TEST_DATA_FILE);
+		html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_XINCLUDE_DATA_FILE, resources);
+		checkHtmlToExpected(html, Constants.UNIT_TEST_XINCLUDE_DATA_FILE);
 	}
 
-	private void checkHtmlToExpected(String htmlFile, String expectedFile) {
+	private void checkHtmlToExpected(String html, String expectedFile) {
 		try {
-		    File xLingDocInternalHtmlFile = new File(htmlFile);
-			String html = Files.readString(xLingDocInternalHtmlFile.toPath());
 		    Document doc = parseXhtmlToDocument(html);
 	        File out = File.createTempFile("testOutput", "xml");
 	        XLingDocSaver.saveXLingDoc(doc, out);

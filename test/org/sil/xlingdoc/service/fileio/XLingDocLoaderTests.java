@@ -23,7 +23,7 @@ import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 /**
  * 
  */
-public class LoadXLingDocFileTests {
+public class XLingDocLoaderTests {
 	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 	private ResourceBundle resources;

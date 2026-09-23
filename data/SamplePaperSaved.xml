@@ -25,7 +25,7 @@ id="s1"
 >Here is the first paragraph of this section.</p
 ><example
 num="xInterlinear"
->)<interlinear
+><interlinear
 ><lineGroup
 ><line
 ><langData
@@ -67,7 +67,7 @@ ref="rAdams1998"
 > has shown that more blah.</p
 ><example
 num="xChart"
->)<chart
+><chart
 >I'm a chart</chart
 ></example
 ><p
@@ -81,7 +81,7 @@ label="References Cited"
 ><refAuthor
 citename="Adams"
 name="Adams, Paul"
->   <refWork
+><refWork
 id="rAdams1998"
 ><refDate
 >1998</refDate
@@ -113,7 +113,7 @@ id="rAdams2003"
 ><refAuthor
 citename="Billings"
 name="Billings, Judith"
->   <refWork
+><refWork
 id="rBillings2004"
 ><refDate
 >2004</refDate
