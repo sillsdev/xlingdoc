@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.junit.After;
 import org.junit.Before;
@@ -91,7 +92,8 @@ public class SpellingCheckerTests {
 	public void checkSpellingInDocumentTest() {
 		XmlDocumentManager manager = new XmlDocumentManager();
 		DtdInspector dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
-		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
+		ResourceBundle resources = ResourceBundle.getBundle(Constants.RESOURCE_LOCATION, Locale.of("en"));
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE, resources);
 		Document doc = manager.getMasterXmlDoc();
 		checker.checkSpellingInDocument(doc, locale);
 		List<WordLocationInText> misspelledWords = checker.getMisspelledWords();

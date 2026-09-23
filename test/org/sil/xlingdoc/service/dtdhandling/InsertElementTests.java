@@ -8,6 +8,8 @@ package org.sil.xlingdoc.service.dtdhandling;
 
 import static org.junit.Assert.*;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.SortedSet;
 
 import org.junit.After;
@@ -39,7 +41,8 @@ public class InsertElementTests {
 	public void setUp() throws Exception {
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
-		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
+		ResourceBundle resources = ResourceBundle.getBundle(Constants.RESOURCE_LOCATION, Locale.of("en"));
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE, resources);
 		doc = manager.getMasterXmlDoc();
 	}
 

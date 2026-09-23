@@ -9,6 +9,8 @@ package org.sil.xlingdoc.service.fileio;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -24,11 +26,12 @@ import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 public class LoadXLingDocFileTests {
 	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
-
+	private ResourceBundle resources;
 	@Before
 	public void setUp() throws Exception {
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
+		resources = ResourceBundle.getBundle(Constants.RESOURCE_LOCATION, Locale.of("en"));
 	}
 
 	/**
@@ -40,7 +43,7 @@ public class LoadXLingDocFileTests {
 
 	@Test
 	public void loadValidFileTest() {
-		String html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE);
+		String html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_DATA_FILE, resources);
 		html = html.replace("\r", "");
 		Assert.assertEquals(0,  manager.getErrorsCount());
 		Assert.assertEquals(0,  manager.getFatalErrorsCount());
@@ -54,7 +57,7 @@ public class LoadXLingDocFileTests {
 			e.printStackTrace();
 		}
 
-		html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_XINCLUDE_DATA_FILE);
+		html = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_XINCLUDE_DATA_FILE, resources);
 		html = html.replace("\r", "");
 		Assert.assertEquals(0,  manager.getErrorsCount());
 		Assert.assertEquals(0,  manager.getFatalErrorsCount());
@@ -72,13 +75,13 @@ public class LoadXLingDocFileTests {
 	@Test
 	public void loadInvalidFileTest() {
 //		System.out.println("first ========================================================");
-		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_DATA_FILE);
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_DATA_FILE, resources);
 		Assert.assertEquals(5,  manager.getErrorsCount());
 		Assert.assertEquals(0,  manager.getFatalErrorsCount());
 		Assert.assertEquals(0,  manager.getWarningsCount());
 
 //		System.out.println("second ========================================================");
-		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_XINCLUDE_DATA_FILE);
+		XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, Constants.UNIT_TEST_INVALID_XINCLUDE_DATA_FILE, resources);
 		Assert.assertEquals(7,  manager.getErrorsCount());
 		Assert.assertEquals(0,  manager.getFatalErrorsCount());
 		Assert.assertEquals(0,  manager.getWarningsCount());

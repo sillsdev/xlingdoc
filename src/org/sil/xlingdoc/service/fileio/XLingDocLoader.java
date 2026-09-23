@@ -7,6 +7,7 @@
 package org.sil.xlingdoc.service.fileio;
 
 import java.io.File;
+import java.util.ResourceBundle;
 
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
@@ -24,7 +25,7 @@ public class XLingDocLoader {
 	public XLingDocLoader() {
 		// TODO Auto-generated constructor stub
 	}
-	public static String loadFileIntoNeededHTML(XmlDocumentManager manager, DtdInspector inspector, String filePath) {
+	public static String loadFileIntoNeededHTML(XmlDocumentManager manager, DtdInspector inspector, String filePath, ResourceBundle bundle) {
 		StringBuilder sb= new StringBuilder();
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<!DOCTYPE html>\n");
@@ -47,18 +48,18 @@ public class XLingDocLoader {
 				Document doc = manager.getMasterXmlDoc();
 				Document newDoc;
 				fileContent = manager.documentToString(doc);
-				System.out.println("before doc change ========================================");
-				System.out.println(fileContent);
-				System.out.println("before doc change ========================================");
-				newDoc =  XmlNameMapper.mapInputFromXLingPaperToHTML(manager.getMasterXmlDoc());
+//				System.out.println("before doc change ========================================");
+//				System.out.println(fileContent);
+//				System.out.println("before doc change ========================================");
+				newDoc =  XmlNameMapper.mapInputFromXLingPaperToHTML(manager.getMasterXmlDoc(), bundle);
 				fileContent = manager.documentToString(newDoc /*manager.getMasterXmlDoc()*/);
-				System.out.println("After doc change ========================================");
-				System.out.println(fileContent);
-				System.out.println("After doc change ========================================");
+//				System.out.println("After doc change ========================================");
+//				System.out.println(fileContent);
+//				System.out.println("After doc change ========================================");
 //				int iBegin = fileContent.indexOf("<lingPaper");
-//				int iBegin = fileContent.indexOf("<div>");
+				int iBegin = fileContent.indexOf("<div>");
 //				iBegin = fileContent.substring(iBegin).indexOf("<div>");
-//				fileContent = fileContent.substring(iBegin);
+				fileContent = fileContent.substring(iBegin);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

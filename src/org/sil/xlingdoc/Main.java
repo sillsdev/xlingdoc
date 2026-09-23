@@ -21,7 +21,6 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			this.primaryStage = primaryStage;
-            primaryStage.setTitle("Edit XML as web testing");
             initRootLayout();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -39,6 +38,7 @@ public class Main extends Application {
 			// Show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout);
 			scene.getStylesheets().add(getClass().getResource("view/fxml/application.css").toExternalForm());
+            primaryStage.setTitle(bundle.getString("program.name"));
 			primaryStage.setScene(scene);
 			controller = loader.getController();
 			primaryStage.show();

@@ -76,7 +76,7 @@ public class MainController implements Initializable {
 		componentPathBarHandler = new ComponentPathBarHandler();
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
-		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath);
+		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath, resources);
 
 		webEngine.loadContent(htmlContent);
 		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {

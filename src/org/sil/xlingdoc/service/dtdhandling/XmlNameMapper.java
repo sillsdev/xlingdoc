@@ -11,11 +11,13 @@ package org.sil.xlingdoc.service.dtdhandling;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.sil.xlingdoc.model.CollapsingInfo;
 import org.sil.xlingdoc.model.InputBoxInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,7 +44,7 @@ public class XmlNameMapper {
 	}
 
 	// TODO: add parameter for light vs. dark mode so we get the right colors for the input boxes
-	public static Document mapInputFromXLingPaperToHTML(Document doc) {
+	public static Document mapInputFromXLingPaperToHTML(Document doc, ResourceBundle bundle) {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder builder = factory.newDocumentBuilder();
@@ -50,9 +52,7 @@ public class XmlNameMapper {
 			Element topDiv = docNew.createElement("div");
 			docNew.appendChild(topDiv);
 			Element root = doc.getDocumentElement();
-			System.out.println("Start: root = " + root.getTagName() /*+ "; topDiv = " + topDiv.getTagName()*/);
-			docNew = mapAndWrapInDivSpanOrDetails(doc, root, docNew, topDiv);
-			System.out.println("returning new doc");
+			docNew = mapAndWrapInDivSpanOrDetails(doc, root, docNew, topDiv, bundle);
 			return docNew;
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -68,9 +68,8 @@ public class XmlNameMapper {
 		return nodeImported;
 	}
 
-	private static Document mapAndWrapInDivSpanOrDetails(Document doc, Element el, Document docNew, Element elNew) {
+	private static Document mapAndWrapInDivSpanOrDetails(Document doc, Element el, Document docNew, Element elNew, ResourceBundle bundle) {
 		String elName = el.getTagName();
-		System.out.println("mapAnd: el = " + el.getTagName() + "; elNew = " + elNew.getTagName());
 		Element parentNew;
 		if (elNew.getParentNode() == null || elNew.getParentNode().getNodeType() == Node.DOCUMENT_NODE) {
 			parentNew = elNew;
@@ -78,23 +77,26 @@ public class XmlNameMapper {
 			parentNew = (Element) elNew.getParentNode();
 		}
 		if (elementsToWrapInDiv.contains(elName)) {
-			docNew = wrapElementIn("div", doc, el, docNew, parentNew);
+			docNew = wrapElementIn("div", doc, el, docNew, parentNew, bundle);
 		} else if(elementsToWrapInSpan.contains(elName)) {
-			docNew = wrapElementIn("span", doc, el, docNew, parentNew);
+			docNew = wrapElementIn("span", doc, el, docNew, parentNew, bundle);
 		}
 		return docNew;
 	}
 
-	private static Document wrapElementIn(String sWrapperName, Document doc, Element el, Document docNew, Element parentNew) {
-		System.out.println("\twrap in " + sWrapperName + " for " + el.getTagName() + " within parentNew = " + parentNew.getTagName());
+	private static Document wrapElementIn(String sWrapperName, Document doc, Element el, Document docNew, Element parentNew, ResourceBundle bundle) {
 		Element wrapper = docNew.createElement(sWrapperName);
 		Element elNew = (Element) cloneANode(el, docNew);//docNew.createElement(el.getTagName());
 		Element subEl = elNew;
 		String tagName = el.getTagName();
-		if (elementsToWrapInDetailsSummary.containsKey(tagName)) {
+		if (elementsToWrapInDetailsSummaryMap.containsKey(tagName)) {
+			CollapsingInfo info = elementsToWrapInDetailsSummaryMap.get(tagName);
 			Element details = docNew.createElement("details");
 			Element summary = docNew.createElement("summary");
-			summary.setTextContent(tagName);
+			String labelKey = info.labelKey();
+			if (labelKey.length() > 0) {
+				summary.setTextContent(bundle.getString(labelKey));
+			}
 			details.appendChild(summary);
 			elNew.appendChild(details);
 			subEl = summary;
@@ -112,10 +114,8 @@ public class XmlNameMapper {
 		for (int i = 0; i < el.getChildNodes().getLength(); i++) {
 			Node node = el.getChildNodes().item(i);
 			if (node instanceof Element el2) {
-				System.out.println("\tel2 = " + el2.getTagName());
-				docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, subEl);
+				docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, subEl, bundle);
 			} else if (node instanceof Text text) {
-				System.out.println("\ttext = '" + text.getTextContent() + "'");
 				elNew.appendChild(cloneANode(text, docNew));
 			}
 		}
@@ -139,7 +139,6 @@ public class XmlNameMapper {
 			Node summary = elNew.getFirstChild().getFirstChild();
 			summary.insertBefore(input, summary.getFirstChild());
 		} else {
-			System.out.println("\t\ttext after = '" + info.textAfterBox() + "'");
 			if (info.textAfterBox().length() > 0) {
 				Element spanAfter = docNew.createElement("span");
 				spanAfter.setTextContent(info.textAfterBox());
@@ -148,7 +147,6 @@ public class XmlNameMapper {
 			}
 			elNew.insertBefore(input, elNew.getFirstChild());
 		}
-
 	}
 
 	private static String buildArguments(Element el, String sIdAttribute, String sId) {
@@ -816,12 +814,12 @@ public class XmlNameMapper {
 			Map.entry("xsl-fospecial", "xsl-foSpecial")
 			);
 
-	private static final Map<String, Boolean> elementsToWrapInDetailsSummary = Map.ofEntries(
-			Map.entry("languages", true),
-			Map.entry("references", true),
-			Map.entry("refAuthor", false),
-			Map.entry("section1", true),
-			Map.entry("types", true)
+	private static final Map<String, CollapsingInfo> elementsToWrapInDetailsSummaryMap = Map.ofEntries(
+			Map.entry("languages", new CollapsingInfo(true, "collapsing.languages", "")),
+			Map.entry("references", new CollapsingInfo(true, "collapsing.references", "")),
+			Map.entry("refAuthor", new CollapsingInfo(false, "collapsing.refworks", "")),
+			Map.entry("section1", new CollapsingInfo(true, "", "secTitle")),
+			Map.entry("types", new CollapsingInfo(true, "collapsing.types", ""))
 			);
 
 	private final static List<String> elementsToWrapInDiv = List.of(
