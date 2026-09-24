@@ -16,6 +16,7 @@ import org.languagetool.JLanguageTool;
 import org.languagetool.Languages;
 import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
+import org.sil.xlingdoc.model.WordLocationInText;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

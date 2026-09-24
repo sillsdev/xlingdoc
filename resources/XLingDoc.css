@@ -517,3 +517,12 @@ xlp-br
 {
 	display:inline;
 }
+xlp-title {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+    color: black;
+    margin-top: .67ex;
+    margin-bottom: .67ex;
+}

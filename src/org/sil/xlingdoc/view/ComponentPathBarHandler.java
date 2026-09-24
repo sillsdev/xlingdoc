@@ -65,7 +65,7 @@ public class ComponentPathBarHandler {
 	public void addElementToComponentPathBar(Element element, TextFlow componentPathBar) {
 		String tagName = element.getTagName();
 		if (tagName.equals("BODY")) {
-			// no need to look further
+			// no need to look further up
 			return;
 		}
 		if (!(element.getParentNode() instanceof Element)) {
@@ -83,7 +83,7 @@ public class ComponentPathBarHandler {
 			tTr.setUserData(element.getParentNode());
 			componentPathBar.getChildren().addAll(tTr, tTrGap);
 		}
-		Text t = new Text(" " + adjustedTagName);
+		Text t = new Text(" " + adjustedTagName.replace(XmlNameMapper.kRenamePrefix, ""));
 		t.setUserData(element);
 		t.setFill(kComponentPathItemColor);
 		componentPathBar.getChildren().add(t);
@@ -112,7 +112,7 @@ public class ComponentPathBarHandler {
 					addComponentGap(componentPathBar);
 					Text t = new Text(" " + textLabel);
 					t.setStyle(kStyleOfText);
-					t.setUserData("text");
+					t.setUserData(element);
 					componentPathBar.getChildren().add(t);
 				}
 			}
@@ -121,7 +121,6 @@ public class ComponentPathBarHandler {
 
 	public void highlightSelectedElement(Element element) {
 		Platform.runLater(() -> {
-			System.out.println("highlightSelectedElement; element = " + element.getTagName());
 			// TODO: what if there are more CSS names in the class attribute?
 			String sClass = element.getAttribute(kClass);
 			sClass = sClass + " " + kComponentSelected;
@@ -140,7 +139,8 @@ public class ComponentPathBarHandler {
 	}
 
 	private boolean hasTextNode(Element element) {
-		if (elementsToIgnore.contains(XmlNameMapper.getMappedElementName(element.getTagName()))) {
+		if (!element.getTagName().equals("SPAN")
+				&& elementsToIgnore.contains(XmlNameMapper.getMappedElementName(element.getTagName()))) {
 			return false;
 		}
 		for (int i = 0; i < element.getChildNodes().getLength(); i++) {
@@ -150,5 +150,4 @@ public class ComponentPathBarHandler {
 		}
 		return false;
 	}
-
 }

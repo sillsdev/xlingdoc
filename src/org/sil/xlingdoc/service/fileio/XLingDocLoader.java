@@ -52,7 +52,10 @@ public class XLingDocLoader {
 //				System.out.println(fileContent);
 //				System.out.println("before doc change ========================================");
 				newDoc =  XmlNameMapper.mapInputFromXLingPaperToHTML(manager.getMasterXmlDoc(), bundle);
+
 				fileContent = manager.documentToString(newDoc /*manager.getMasterXmlDoc()*/);
+//				fileContent = fileContent.replaceAll("<title>", "<xlp-title>");
+//				fileContent = fileContent.replaceAll("</title>", "</xlp-title>");
 //				System.out.println("After doc change ========================================");
 //				System.out.println(fileContent);
 //				System.out.println("After doc change ========================================");

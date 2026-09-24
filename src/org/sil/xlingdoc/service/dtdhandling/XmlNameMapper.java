@@ -33,6 +33,7 @@ public class XmlNameMapper {
 	final static String kDetailsSummaryBegin = "<details><summary>";
 	final static String kSummaryEnd = "</summary";
 	final static String kDetailsEnd = "</details>";
+	public final static String kRenamePrefix = "xlp-";
 
 	public static String mapElementName(String name) {
 		String nameToUse = name.toLowerCase();
@@ -91,6 +92,9 @@ public class XmlNameMapper {
 		Element subEl = elNew;
 		String ignoreElementInSummary = "";
 		String tagName = el.getTagName();
+		if (elementsToRename.contains(tagName)) {
+			elNew = (Element) docNew.renameNode(elNew, null, kRenamePrefix + tagName);
+		}
 		CollapsingInfo collapseInfo = elementsToWrapInDetailsSummaryMap.get(tagName);
 		if (collapseInfo != null) {
 			ignoreElementInSummary = collapseInfo.includeElementInSummary();
@@ -116,7 +120,10 @@ public class XmlNameMapper {
 					docNew = mapAndWrapInDivSpanOrDetails(doc, el2, docNew, subEl, bundle);
 				}
 			} else if (node instanceof Text text) {
-				elNew.appendChild(cloneANode(text, docNew, false));
+				Element span = docNew.createElement("span");
+				Text textNew = (Text) cloneANode(text, docNew, true);
+				span.appendChild(textNew);
+				elNew.appendChild(span);
 			}
 		}
 		wrapper.appendChild(elNew);
@@ -1005,5 +1012,17 @@ public class XmlNameMapper {
 			Map.entry("section5", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
 			Map.entry("section6", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
 			Map.entry("type", new InputBoxInfo("id", "15", "", false, ""))
+	);
+
+	// elements with same name as in HTML may not load the way we want.
+	public final static List<String> elementsToRename = List.of("br",
+//			"li",
+//			"ol",
+//			"p",
+//			"table",
+//			"td",
+//			"th",
+			"title"
+//			"ul"
 	);
 }

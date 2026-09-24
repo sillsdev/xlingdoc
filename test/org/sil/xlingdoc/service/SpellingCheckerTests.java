@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sil.xlingdoc.Constants;
+import org.sil.xlingdoc.model.WordLocationInText;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.sil.xlingdoc.service.fileio.XLingDocLoader;

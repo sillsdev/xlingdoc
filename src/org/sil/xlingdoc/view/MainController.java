@@ -50,6 +50,7 @@ public class MainController implements Initializable {
 	private WebPageInteractor webPageInteractor;
 	private ComponentPathBarHandler componentPathBarHandler;
 	private ResourceBundle bundle;
+	private Element elementClickedOn;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -85,15 +86,15 @@ public class MainController implements Initializable {
 			if (newState == Worker.State.SUCCEEDED) {
 				webEngine = WebPageUtilities.allowConsoleLogViaJavaScript(webEngine, webPageInteractor);
 				Document doc = webEngine.getDocument();
-//				doc = WebPageUtilities.removeIncorrectEmbedding(doc);
 				webPageInteractor.setDocument(doc);
-//				WebPageUtilities.addInputBoxes(webEngine);
 				Element target = doc.getDocumentElement();
 				if (target != null) {
 					((EventTarget) target).addEventListener("click", (org.w3c.dom.events.Event ev) -> {
-						Element clicked = (Element) ev.getTarget();
-						System.out.println("New Clicked: " + clicked.getTagName());
-						componentPathBarHandler.updateComponentPathBar(clicked, componentPathBar, bundle.getString("label.text"));
+						// this finds the w3c DOM element that was clicked on;
+						// we get the X,Y coordinate from the webView via its setOnMouseClicked() method below
+						elementClickedOn = (Element) ev.getTarget();
+//						System.out.println("New Clicked: " + elementClickedOn.getTagName());
+						componentPathBarHandler.updateComponentPathBar(elementClickedOn, componentPathBar, bundle.getString("label.text"));
 					}, false);
 				}
 			}
@@ -162,12 +163,9 @@ public class MainController implements Initializable {
 		componentPathBar.setOnMouseClicked(event -> {
 			if (event.getTarget() instanceof Text) {
 				Text clickedText = (Text) event.getTarget();
-				System.out.println("\nClicked text: " + clickedText.getText());
 				Object obj = clickedText.getUserData();
 				if (obj instanceof Element el) {
-					System.out.println("el = '" + el.getTagName());
 					componentPathBarHandler.highlightSelectedElement(el);
-//					highlightDomElement(cpItem);
 				}
 			}
 		});
