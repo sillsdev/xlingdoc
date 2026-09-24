@@ -57,7 +57,7 @@ public class ComponentPathBarHandlerTests {
 
 	@Test
 	public void addElementInputInDetailsTest() {
-		nodelist = doc.getElementsByTagName("INPUT");
+		nodelist = doc.getElementsByTagName("input");
 		Assert.assertEquals(29, nodelist.getLength());
 		Element el = (Element) nodelist.item(0);
 		componentPathBarHandler.addElementToComponentPathBar(el, componentPathBar);
@@ -75,7 +75,7 @@ public class ComponentPathBarHandlerTests {
 
 	@Test
 	public void addElementExampleInputTest() {
-		nodelist = doc.getElementsByTagName("INPUT");
+		nodelist = doc.getElementsByTagName("input");
 		Assert.assertEquals(29, nodelist.getLength());
 		Element el = (Element) nodelist.item(1);
 		componentPathBarHandler.addElementToComponentPathBar(el, componentPathBar);
@@ -92,7 +92,7 @@ public class ComponentPathBarHandlerTests {
 
 	@Test
 	public void addElementLanguagesInputTest() {
-		nodelist = doc.getElementsByTagName("INPUT");
+		nodelist = doc.getElementsByTagName("input");
 		Assert.assertEquals(29, nodelist.getLength());
 		Element el = (Element) nodelist.item(11);
 		componentPathBarHandler.addElementToComponentPathBar(el, componentPathBar);
@@ -109,7 +109,7 @@ public class ComponentPathBarHandlerTests {
 
 	@Test
 	public void addElementLineTest() {
-		nodelist = doc.getElementsByTagName("LANGDATA");
+		nodelist = doc.getElementsByTagName("langData");
 		Assert.assertEquals(1, nodelist.getLength());
 		Element el = (Element) nodelist.item(0);
 		componentPathBarHandler.addElementToComponentPathBar(el, componentPathBar);
@@ -148,7 +148,7 @@ public class ComponentPathBarHandlerTests {
 		Assert.assertEquals(sExpected, t.getText());
 		if (hasElement) {
 			Element e = (Element)t.getUserData();
-			Assert.assertEquals(sExpected.toUpperCase().trim(), e.getTagName());			
+			Assert.assertEquals(sExpected.trim(), e.getTagName());
 		}
 		if (isFinal) {
 			Assert.assertEquals(componentPathBarHandler.kStyleOfFinal, t.getStyle());

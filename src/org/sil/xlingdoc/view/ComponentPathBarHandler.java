@@ -22,8 +22,6 @@ import javafx.scene.text.TextFlow;
  * 
  */
 public class ComponentPathBarHandler {
-//	private final String kClass = "class";
-//	List<ComponentPathItem> componentsInPathBar = new ArrayList<ComponentPathItem>();
 	public final String kComponentGap = " " + Character.toString(0x227a);
 	public final String kStyleOfFinal = "-fx-font-weight: bold;";
 	final String kComponentBreak = " > ";
@@ -35,10 +33,19 @@ public class ComponentPathBarHandler {
 	Element elementSelected = null;
 	private final List<String> elementsToIgnore = List.of(
 			"BODY",
+			"body",
 			"DETAILS",
+			"details",
+			"DIV",
+			"div",
 			"HTML",
+			"html",
 			"INPUT",
-			"SUMMARY"
+			"input",
+			"SPAN",
+			"span",
+			"SUMMARY",
+			"summary"
 			);
 
 	public Element getElementSelected() {
@@ -49,15 +56,10 @@ public class ComponentPathBarHandler {
 		return kComponentPathItemColor;
 	}
 
-//	public List<ComponentPathItem> getComponentsInPathBar() {
-//		return componentsInPathBar;
-//	}
-
 	public void updateComponentPathBar(Element element, TextFlow componentPathBar) {
 		Platform.runLater(() -> {
 			removeHighlightFromLastElementHighlighted();
 			componentPathBar.getChildren().clear();
-//			componentsInPathBar.clear();
 			addElementToComponentPathBar(element, componentPathBar);
 			markLastElement(element, componentPathBar);
 		});
@@ -81,10 +83,8 @@ public class ComponentPathBarHandler {
 			Text tTr = new Text(" tr");
 			tTr.setFill(kComponentPathItemColor);
 			Text tTrGap = new Text(kComponentGap);
-//			ComponentPathItem trItem = new ComponentPathItem("tr", (Element) element.getParentNode(), tTr);
 			tTr.setUserData(element.getParentNode());
 			componentPathBar.getChildren().addAll(tTr, tTrGap);
-//			componentsInPathBar.add(trItem);
 		}
 		String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
 		Text t = new Text(" " + adjustedTagName);
