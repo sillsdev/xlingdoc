@@ -65,9 +65,9 @@ public class ComponentPathBarHandlerTests {
 		contents = componentPathBar.getChildrenUnmodifiable();
 //		showContents();
 		Assert.assertEquals(3, contents.size());
-		checkContents(0, " lingPaper", true, false);
-		checkContents(1, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(2, " section1", true, true);
+		checkContents(0, " lingPaper", true, false, false);
+		checkContents(1, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(2, " section1", true, true, false);
 		int index = 2;
 		Text t = (Text) contents.get(index);
 		Assert.assertEquals(componentPathBarHandler.kStyleOfFinal, t.getStyle());
@@ -83,11 +83,11 @@ public class ComponentPathBarHandlerTests {
 		contents = componentPathBar.getChildrenUnmodifiable();
 //		showContents();
 		Assert.assertEquals(5, contents.size());
-		checkContents(0, " lingPaper", true, false);
-		checkContents(1, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(2, " section1", true, false);
-		checkContents(3, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(4, " example", true, true);
+		checkContents(0, " lingPaper", true, false, false);
+		checkContents(1, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(2, " section1", true, false, false);
+		checkContents(3, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(4, " example", true, true, false);
 	}
 
 	@Test
@@ -100,11 +100,11 @@ public class ComponentPathBarHandlerTests {
 		contents = componentPathBar.getChildrenUnmodifiable();
 //		showContents();
 		Assert.assertEquals(5, contents.size());
-		checkContents(0, " lingPaper", true, false);
-		checkContents(1, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(2, " languages", true, false);
-		checkContents(3, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(4, " language", true, true);
+		checkContents(0, " lingPaper", true, false, false);
+		checkContents(1, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(2, " languages", true, false, false);
+		checkContents(3, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(4, " language", true, true, false);
 	}
 
 	@Test
@@ -116,20 +116,22 @@ public class ComponentPathBarHandlerTests {
 		componentPathBarHandler.markLastElement(el, componentPathBar);
 		contents = componentPathBar.getChildrenUnmodifiable();
 //		showContents();
-		Assert.assertEquals(13, contents.size());
-		checkContents(0, " lingPaper", true, false);
-		checkContents(1, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(2, " section1", true, false);
-		checkContents(3, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(4, " example", true, false);
-		checkContents(5, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(6, " interlinear", true, false);
-		checkContents(7, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(8, " lineGroup", true, false);
-		checkContents(9, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(10, " line", true, false);
-		checkContents(11, componentPathBarHandler.kComponentGap, false, false);
-		checkContents(12, " langData", true, true);
+		Assert.assertEquals(15, contents.size());
+		checkContents(0, " lingPaper", true, false, false);
+		checkContents(1, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(2, " section1", true, false, false);
+		checkContents(3, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(4, " example", true, false, false);
+		checkContents(5, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(6, " interlinear", true, false, false);
+		checkContents(7, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(8, " lineGroup", true, false, false);
+		checkContents(9, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(10, " line", true, false, false);
+		checkContents(11, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(12, " langData", true, true, false);
+		checkContents(13, componentPathBarHandler.kComponentGap, false, false, false);
+		checkContents(14, " text", false, false, true);
 	}
 
 //	private void showContents() {
@@ -143,7 +145,7 @@ public class ComponentPathBarHandlerTests {
 //		System.out.print(sb.toString() + "\n");
 //	}
 
-	private void checkContents(int index, String sExpected, boolean hasElement, boolean isFinal) {
+	private void checkContents(int index, String sExpected, boolean hasElement, boolean isFinal, boolean isText) {
 		Text t = (Text) contents.get(index);
 		Assert.assertEquals(sExpected, t.getText());
 		if (hasElement) {
@@ -152,6 +154,8 @@ public class ComponentPathBarHandlerTests {
 		}
 		if (isFinal) {
 			Assert.assertEquals(componentPathBarHandler.kStyleOfFinal, t.getStyle());
+		} else if (isText) {
+			Assert.assertEquals(componentPathBarHandler.kStyleOfText, t.getStyle());
 		}
 		else {
 			Assert.assertEquals("", t.getStyle());

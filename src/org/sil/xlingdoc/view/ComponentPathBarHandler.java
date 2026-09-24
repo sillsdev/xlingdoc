@@ -24,27 +24,22 @@ import javafx.scene.text.TextFlow;
 public class ComponentPathBarHandler {
 	public final String kComponentGap = " " + Character.toString(0x227a);
 	public final String kStyleOfFinal = "-fx-font-weight: bold;";
+	public final String kStyleOfText = "-fx-font-style: italic;";
 	final String kComponentBreak = " > ";
 	final Color kComponentPathItemColor = Color.MAROON;
 	private final String kClass = "class";
 	private final String kComponentSelected = "component-selected";
 	Element lastElementHighlighted = null;
+	String textLabel = "text";
 
 	Element elementSelected = null;
 	private final List<String> elementsToIgnore = List.of(
-			"BODY",
 			"body",
-			"DETAILS",
 			"details",
-			"DIV",
 			"div",
-			"HTML",
 			"html",
-			"INPUT",
 			"input",
-			"SPAN",
 			"span",
-			"SUMMARY",
 			"summary"
 			);
 
@@ -56,8 +51,9 @@ public class ComponentPathBarHandler {
 		return kComponentPathItemColor;
 	}
 
-	public void updateComponentPathBar(Element element, TextFlow componentPathBar) {
+	public void updateComponentPathBar(Element element, TextFlow componentPathBar, String textLabel) {
 		Platform.runLater(() -> {
+			this.textLabel = textLabel;
 			removeHighlightFromLastElementHighlighted();
 			componentPathBar.getChildren().clear();
 			addElementToComponentPathBar(element, componentPathBar);
@@ -76,24 +72,28 @@ public class ComponentPathBarHandler {
 			return;
 		}
 		addElementToComponentPathBar((Element) element.getParentNode(), componentPathBar);
-		if (elementsToIgnore.contains(tagName)) {
+		String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
+		if (elementsToIgnore.contains(adjustedTagName)) {
 			return;
 		}
-		if (tagName.equals("TH") || tagName.equals("TD")) {
+		if (tagName.equals("th") || tagName.equals("td")) {
 			Text tTr = new Text(" tr");
 			tTr.setFill(kComponentPathItemColor);
 			Text tTrGap = new Text(kComponentGap);
 			tTr.setUserData(element.getParentNode());
 			componentPathBar.getChildren().addAll(tTr, tTrGap);
 		}
-		String adjustedTagName = XmlNameMapper.getMappedElementName(tagName);
 		Text t = new Text(" " + adjustedTagName);
 		t.setUserData(element);
 		t.setFill(kComponentPathItemColor);
 		componentPathBar.getChildren().add(t);
-			Text tGap = new Text(kComponentGap);
-			tGap.setUserData("gap");
-			componentPathBar.getChildren().add(tGap);
+		addComponentGap(componentPathBar);
+	}
+
+	private void addComponentGap(TextFlow componentPathBar) {
+		Text tGap = new Text(kComponentGap);
+		tGap.setUserData("gap");
+		componentPathBar.getChildren().add(tGap);
 	}
 
 	// public for testing
@@ -108,6 +108,13 @@ public class ComponentPathBarHandler {
 				children.removeLast();
 				children.add(lastText);
 				elementSelected = element;
+				if (hasTextNode(element)) {
+					addComponentGap(componentPathBar);
+					Text t = new Text(" " + textLabel);
+					t.setStyle(kStyleOfText);
+					t.setUserData("text");
+					componentPathBar.getChildren().add(t);
+				}
 			}
 		}
 	}
@@ -130,6 +137,18 @@ public class ComponentPathBarHandler {
 			cssClass = cssClass.replaceAll(kComponentSelected, "");
 			lastElementHighlighted.setAttribute(kClass, cssClass);
 		}
+	}
+
+	private boolean hasTextNode(Element element) {
+		if (elementsToIgnore.contains(XmlNameMapper.getMappedElementName(element.getTagName()))) {
+			return false;
+		}
+		for (int i = 0; i < element.getChildNodes().getLength(); i++) {
+			if (element.getChildNodes().item(i).getNodeType() == org.w3c.dom.Node.TEXT_NODE) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

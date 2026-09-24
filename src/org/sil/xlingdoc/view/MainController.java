@@ -49,6 +49,7 @@ public class MainController implements Initializable {
 	private XmlDocumentManager manager;
 	private WebPageInteractor webPageInteractor;
 	private ComponentPathBarHandler componentPathBarHandler;
+	private ResourceBundle bundle;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -56,6 +57,7 @@ public class MainController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		bundle = resources;
 		webEngine = webView.getEngine();
 		String filePath = Constants.CSS_LOCATION;
 		File f = new File(filePath);
@@ -71,12 +73,12 @@ public class MainController implements Initializable {
 			System.out.println(filePath + " not found");
 		}
 		manager = new XmlDocumentManager();
-		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, resources.getString("element.text"));
+		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, bundle.getString("element.text"));
 		webPageInteractor = new WebPageInteractor();
 		componentPathBarHandler = new ComponentPathBarHandler();
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
-		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath, resources);
+		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath, bundle);
 
 		webEngine.loadContent(htmlContent);
 		webEngine.getLoadWorker().stateProperty().addListener((_, _, newState) -> {
@@ -91,7 +93,7 @@ public class MainController implements Initializable {
 					((EventTarget) target).addEventListener("click", (org.w3c.dom.events.Event ev) -> {
 						Element clicked = (Element) ev.getTarget();
 						System.out.println("New Clicked: " + clicked.getTagName());
-						componentPathBarHandler.updateComponentPathBar(clicked, componentPathBar);
+						componentPathBarHandler.updateComponentPathBar(clicked, componentPathBar, bundle.getString("label.text"));
 					}, false);
 				}
 			}
