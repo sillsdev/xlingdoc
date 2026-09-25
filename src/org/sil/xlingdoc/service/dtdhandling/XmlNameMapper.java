@@ -201,56 +201,6 @@ public class XmlNameMapper {
 		return sb.toString();
 	}
 
-	public static String mapInputFromXLingPaperToHTML(String fileContent) {
-		fileContent = mapElementName(fileContent, "br");
-		// We may need to do something specific for tables...
-//		fileContent = mapElementName(fileContent, "table");
-//		fileContent = mapElementName(fileContent, "td");
-//		fileContent = mapElementName(fileContent, "th");
-//		fileContent = mapElementName(fileContent, "tr");
-		fileContent = insertWrapping(fileContent);
-		// We use xInclude for the attribute name so CSS can see it; "xml:base" is not visible to CSS
-		fileContent = fileContent.replaceAll(" xml:base=\"", " contenteditable=\"false\" xInclude=\"");
-		return fileContent;
-	}
-
-	static String mapElementName(String fileContent, String elementName) {
-		fileContent = fileContent.replaceAll("<" + elementName, "<xlp-" + elementName);
-		fileContent = fileContent.replaceAll("</" + elementName, "</xlp-" + elementName);
-		return fileContent;
-	}
-
-	static String insertWrapping(String fileContent) {
-		fileContent = fileContent.replaceAll("<secTitle", kDetailsSummaryBegin + "<secTitle");
-		fileContent = fileContent.replaceAll("</secTitle", "</secTitle>" + kSummaryEnd);
-		fileContent = fileContent.replaceAll("</section1", kDetailsEnd + "</section1");
-
-		// TODO: be sure to use localized value for the wrap summary string
-		fileContent = wrapElement(fileContent, "references", "References", false);
-		fileContent = wrapElement(fileContent, "refAuthor", "works", true);
-		fileContent = wrapElement(fileContent, "languages", "Languages", false);
-		fileContent = wrapElement(fileContent, "types", "Types", false);
-
-		return fileContent;
-	}
-
-	protected static String wrapElement(String fileContent, String elementToWrap, String wrapSummary, boolean open) {
-		StringBuilder sbReplace = new StringBuilder();
-		sbReplace.append("<");
-		sbReplace.append(elementToWrap);
-		sbReplace.append("$1");
-		if (open)
-			sbReplace.append(kDetailsOpenSummaryBegin);
-		else
-			sbReplace.append(kDetailsSummaryBegin);
-		sbReplace.append(wrapSummary);
-		sbReplace.append(kSummaryEnd);
-		sbReplace.append(">");
-		fileContent = fileContent.replaceAll("<" + elementToWrap + "(.*?>)", sbReplace.toString());
-		fileContent = fileContent.replace("</" + elementToWrap, kDetailsEnd + "</" + elementToWrap);
-		return fileContent;
-	}
-
 	public static String getMappedElementName(String elementName) {
 		String lowercaseName = elementName.toLowerCase();
 		if (elementNameMap.containsKey(lowercaseName)) {

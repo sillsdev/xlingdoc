@@ -40,11 +40,6 @@ public class XLingDocLoader {
 		} else {
 			try {
 				manager.loadXmlDocument(f);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
 				Document doc = manager.getMasterXmlDoc();
 				Document newDoc;
 				fileContent = manager.documentToString(doc);
