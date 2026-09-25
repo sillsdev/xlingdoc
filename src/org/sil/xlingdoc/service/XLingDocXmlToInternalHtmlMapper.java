@@ -4,7 +4,7 @@
  * (http://www.gnu.org/licenses/lgpl-2.1.html)
  */
 
-package org.sil.xlingdoc.service.fileio;
+package org.sil.xlingdoc.service;
 
 import java.util.List;
 import java.util.Map;
@@ -329,10 +329,26 @@ public class XLingDocXmlToInternalHtmlMapper {
 			Map.entry("types", new CollapsingInfo(true, "collapsing.types", "", ""))
 			);
 
-	// TODO add the other input elements (like appendix, chapter, etc.)
 	private static final Map<String, InputBoxInfo> elementInputBoxAttributeLightModeMap = Map.ofEntries(
+			Map.entry("abbreviation", new InputBoxInfo("id", "15", "#FFFFBB", false, "")),
+			Map.entry("annotatedBibliographyType", new InputBoxInfo("id", "15", "#FFFFBB", false, "")),
+			Map.entry("annotation", new InputBoxInfo("id", "15", "#F6CAF6", false, "")),
+			Map.entry("authorContact", new InputBoxInfo("id", "15", "#FFD788", false, "")),
+			Map.entry("chapter", new InputBoxInfo("id", "15", "##D8BFD8", true, "")),
+			Map.entry("chapterBeforePart", new InputBoxInfo("id", "15", "##D8BFD8", true, "")),
+			Map.entry("chapterInCollection", new InputBoxInfo("id", "15", "##D8BFD8", true, "")),
+			Map.entry("contentType", new InputBoxInfo("id", "15", "", false, "")),
+			Map.entry("endnote", new InputBoxInfo("id", "15", "#E0E0E0", false, ")")),
 			Map.entry("example", new InputBoxInfo("num", "15", "#F5DEB3", false, ")")),
+			Map.entry("figure", new InputBoxInfo("id", "15", "#FFCCA0", false, ")")),
+			Map.entry("framedType", new InputBoxInfo("id", "15", "", false, "")),
+			Map.entry("genericTarget", new InputBoxInfo("id", "15", "#AFEEEE", false, "")),
+			Map.entry("glossaryTerm", new InputBoxInfo("id", "15", "#FFB6C1", false, "")),
+			Map.entry("indexTerm", new InputBoxInfo("id", "15", "#ccffcc", false, "")),
+			Map.entry("langName", new InputBoxInfo("id", "15", "", false, "")),
 			Map.entry("language", new InputBoxInfo("id", "15", "", false, "")),
+			Map.entry("object", new InputBoxInfo("type", "15", "#CCCCCC", false, "")),
+			Map.entry("part", new InputBoxInfo("id", "15", "#B0B0F0", false, "")),
 			Map.entry("refAuthor", new InputBoxInfo("citename", "15", "#F09FF0", false, "")),
 			Map.entry("refAuthorname", new InputBoxInfo("name", "40", "", false, "\u00a0\u00a0\u00a0")),
 			Map.entry("refWork", new InputBoxInfo("id", "15", "#F09FF0", false, "")),
@@ -342,6 +358,7 @@ public class XLingDocXmlToInternalHtmlMapper {
 			Map.entry("section4", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
 			Map.entry("section5", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
 			Map.entry("section6", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
+			Map.entry("tablenumbered", new InputBoxInfo("id", "15", "#F0CCA0", false, "")),
 			Map.entry("type", new InputBoxInfo("id", "15", "", false, ""))
 	);
 

@@ -9,6 +9,7 @@ package org.sil.xlingdoc.service.fileio;
 import java.io.File;
 import java.util.ResourceBundle;
 
+import org.sil.xlingdoc.service.XLingDocXmlToInternalHtmlMapper;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.w3c.dom.Document;
