@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.util.List;
 
 import org.sil.utility.StringUtilities;
+import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -63,8 +64,8 @@ public class XLingDocSaver {
 		}
 		String tagName = XmlNameMapper.mapElementName(element.getTagName());
 //		System.out.println("element = '" + tagName + "'");
-		if (tagName.startsWith("xlp-")) {
-			tagName = tagName.substring(4);
+		if (tagName.startsWith(Constants.ELEMENT_RENAME_PREFIX)) {
+			tagName = tagName.substring(Constants.ELEMENT_RENAME_PREFIX.length());
 		}
 		if (tagName.equals("span")) {
 			String contentEditable = element.getAttribute("contenteditable");

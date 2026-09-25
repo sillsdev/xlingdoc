@@ -8,6 +8,7 @@ package org.sil.xlingdoc.view;
 
 import java.util.List;
 
+import org.sil.xlingdoc.Constants;
 import org.sil.xlingdoc.service.dtdhandling.XmlNameMapper;
 import org.w3c.dom.Element;
 
@@ -83,7 +84,7 @@ public class ComponentPathBarHandler {
 			tTr.setUserData(element.getParentNode());
 			componentPathBar.getChildren().addAll(tTr, tTrGap);
 		}
-		Text t = new Text(" " + adjustedTagName.replace(XmlNameMapper.kRenamePrefix, ""));
+		Text t = new Text(" " + adjustedTagName.replace(Constants.ELEMENT_RENAME_PREFIX, ""));
 		t.setUserData(element);
 		t.setFill(kComponentPathItemColor);
 		componentPathBar.getChildren().add(t);
