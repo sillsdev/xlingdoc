@@ -6,6 +6,7 @@
 
 package org.sil.xlingdoc.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -23,11 +24,107 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import javafx.scene.web.WebEngine;
+
 /**
  * 
  */
 public class XLingDocXmlToInternalHtmlMapper {
-	
+
+	static String abbreviationBackgroundColor = "#FFFFBB";
+	static String annotatedbibliographytypeBackgroundColor = "#FBDFFB";
+	static String annotationBackgroundColor = "#F6CAF6";
+	static String appendixBackgroundColor = "#D8BFD8";
+	static String authorContactBackgroundColor = "#FFD788";
+	static String chapterBackgroundColor = "#D8BFD8";
+	static String citationBackgroundColor = "#F09FF0";
+	static String commentBackgroundColor = " yellow";
+	static String endnoteBackgroundColor = "#E0E0E0";
+	static String exampleBackgroundColor = "#F5DEB3";
+	static String figureBackgroundColor = "#FFCCA0";
+	static String genericBackgroundColor = "#AFEEEE";
+	static String glossarytermBackgroundColor = "#FFB6C1";
+	static String indexBackgroundColor = "#ccffcc";
+	static String indexRangeBackgroundColor = "#ccffaa";
+	static String interlinearSourceBackgroundColor = "#F0D0B0";
+	static String iso6393codeBackgroundColor = "#B0E0E6";
+	static String objectBackgroundColor = "#CCCCCC";
+	static String partBackgroundColor = "#B0B0F0";
+	static String sectionBackgroundColor = "#BFD0FF";
+	static String tablenumberedBackgroundColor = "#F0CCA0";
+
+	private static final Map<String, InputBoxInfo> elementInputBoxAttributeMap = new HashMap<String, InputBoxInfo>();
+
+	public static void resetElementInputBoxAtrributeMap(WebEngine webEngine) {
+		if (webEngine != null) {
+			setBackgroundColors(webEngine);
+		}
+		setElementInputBoxAtrributeMap();
+	}
+
+	protected static void setElementInputBoxAtrributeMap() {
+		elementInputBoxAttributeMap.clear();
+		elementInputBoxAttributeMap.put("abbreviation", new InputBoxInfo("id", "15", abbreviationBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("annotatedBibliographyType", new InputBoxInfo("id", "15", annotatedbibliographytypeBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("annotation", new InputBoxInfo("id", "15", annotationBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("authorContact", new InputBoxInfo("id", "15", authorContactBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("chapter", new InputBoxInfo("id", "15", chapterBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("chapterBeforePart", new InputBoxInfo("id", "15", chapterBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("chapterInCollection", new InputBoxInfo("id", "15", chapterBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("contentType", new InputBoxInfo("id", "15", "", false, ""));
+		elementInputBoxAttributeMap.put("endnote", new InputBoxInfo("id", "15", endnoteBackgroundColor, false, ")"));
+		elementInputBoxAttributeMap.put("example", new InputBoxInfo("num", "15", exampleBackgroundColor, false, ")"));
+		elementInputBoxAttributeMap.put("figure", new InputBoxInfo("id", "15", figureBackgroundColor, false, ")"));
+		elementInputBoxAttributeMap.put("framedType", new InputBoxInfo("id", "15", "", false, ""));
+		elementInputBoxAttributeMap.put("genericTarget", new InputBoxInfo("id", "15", genericBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("glossaryTerm", new InputBoxInfo("id", "15", glossarytermBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("indexTerm", new InputBoxInfo("id", "15", indexBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("langName", new InputBoxInfo("id", "15", "", false, ""));
+		elementInputBoxAttributeMap.put("language", new InputBoxInfo("id", "15", "", false, ""));
+		elementInputBoxAttributeMap.put("object", new InputBoxInfo("type", "15", objectBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("part", new InputBoxInfo("id", "15", partBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("refAuthor", new InputBoxInfo("citename", "15", citationBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("refAuthorname", new InputBoxInfo("name", "40", "", false, "\u00a0\u00a0\u00a0"));
+		elementInputBoxAttributeMap.put("refWork", new InputBoxInfo("id", "15", citationBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("section1", new InputBoxInfo("id", "15", sectionBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("section2", new InputBoxInfo("id", "15", sectionBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("section3", new InputBoxInfo("id", "15", sectionBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("section4", new InputBoxInfo("id", "15", sectionBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("section5", new InputBoxInfo("id", "15", sectionBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("section6", new InputBoxInfo("id", "15", sectionBackgroundColor, true, ""));
+		elementInputBoxAttributeMap.put("tablenumbered", new InputBoxInfo("id", "15", tablenumberedBackgroundColor, false, ""));
+		elementInputBoxAttributeMap.put("type", new InputBoxInfo("id", "15", "", false, ""));
+	}
+
+	protected static void setBackgroundColors(WebEngine webEngine) {
+		abbreviationBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine,
+				"--abbreviation-background-color");
+		annotatedbibliographytypeBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine,
+				"--annotatedbibliographytype-background-color");
+		annotationBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--annotation-background-color");
+		appendixBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--appendix-background-color");
+		authorContactBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine,
+				"--authorContact-background-color");
+		chapterBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--chapter-background-color");
+		citationBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--citation-background-color");
+		commentBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--comment-background-color");
+		endnoteBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--endnote-background-color");
+		exampleBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--example-background-color");
+		figureBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--figure-background-color");
+		genericBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--generic-background-color");
+		glossarytermBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine,
+				"--glossaryterm-background-color");
+		indexBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--index-background-color");
+		indexRangeBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--indexRange-background-color");
+		interlinearSourceBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine,
+				"--interlinearSource-background-color");
+		iso6393codeBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--iso639-3code-background-color");
+		objectBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--object-background-color");
+		partBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--part-background-color");
+		sectionBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine, "--section-background-color");
+		tablenumberedBackgroundColor = WebPageUtilities.getCssVariableValue(webEngine,
+				"--tablenumbered-background-color");
+	}
 	// TODO: add parameter for light vs. dark mode so we get the right colors for the input boxes
 	// unless we can find a way to get access to the CSS file and use its variables
 	public static Document mapInputFromXLingPaperToHTML(Document doc, ResourceBundle bundle) {
@@ -81,13 +178,13 @@ public class XLingDocXmlToInternalHtmlMapper {
 			Element summary = handleWrapInDetailsSummary(el, docNew, bundle, elNew, tagName, collapseInfo);
 			subEl = summary;
 		}
-		if (elementInputBoxAttributeLightModeMap.containsKey(tagName)) {
-			InputBoxInfo info = elementInputBoxAttributeLightModeMap.get(tagName);
+		if (elementInputBoxAttributeMap.containsKey(tagName)) {
+			InputBoxInfo info = elementInputBoxAttributeMap.get(tagName);
 			addInputBox(elNew, info, docNew);
 			if (tagName.equals("refAuthor")) {
 				// refAutor exceptionally needs two input boxes
 				// we add the name of the attribute to the tagname to avoid a duplicate in the map
-				info = elementInputBoxAttributeLightModeMap.get("refAuthorname");
+				info = elementInputBoxAttributeMap.get("refAuthorname");
 				addInputBox(elNew, info, docNew);
 			}
 		}
@@ -328,39 +425,6 @@ public class XLingDocXmlToInternalHtmlMapper {
 			Map.entry("section1", new CollapsingInfo(true, "", "secTitle", "")),
 			Map.entry("types", new CollapsingInfo(true, "collapsing.types", "", ""))
 			);
-
-	private static final Map<String, InputBoxInfo> elementInputBoxAttributeLightModeMap = Map.ofEntries(
-			Map.entry("abbreviation", new InputBoxInfo("id", "15", "#FFFFBB", false, "")),
-			Map.entry("annotatedBibliographyType", new InputBoxInfo("id", "15", "#FFFFBB", false, "")),
-			Map.entry("annotation", new InputBoxInfo("id", "15", "#F6CAF6", false, "")),
-			Map.entry("authorContact", new InputBoxInfo("id", "15", "#FFD788", false, "")),
-			Map.entry("chapter", new InputBoxInfo("id", "15", "##D8BFD8", true, "")),
-			Map.entry("chapterBeforePart", new InputBoxInfo("id", "15", "##D8BFD8", true, "")),
-			Map.entry("chapterInCollection", new InputBoxInfo("id", "15", "##D8BFD8", true, "")),
-			Map.entry("contentType", new InputBoxInfo("id", "15", "", false, "")),
-			Map.entry("endnote", new InputBoxInfo("id", "15", "#E0E0E0", false, ")")),
-			Map.entry("example", new InputBoxInfo("num", "15", "#F5DEB3", false, ")")),
-			Map.entry("figure", new InputBoxInfo("id", "15", "#FFCCA0", false, ")")),
-			Map.entry("framedType", new InputBoxInfo("id", "15", "", false, "")),
-			Map.entry("genericTarget", new InputBoxInfo("id", "15", "#AFEEEE", false, "")),
-			Map.entry("glossaryTerm", new InputBoxInfo("id", "15", "#FFB6C1", false, "")),
-			Map.entry("indexTerm", new InputBoxInfo("id", "15", "#ccffcc", false, "")),
-			Map.entry("langName", new InputBoxInfo("id", "15", "", false, "")),
-			Map.entry("language", new InputBoxInfo("id", "15", "", false, "")),
-			Map.entry("object", new InputBoxInfo("type", "15", "#CCCCCC", false, "")),
-			Map.entry("part", new InputBoxInfo("id", "15", "#B0B0F0", false, "")),
-			Map.entry("refAuthor", new InputBoxInfo("citename", "15", "#F09FF0", false, "")),
-			Map.entry("refAuthorname", new InputBoxInfo("name", "40", "", false, "\u00a0\u00a0\u00a0")),
-			Map.entry("refWork", new InputBoxInfo("id", "15", "#F09FF0", false, "")),
-			Map.entry("section1", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
-			Map.entry("section2", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
-			Map.entry("section3", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
-			Map.entry("section4", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
-			Map.entry("section5", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
-			Map.entry("section6", new InputBoxInfo("id", "15", "#BFD0FF", true, "")),
-			Map.entry("tablenumbered", new InputBoxInfo("id", "15", "#F0CCA0", false, "")),
-			Map.entry("type", new InputBoxInfo("id", "15", "", false, ""))
-	);
 
 	// elements with same name as in HTML may not load the way we want.
 	public final static List<String> elementsToRename = List.of("br",

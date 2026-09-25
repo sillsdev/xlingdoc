@@ -16,6 +16,7 @@ import org.sil.xlingdoc.service.fileio.XLingDocLoader;
 import org.sil.xlingdoc.service.fileio.XLingDocSaver;
 import org.sil.xlingdoc.service.WebPageInteractor;
 import org.sil.xlingdoc.service.WebPageUtilities;
+import org.sil.xlingdoc.service.XLingDocXmlToInternalHtmlMapper;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.w3c.dom.Document;
@@ -79,6 +80,7 @@ public class MainController implements Initializable {
 		componentPathBarHandler = new ComponentPathBarHandler();
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
+		XLingDocXmlToInternalHtmlMapper.resetElementInputBoxAtrributeMap(webEngine);
 		String htmlContent = XLingDocLoader.loadFileIntoNeededHTML(manager, dtdInspector, xmlFilePath, bundle);
 
 		webEngine.loadContent(htmlContent);

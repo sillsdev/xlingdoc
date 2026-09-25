@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sil.xlingdoc.Constants;
+import org.sil.xlingdoc.service.XLingDocXmlToInternalHtmlMapper;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 
@@ -32,6 +33,7 @@ public class XLingDocLoaderTests {
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		manager = new XmlDocumentManager();
 		resources = ResourceBundle.getBundle(Constants.RESOURCE_LOCATION, Locale.of("en"));
+		XLingDocXmlToInternalHtmlMapper.resetElementInputBoxAtrributeMap(null);
 	}
 
 	/**
