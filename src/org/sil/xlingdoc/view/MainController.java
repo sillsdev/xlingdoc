@@ -27,6 +27,8 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -52,6 +54,14 @@ public class MainController implements Initializable {
 	private ComponentPathBarHandler componentPathBarHandler;
 	private ResourceBundle bundle;
 	private Element elementClickedOn;
+	Clipboard systemClipboard = Clipboard.getSystemClipboard();
+
+	@FXML
+	private MenuItem menuItemEditCopy;
+	@FXML
+	private MenuItem menuItemEditCut;
+	@FXML
+	private MenuItem menuItemEditPaste;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -189,4 +199,380 @@ public class MainController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+
+	@FXML
+	private void handleNewDocument() {
+		System.out.println("handleNewDocument");
+	}
+
+	@FXML
+	private void handleOpenDocument() {
+		System.out.println("handleOpenDocument");
+	}
+
+	@FXML
+	private void handleSaveDocument() {
+		System.out.println("handleSaveDocument");
+	}
+
+	@FXML
+	private void handleSaveDocumentAs() {
+		System.out.println("handleSaveDocumentAs");
+	}
+
+	@FXML
+	private void handleExit() {
+		System.out.println("handleExit");
+	}
+
+	@FXML
+	private void handleCut() {
+		System.out.println("handleCut");
+	}
+
+	@FXML
+	private void handleCopy() {
+		System.out.println("handleCopy");
+	}
+
+	@FXML
+	private void handlePasteBefore() {
+		System.out.println("handlePasteBefore");
+	}
+
+	@FXML
+	private void handlePaste() {
+		System.out.println("handlePaste");
+	}
+
+	@FXML
+	private void handlePasteAfter() {
+		System.out.println("handlePasteAfter");
+	}
+
+	@FXML
+	private void handleInsertBefore() {
+		System.out.println("handleInsertBefore");
+	}
+
+	@FXML
+	private void handleInsert() {
+		System.out.println("handleInsert");
+	}
+
+	@FXML
+	private void handleInsertAfter() {
+		System.out.println("handleInsertAfter");
+	}
+
+	@FXML
+	private void handleRemove() {
+		System.out.println("handleRemove");
+	}
+
+	@FXML
+	private void handleConvert() {
+		System.out.println("handleConvert");
+	}
+
+	@FXML
+	private void handleConvertWrap() {
+		System.out.println("handleConvertWrap");
+	}
+
+	@FXML
+	private void handleUndo() {
+		System.out.println("handleUndo");
+	}
+
+	@FXML
+	private void handleRedo() {
+		System.out.println("handleRedo");
+	}
+
+	@FXML
+	private void handleInsertSetReference() {
+		System.out.println("handleInsertSetReference");
+	}
+
+	@FXML
+	private void handleSetReference() {
+		System.out.println("handleSetReference");
+	}
+
+	@FXML
+	private void handleInsertSetReferenceRange() {
+		System.out.println("handleInsertSetReferenceRange");
+	}
+
+	@FXML
+	private void handleTableIncreaseSize() {
+		System.out.println("handleTableIncreaseSize");
+	}
+
+	@FXML
+	private void handleTableCopyColumn() {
+		System.out.println("handleTableCopyColumn");
+	}
+
+	@FXML
+	private void handleTableCutColumn() {
+		System.out.println("handleTableCutColumn");
+	}
+
+	@FXML
+	private void handleTableDeleteColumn() {
+		System.out.println("handleTableDeleteColumn");
+	}
+
+	@FXML
+	private void handleTableInsertColumnBefore() {
+		System.out.println("handleTableInsertColumnBefore");
+	}
+
+	@FXML
+	private void handleTableInsertColumnAfter() {
+		System.out.println("handleTableInsertColumnAfter");
+	}
+
+	@FXML
+	private void handleTablePasteColumnBefore() {
+		System.out.println("handleTablePasteColumnBefore");
+	}
+
+	@FXML
+	private void handleTablePasteColumnAfter() {
+		System.out.println("handleTablePasteColumnAfter");
+	}
+
+	@FXML
+	private void handleTableCopyRow() {
+		System.out.println("handleTableCopyRow");
+	}
+
+	@FXML
+	private void handleTableCutRow() {
+		System.out.println("handleTableCutRow");
+	}
+
+	@FXML
+	private void handleTableDeleteRow() {
+		System.out.println("handleTableDeleteRow");
+	}
+
+	@FXML
+	private void handleTableInsertRowBefore() {
+		System.out.println("handleTableInsertRowBefore");
+	}
+
+	@FXML
+	private void handleTableInsertRowAfter() {
+		System.out.println("handleTableInsertRowAfter");
+	}
+
+	@FXML
+	private void handleTablePasteRowBefore() {
+		System.out.println("handleTablePasteRowBefore");
+	}
+
+	@FXML
+	private void handleTablePasteRowAfter() {
+		System.out.println("handleTablePasteRowAfter");
+	}
+
+	@FXML
+	private void handleTableIncrementColumnSpan() {
+		System.out.println("handleTableIncrementColumnSpan");
+	}
+
+	@FXML
+	private void handleTableDecrementColumnSpan() {
+		System.out.println("handleTableDecrementColumnSpan");
+	}
+
+	@FXML
+	private void handleTableIncrementRowSpan() {
+		System.out.println("handleTableIncrementRowSpan");
+	}
+
+	@FXML
+	private void handleTableDecrementRowSpan() {
+		System.out.println("handleTableDecrementRowSpan");
+	}
+
+	@FXML
+	private void handleProduceWebPage() {
+		System.out.println("handleProduceWebPage");
+	}
+
+	@FXML
+	private void handleShowWebPage() {
+		System.out.println("handleShowWebPage");
+	}
+
+	@FXML
+	private void handleProduceEBook() {
+		System.out.println("handleProduceEBook");
+	}
+
+	@FXML
+	private void handleProducePdf() {
+		System.out.println("handleProducePdf");
+	}
+
+	@FXML
+	private void handleProducePdfRenderX() {
+		System.out.println("handleProducePdfRenderX");
+	}
+
+	@FXML
+	private void handleProduceWord2003() {
+		System.out.println("handleProduceWord2003");
+	}
+
+	@FXML
+	private void handleProduceOpenOffice() {
+		System.out.println("handleProduceOpenOffice");
+	}
+
+	@FXML
+	private void handleConvertLineToWrd() {
+		System.out.println("handleConvertLineToWrd");
+	}
+
+	@FXML
+	private void handleConvertAbbrToAbbrRef() {
+		System.out.println("handleConvertAbbrToAbbrRef");
+	}
+
+	@FXML
+	private void handleConvertToObject() {
+		System.out.println("handleConvertToObject");
+	}
+
+	@FXML
+	private void handleConvertToLangData() {
+		System.out.println("handleConvertToLangData");
+	}
+
+	@FXML
+	private void handleConvertToGloss() {
+		System.out.println("handleConvertToGloss");
+	}
+
+	@FXML
+	private void handleConvertToEndnote() {
+		System.out.println("handleConvertToEndnote");
+	}
+
+	@FXML
+	private void handleConvertToBracketedConstituent() {
+		System.out.println("handleConvertToBracketedConstituent");
+	}
+
+	@FXML
+	private void handleConvertSvgToPdf() {
+		System.out.println("handleConvertSvgToPdf");
+	}
+
+	@FXML
+	private void handleDemoteSelection() {
+		System.out.println("handleDemoteSelection");
+	}
+
+	@FXML
+	private void handleDemoteSection() {
+		System.out.println("handleDemoteSection");
+	}
+
+	@FXML
+	private void handlePromoteSection() {
+		System.out.println("handlePromoteSection");
+	}
+
+	@FXML
+	private void handleAssociateStyleSheet() {
+		System.out.println("handleAssociateStyleSheet");
+	}
+
+	@FXML
+	private void handleRemoveStyleSheet() {
+		System.out.println("handleRemoveStyleSheet");
+	}
+
+	@FXML
+	private void handleUserDocumentation() {
+		System.out.println("handleUserDocumentation");
+	}
+
+	@FXML
+	private void handlePublisherStyleSheetDocumentation() {
+		System.out.println("handlePublisherStyleSheetDocumentation");
+	}
+
+	@FXML
+	private void handleQuickReferenceGuide() {
+		System.out.println("handleQuickReferenceGuide");
+	}
+
+	@FXML
+	private void handleAbout() {
+		System.out.println("handleAbout");
+	}
+
+	@FXML
+	private void handleChangeInterfaceLanguage() {
+		System.out.println("handleChangeInterfaceLanguage");
+	}
+
+	// code taken from
+	// http://bekwam.blogspot.com/2014/10/cut-copy-and-paste-from-javafx-menubar.html
+	@FXML
+	public void handleShowingEditMenu() {
+		System.out.println("handleShowingEditMenu");
+		if (systemClipboard == null) {
+			systemClipboard = Clipboard.getSystemClipboard();
+		}
+
+		if (systemClipboard.hasString()) {
+			adjustForClipboardContents();
+		} else {
+			adjustForEmptyClipboard();
+		}
+
+//		if (currentApproachController.anythingSelected()) {
+			adjustForSelection();
+//
+//		} else {
+//			adjustForDeselection();
+//		}
+	}
+
+	// TODO: put these in a separate handler (maybe)
+	// code taken from
+	// http://bekwam.blogspot.com/2014/10/cut-copy-and-paste-from-javafx-menubar.html
+	public void adjustForEmptyClipboard() {
+		menuItemEditPaste.setDisable(true); // nothing to paste
+	}
+
+	// code taken from
+	// http://bekwam.blogspot.com/2014/10/cut-copy-and-paste-from-javafx-menubar.html
+	private void adjustForClipboardContents() {
+		menuItemEditPaste.setDisable(false); // something to paste
+	}
+
+	// code taken from
+	// http://bekwam.blogspot.com/2014/10/cut-copy-and-paste-from-javafx-menubar.html
+	private void adjustForSelection() {
+		menuItemEditCut.setDisable(false);
+		menuItemEditCopy.setDisable(false);
+	}
+
+	// code taken from
+	// http://bekwam.blogspot.com/2014/10/cut-copy-and-paste-from-javafx-menubar.html
+	private void adjustForDeselection() {
+		menuItemEditCut.setDisable(true);
+		menuItemEditCopy.setDisable(true);
+	}
+
 }
