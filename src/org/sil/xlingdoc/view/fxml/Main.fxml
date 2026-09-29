@@ -219,6 +219,64 @@
 					</Menu>
 				</menus>
 			</MenuBar>
+			<ToolBar prefHeight="25.0" prefWidth="800.0" styleClass="toolbarbutton"
+				BorderPane.alignment="CENTER">
+				<items>
+					<Button fx:id="buttonToolbarFileNew" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleNewDocument" prefHeight="23.0" prefWidth="17.0" text="" />
+					<Button fx:id="buttonToolbarFileOpen" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleOpenDocument" prefHeight="23.0" prefWidth="17.0" text="" />
+					<Button fx:id="buttonToolbarFileSave" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleSaveDocument" prefHeight="23.0" prefWidth="17.0" text="" />
+					<Separator orientation="VERTICAL" prefHeight="0.0"
+						prefWidth="3.0" />
+					<Button fx:id="buttonToolbarEditCut" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleCut" prefHeight="23.0" prefWidth="17.0"
+						text="" />
+					<Button fx:id="buttonToolbarEditCopy" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleCopy" prefHeight="23.0" prefWidth="17.0"
+						text="" />
+					<Button fx:id="buttonToolbarEditPaste" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handlePaste" prefHeight="23.0" prefWidth="17.0"
+						text="" />
+					<Separator orientation="VERTICAL" prefHeight="0.0"
+						prefWidth="3.0" />
+					<Button fx:id="buttonToolbarEditInsert" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleInsert" prefHeight="23.0" prefWidth="17.0"
+						text="" />
+					<Button fx:id="buttonToolbarEditRemove" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="17.0" mnemonicParsing="true"
+						onAction="#handleRemove" prefHeight="23.0" prefWidth="17.0"
+						text="" />
+					<Separator orientation="VERTICAL" prefHeight="0.0"
+						prefWidth="3.0" />
+					<Button fx:id="buttonToolbarProduceWebPage" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="19.0" mnemonicParsing="true"
+						onAction="#handleProduceWebPage" prefHeight="23.0" prefWidth="19.0"
+						text="" />
+					<Button fx:id="buttonToolbarProducePdf"
+						contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="19.0"
+						mnemonicParsing="true" onAction="#handleProducePdf"
+						prefHeight="23.0" prefWidth="19.0" text="" />
+					<Separator orientation="VERTICAL" prefHeight="0.0"
+						prefWidth="3.0" />
+					<Button fx:id="buttonToolbarTextFind" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="19.0" mnemonicParsing="true"
+						onAction="#handleTextFind" prefHeight="23.0" prefWidth="19.0"
+						text="" />
+					<Button fx:id="buttonToolbarElementFind" contentDisplay="GRAPHIC_ONLY"
+						graphicTextGap="0.0" minWidth="19.0" mnemonicParsing="true"
+						onAction="#handleElementFind" prefHeight="23.0" prefWidth="19.0"
+						text="" />
+				</items>
+			</ToolBar>
          <TextFlow fx:id="componentPathBar" prefHeight="20.0" prefWidth="800.0"/>
 	   </VBox>
    </top>

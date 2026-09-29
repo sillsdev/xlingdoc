@@ -19,6 +19,7 @@ public class Constants {
 	public static final String ELEMENT_ONLY_DTD_LOCATION = "resources/dtdsElementSequences/XLingPap.dtd";
 	public static final String JAVASCRIPT_LOCATION = "resources/XLingDoc.js";
 	public static final String RESOURCE_LOCATION = "org.sil.xlingdoc.resources.XLingDoc";
+	public static final String RESOURCE_SOURCE_LOCATION = "src/org/sil/xlingdoc/";
 
 	public final static String ELEMENT_RENAME_PREFIX = "xlp-";
 

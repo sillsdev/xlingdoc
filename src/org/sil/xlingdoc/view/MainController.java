@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.sil.utility.view.ControllerUtilities;
 import org.sil.xlingdoc.Constants;
+import org.sil.xlingdoc.Main;
 import org.sil.xlingdoc.service.fileio.XLingDocLoader;
 import org.sil.xlingdoc.service.fileio.XLingDocSaver;
 import org.sil.xlingdoc.service.WebPageInteractor;
@@ -28,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -65,6 +68,54 @@ public class MainController implements Initializable {
 	private MenuItem menuItemEditCut;
 	@FXML
 	private MenuItem menuItemEditPaste;
+	@FXML
+	private Button buttonToolbarEditCopy;
+	@FXML
+	private Button buttonToolbarEditCut;
+	@FXML
+	private Button buttonToolbarEditInsert;
+	@FXML
+	private Button buttonToolbarEditPaste;
+	@FXML
+	private Button buttonToolbarEditRemove;
+	@FXML
+	private Button buttonToolbarElementFind;
+	@FXML
+	private Button buttonToolbarFileNew;
+	@FXML
+	private Button buttonToolbarFileOpen;
+	@FXML
+	private Button buttonToolbarFileSave;
+	@FXML
+	private Button buttonToolbarProducePdf;
+	@FXML
+	private Button buttonToolbarProduceWebPage;
+	@FXML
+	private Button buttonToolbarTextFind;
+	@FXML
+	private Tooltip tooltipToolbarEditCopy;
+	@FXML
+	private Tooltip tooltipToolbarEditCut;
+	@FXML
+	private Tooltip tooltipToolbarEditInsert;
+	@FXML
+	private Tooltip tooltipToolbarEditPaste;
+	@FXML
+	private Tooltip tooltipToolbarEditRemove;
+	@FXML
+	private Tooltip tooltipToolbarElementFind;
+	@FXML
+	private Tooltip tooltipToolbarFileNew;
+	@FXML
+	private Tooltip tooltipToolbarFileOpen;
+	@FXML
+	private Tooltip tooltipToolbarFileSave;
+	@FXML
+	private Tooltip tooltipToolbarProducePdf;
+	@FXML
+	private Tooltip tooltipToolbarProduceWebPage;
+	@FXML
+	private Tooltip tooltipToolbarTextFind;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -202,7 +253,47 @@ public class MainController implements Initializable {
 		top.setFill(componentPathBarHandler.getComponentPathItemColor());
 		componentPathBar.getChildren().add(top);
 
+		createToolbarButtons(bundle);
 //		webView.setOnContextMenuRequested(null);
+	}
+
+	protected void createToolbarButtons(ResourceBundle bundle) {
+		tooltipToolbarFileNew = ControllerUtilities.createToolbarButtonWithImage("newAction.png",
+				buttonToolbarFileNew, tooltipToolbarFileNew, bundle.getString("tooltip.new"),
+				Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarFileOpen = ControllerUtilities.createToolbarButtonWithImage("openAction.png",
+				buttonToolbarFileOpen, tooltipToolbarFileOpen, bundle.getString("tooltip.open"),
+				Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarFileSave = ControllerUtilities.createToolbarButtonWithImage("saveAction.png",
+				buttonToolbarFileSave, tooltipToolbarFileSave, bundle.getString("tooltip.save"),
+				Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarEditCut = ControllerUtilities.createToolbarButtonWithImage("cutAction.png",
+				buttonToolbarEditCut, tooltipToolbarEditCut, bundle.getString("tooltip.cut"),
+				Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarEditCopy = ControllerUtilities.createToolbarButtonWithImage("copyAction.png",
+				buttonToolbarEditCopy, tooltipToolbarEditCopy, bundle.getString("tooltip.copy"),
+				Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarEditPaste = ControllerUtilities.createToolbarButtonWithImage(
+				"pasteAction.png", buttonToolbarEditPaste, tooltipToolbarEditPaste,
+				bundle.getString("tooltip.paste"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarEditInsert = ControllerUtilities.createToolbarButtonWithImage(
+				"insertAction.png", buttonToolbarEditInsert, tooltipToolbarEditInsert,
+				bundle.getString("tooltip.insert"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarEditRemove = ControllerUtilities.createToolbarButtonWithImage(
+				"deleteAction.png", buttonToolbarEditRemove, tooltipToolbarEditRemove,
+				bundle.getString("tooltip.remove"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarProduceWebPage = ControllerUtilities.createToolbarButtonWithImage(
+				"ProduceWebPage.png", buttonToolbarProduceWebPage, tooltipToolbarProduceWebPage,
+				bundle.getString("tooltip.producewebpage"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarProducePdf = ControllerUtilities.createToolbarButtonWithImage(
+				"ProducePDF.png", buttonToolbarProducePdf, tooltipToolbarProducePdf,
+				bundle.getString("tooltip.producepdf"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarTextFind = ControllerUtilities.createToolbarButtonWithImage(
+				"TextFind.png", buttonToolbarElementFind, tooltipToolbarTextFind,
+				bundle.getString("tooltip.elementfind"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarElementFind = ControllerUtilities.createToolbarButtonWithImage(
+				"ElementFind.png", buttonToolbarTextFind, tooltipToolbarElementFind,
+				bundle.getString("tooltip.textfind"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 	}
 
 	@FXML

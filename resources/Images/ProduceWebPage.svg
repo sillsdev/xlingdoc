@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <!-- Document Page Base -->
+  <rect x="2" y="1" width="12" height="14" rx="1" fill="#FFFFFF" stroke="#4A6572" stroke-width="1"/>
+  
+  <!-- Browser Header Bar -->
+  <path d="M2.5 1.5h11a0.5 0.5 0 0 1 0.5 0.5v3H2v-3a0.5 0.5 0 0 1 0.5-0.5z" fill="#203647"/>
+  
+  <!-- Browser Control Dots -->
+  <circle cx="3.8" cy="3" r="0.5" fill="#E2E8F0"/>
+  <circle cx="5.3" cy="3" r="0.5" fill="#E2E8F0"/>
+  <circle cx="6.8" cy="3" r="0.5" fill="#E2E8F0"/>
+  
+  <!-- Web/Globe Symbol -->
+  <circle cx="8" cy="10" r="3" stroke="#007ACC" stroke-width="0.9" fill="none"/>
+  <line x1="5" y1="10" x2="11" y2="10" stroke="#007ACC" stroke-width="0.8"/>
+  <ellipse cx="8" cy="10" rx="1.2" ry="3" stroke="#007ACC" stroke-width="0.8" fill="none"/>
+</svg>

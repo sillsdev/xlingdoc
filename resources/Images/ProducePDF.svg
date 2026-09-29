@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <!-- Document Page Base (Light off-white page with folded corner) -->
+  <path d="M2.5 1h7.5l3.5 3.5V14.5a0.5 0.5 0 0 1-0.5 0.5H2.5a0.5 0.5 0 0 1-0.5-0.5V1.5A0.5 0.5 0 0 1 2.5 1z" fill="#FFFFFF" stroke="#5C1D1D" stroke-width="1"/>
+  
+  <!-- Folded Corner Detail -->
+  <path d="M9.5 1.5v3h3.5" fill="none" stroke="#5C1D1D" stroke-width="1"/>
+  <path d="M10 2l2.5 2.5H10V2z" fill="#B3B9C1"/>
+
+  <!-- Document Faint Lines -->
+  <line x1="4" y1="4" x2="8" y2="4" stroke="#8D96A3" stroke-width="1"/>
+  <line x1="4" y1="6" x2="12" y2="6" stroke="#8D96A3" stroke-width="1"/>
+
+  <!-- Red PDF Banner (Standard color representing PDF output) -->
+  <rect x="1" y="8" width="14" height="6" rx="0.5" fill="#C92A2A" stroke="#801010" stroke-width="0.5"/>
+  
+  <!-- White Lettering "PDF" (Fitted inside 16x16 boundaries) -->
+  <!-- "P" -->
+  <path d="M3 10h1.5a0.5 0.5 0 0 1 .5.5v1a0.5 0.5 0 0 1-.5.5H3v1h-.5v-3H3zm0 .5v1h1v-1H3z" fill="#FFFFFF"/>
+  <!-- "D" -->
+  <path d="M6 10h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H6v-3zm.5.5v2h.5c.3 0 .5-.2.5-.5v-1c0-.3-.2-.5-.5-.5h-.5z" fill="#FFFFFF"/>
+  <!-- "F" -->
+  <path d="M9.5 10H11v.5h-1.5v.5h1v.5h-1v1.5h-.5v-3z" fill="#FFFFFF"/>
+</svg>
