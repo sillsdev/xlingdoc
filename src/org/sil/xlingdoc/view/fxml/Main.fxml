@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
@@ -15,11 +16,11 @@
 					<Menu mnemonicParsing="true" text="%menu.file">
 						<items>
 							<MenuItem mnemonicParsing="true" onAction="#handleNewDocument"
-								text="%menu.new" accelerator="Ctrl+n" />
+								text="%menu.new" accelerator="shortcut+n" />
 							<MenuItem mnemonicParsing="true" onAction="#handleOpenDocument"
-								text="%menu.open" accelerator="Ctrl+o" />
+								text="%menu.open" accelerator="shortcut+o" />
 							<MenuItem mnemonicParsing="true" onAction="#handleSaveDocument"
-								text="%menu.save" accelerator="Ctrl+s" />
+								text="%menu.save" accelerator="shortcut+s" />
 							<MenuItem mnemonicParsing="true" onAction="#handleSaveDocumentAs"
 								text="%menu.saveas" />
 							<SeparatorMenuItem />
@@ -30,36 +31,68 @@
 					<Menu mnemonicParsing="true" text="%menu.edit" onShown="#handleShowingEditMenu">
 						<items>
 							<MenuItem mnemonicParsing="true" onAction="#handleUndo"
-								text="%menu.undo" fx:id="menuItemUndo" accelerator="ctrl+z" />
+								text="%menu.undo" fx:id="menuItemUndo" accelerator="shortcut+z" />
 							<MenuItem mnemonicParsing="true" onAction="#handleRedo"
-								text="%menu.redo" fx:id="menuItemRedo" accelerator="ctrl+y" />
+								text="%menu.redo" fx:id="menuItemRedo" accelerator="shortcut+y" />
 							<SeparatorMenuItem />
 							<MenuItem mnemonicParsing="true" onAction="#handleCut"
-								text="%menu.cut" fx:id="menuItemEditCut" accelerator="ctrl+x" />
+								text="%menu.cut" fx:id="menuItemEditCut" accelerator="shortcut+x" />
 							<MenuItem mnemonicParsing="true" onAction="#handleCopy"
-								text="%menu.copy" fx:id="menuItemEditCopy" accelerator="ctrl+c" />
+								text="%menu.copy" fx:id="menuItemEditCopy" accelerator="shortcut+c" />
 							<MenuItem mnemonicParsing="true" onAction="#handlePaste"
-								text="%menu.paste" fx:id="menuItemEditPaste" accelerator="ctrl+v" />
+								text="%menu.paste" fx:id="menuItemEditPaste" accelerator="shortcut+v" />
 							<SeparatorMenuItem />
 							<MenuItem mnemonicParsing="true" onAction="#handleInsertBefore"
-								text="%menu.insertbefore" fx:id="menuItemEditInsertBefore" accelerator="ctrl+h" />
+								text="%menu.insertbefore" fx:id="menuItemEditInsertBefore" accelerator="shortcut+h" />
 							<MenuItem mnemonicParsing="true" onAction="#handleInsert"
-								text="%menu.insert" fx:id="menuItemEditInsert" accelerator="ctrl+i" />
+								text="%menu.insert" fx:id="menuItemEditInsert" accelerator="shortcut+i" />
 							<MenuItem mnemonicParsing="true" onAction="#handleInsertAfter"
-								text="%menu.insertafter" fx:id="menuItemEditInsertAfter" accelerator="ctrl+j" />
+								text="%menu.insertafter" fx:id="menuItemEditInsertAfter" accelerator="shortcut+j" />
 							<MenuItem mnemonicParsing="true" onAction="#handleRemove"
-								text="%menu.remove" fx:id="menuItemEditRemove" accelerator="ctrl+r" />
+								text="%menu.remove" fx:id="menuItemEditRemove" accelerator="shortcut+r" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvert"
-								text="%menu.convert" fx:id="menuItemEditConvert" accelerator="ctrl+t" />
+								text="%menu.convert" fx:id="menuItemEditConvert" accelerator="shortcut+t" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertWrap"
-								text="%menu.convertwrap" fx:id="menuItemEditConvertWrap" accelerator="ctrl+shift+t" />
+								text="%menu.convertwrap" fx:id="menuItemEditConvertWrap" accelerator="shortcut+shift+t" />
 							<SeparatorMenuItem />
 							<MenuItem mnemonicParsing="true" onAction="#handleInsertSetReference"
 								text="%menu.insertsetreference" fx:id="menuItemEditInsertSetReference" accelerator="shift+f11" />
 							<MenuItem mnemonicParsing="true" onAction="#handleSetReference"
 								text="%menu.setreference" fx:id="menuItemEditSetReferenceRange" accelerator="f11" />
 							<MenuItem mnemonicParsing="true" onAction="#handleInsertSetReferenceRange"
-								text="%menu.insertsetreferencerange" fx:id="menuItemEditInsertSetReferenceRange" accelerator="ctrl+alt+shift+f11" />
+								text="%menu.insertsetreferencerange" fx:id="menuItemEditInsertSetReferenceRange" accelerator="shortcut+alt+shift+f11" />
+						</items>
+					</Menu>
+					<Menu mnemonicParsing="true" text="%menu.search">
+						<items>
+							<MenuItem mnemonicParsing="true" onAction="#handleTextFind"
+								text="%menu.textfind" fx:id="menuItemTextFind" accelerator="shortcut+f" />
+							<MenuItem mnemonicParsing="true" onAction="#handleTextReplace"
+								text="%menu.textreplace" fx:id="menuItemTextReplace" accelerator="shortcut+r" />
+							<SeparatorMenuItem />
+							<MenuItem mnemonicParsing="true" onAction="#handleElementFind"
+								text="%menu.elementfind" fx:id="menuItemElementFind" accelerator="shortcut+shift+f" />
+							<MenuItem mnemonicParsing="true" onAction="#handleElementReplace"
+								text="%menu.elementreplace" fx:id="menuItemElementReplace" accelerator="shortcut+shift+r" />
+						</items>
+					</Menu>
+					<Menu mnemonicParsing="true" text="%menu.select">
+						<items>
+							<MenuItem mnemonicParsing="true" onAction="#handleSelectParent"
+								text="%menu.selectparent" fx:id="menuItemSelectParent" accelerator="shortcut+up" />
+							<MenuItem mnemonicParsing="true" onAction="#handleSelectChild"
+								text="%menu.selectchild" fx:id="menuItemSelectChild" accelerator="shortcut+down" />
+							<MenuItem mnemonicParsing="true" onAction="#handleSelectPrecedingSibling"
+								text="%menu.selectprecedingsibling" fx:id="menuItemSelectPrecedingSibling" accelerator="shortcut+shift+up" />
+							<MenuItem mnemonicParsing="true" onAction="#handleSelectFollowingSibling"
+								text="%menu.selectfollowingsibling" fx:id="menuItemSelectFollowingSibling" accelerator="shortcut+shift+down" />
+							<SeparatorMenuItem />
+							<MenuItem mnemonicParsing="true" onAction="#handleExtendSelectionToPrecedingSibling"
+								text="%menu.extendselectiontoprecedingsibling" fx:id="menuItemExtendSelectionToFollowingSibling" />
+							<MenuItem mnemonicParsing="true" onAction="#handleExtendSelectionToFollowingSibling"
+								text="%menu.extendselectiontofollowingsibling" fx:id="menuItemExtendSelectionToFollowingSibling" />
+							<MenuItem mnemonicParsing="true" onAction="#handleSelectAllChildren"
+								text="%menu.selectallchildren" fx:id="menuItemSelectAllChildren" accelerator="Esc ↓" />
 						</items>
 					</Menu>
 					<Menu mnemonicParsing="true" text="%menu.table">
@@ -115,12 +148,12 @@
 							<MenuItem mnemonicParsing="true" onAction="#handleShowWebPage"
 								text="%menu.showwebpage" fx:id="menuItemShowWebPage" accelerator="F8" />
 							<MenuItem mnemonicParsing="true" onAction="#handleProduceEBook"
-								text="%menu.produceebook" fx:id="menuItemProduceEBook" accelerator="ctrl+shift+F7" />
+								text="%menu.produceebook" fx:id="menuItemProduceEBook" accelerator="shortcut+shift+F7" />
 							<SeparatorMenuItem />
 							<MenuItem mnemonicParsing="true" onAction="#handleProducePdf"
 								text="%menu.producepdf" fx:id="menuItemProducePdf" accelerator="F9" />
 							<MenuItem mnemonicParsing="true" onAction="#handleProducePdfRenderX"
-								text="%menu.producepdfrenderx" fx:id="menuItemProducePdfRenderX" accelerator="ctrl+shift+F9" />
+								text="%menu.producepdfrenderx" fx:id="menuItemProducePdfRenderX" accelerator="shortcut+shift+F9" />
 							<MenuItem mnemonicParsing="true" onAction="#handleProduceWord2003"
 								text="%menu.produceword2003" fx:id="menuItemProduceWord2003" />
 							<MenuItem mnemonicParsing="true" onAction="#handleProduceOpenOffice"
@@ -132,15 +165,15 @@
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertLineToWrd"
 								text="%menu.convertlinetowrd" fx:id="menuItemConvertLineToWrd" accelerator="shift+F10" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertAbbrToAbbrRef"
-								text="%menu.convertabbrtoabbrref" fx:id="menuItemConvertAbbrToAbbrRef" accelerator="ctrl+shift+F10" />
+								text="%menu.convertabbrtoabbrref" fx:id="menuItemConvertAbbrToAbbrRef" accelerator="shortcut+shift+F10" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertToObject"
-								text="%menu.converttoobject" fx:id="menuItemConvertToObject" accelerator="ctrl+F11" />
+								text="%menu.converttoobject" fx:id="menuItemConvertToObject" accelerator="shortcut+F11" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertToLangData"
 								text="%menu.converttolangdata" fx:id="menuItemConvertToLangData" accelerator="alt+F11" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertToGloss"
 								text="%menu.converttogloss" fx:id="menuItemConvertToGloss" accelerator="alt+shift+F11" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertToEndnote"
-								text="%menu.converttoendnote" fx:id="menuItemConvertToEndnote" accelerator="ctrl+alt+F11" />
+								text="%menu.converttoendnote" fx:id="menuItemConvertToEndnote" accelerator="shortcut+alt+F11" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertToBracketedConstituent"
 								text="%menu.converttobracketedconstituent" fx:id="menuItemConvertToBracketedConstituent" accelerator="shift+F12" />
 							<MenuItem mnemonicParsing="true" onAction="#handleConvertSvgToPdf"

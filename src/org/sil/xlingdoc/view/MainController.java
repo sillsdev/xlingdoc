@@ -29,6 +29,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -54,6 +56,7 @@ public class MainController implements Initializable {
 	private ComponentPathBarHandler componentPathBarHandler;
 	private ResourceBundle bundle;
 	private Element elementClickedOn;
+	private boolean escPressed;
 	Clipboard systemClipboard = Clipboard.getSystemClipboard();
 
 	@FXML
@@ -171,6 +174,19 @@ public class MainController implements Initializable {
 ////		        }
 //		    }
 //		});
+
+	    webView.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+	        if (event.getCode() == KeyCode.ESCAPE) {
+	            escPressed = true;
+	            event.consume();
+	        } else if (escPressed && event.getCode() == KeyCode.DOWN) {
+	            handleSelectAllChildren();
+	            event.consume();
+	        }
+	        if (event.getCode() != KeyCode.ESCAPE && event.getCode() != KeyCode.DOWN) {
+	            escPressed = false;
+	        }
+	    });
 
 		componentPathBar.setOnMouseClicked(event -> {
 			if (event.getTarget() instanceof Text) {
@@ -523,6 +539,61 @@ public class MainController implements Initializable {
 	@FXML
 	private void handleChangeInterfaceLanguage() {
 		System.out.println("handleChangeInterfaceLanguage");
+	}
+
+	@FXML
+	private void handleSelectParent() {
+		System.out.println("handleSelectParent");
+	}
+
+	@FXML
+	private void handleSelectChild() {
+		System.out.println("handleSelectChild");
+	}
+
+	@FXML
+	private void handleSelectPrecedingSibling() {
+		System.out.println("handleSelectPrecedingSibling");
+	}
+
+	@FXML
+	private void handleSelectFollowingSibling() {
+		System.out.println("handleSelectFollowingSibling");
+	}
+
+	@FXML
+	private void handleExtendSelectionToPrecedingSibling() {
+		System.out.println("handleExtendSelectionToPrecedingSibling");
+	}
+
+	@FXML
+	private void handleExtendSelectionToFollowingSibling() {
+		System.out.println("handleExtendSelectionToFollowingSibling");
+	}
+
+	@FXML
+	private void handleSelectAllChildren() {
+		System.out.println("handleSelectAllChildren");
+	}
+
+	@FXML
+	private void handleTextFind() {
+		System.out.println("handleTextFind");
+	}
+
+	@FXML
+	private void handleTextReplace() {
+		System.out.println("handleTextReplace");
+	}
+
+	@FXML
+	private void handleElementFind() {
+		System.out.println("handleElementFind");
+	}
+
+	@FXML
+	private void handleElementReplace() {
+		System.out.println("handleElementReplace");
 	}
 
 	// code taken from
