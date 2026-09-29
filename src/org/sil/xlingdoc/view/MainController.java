@@ -217,33 +217,68 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleNewDocument() {
-		System.out.println("handleNewDocument");
+	private void handleAbout() {
+		System.out.println("handleAbout");
 	}
 
 	@FXML
-	private void handleOpenDocument() {
-		System.out.println("handleOpenDocument");
+	private void handleAssociateStyleSheet() {
+		System.out.println("handleAssociateStyleSheet");
 	}
 
 	@FXML
-	private void handleSaveDocument() {
-		System.out.println("handleSaveDocument");
+	private void handleChangeInterfaceLanguage() {
+		System.out.println("handleChangeInterfaceLanguage");
 	}
 
 	@FXML
-	private void handleSaveDocumentAs() {
-		System.out.println("handleSaveDocumentAs");
+	private void handleConvert() {
+		System.out.println("handleConvert");
 	}
 
 	@FXML
-	private void handleExit() {
-		System.out.println("handleExit");
+	private void handleConvertAbbrToAbbrRef() {
+		System.out.println("handleConvertAbbrToAbbrRef");
 	}
 
 	@FXML
-	private void handleCut() {
-		System.out.println("handleCut");
+	private void handleConvertLineToWrd() {
+		System.out.println("handleConvertLineToWrd");
+	}
+
+	@FXML
+	private void handleConvertSvgToPdf() {
+		System.out.println("handleConvertSvgToPdf");
+	}
+
+	@FXML
+	private void handleConvertToBracketedConstituent() {
+		System.out.println("handleConvertToBracketedConstituent");
+	}
+
+	@FXML
+	private void handleConvertToEndnote() {
+		System.out.println("handleConvertToEndnote");
+	}
+
+	@FXML
+	private void handleConvertToGloss() {
+		System.out.println("handleConvertToGloss");
+	}
+
+	@FXML
+	private void handleConvertToLangData() {
+		System.out.println("handleConvertToLangData");
+	}
+
+	@FXML
+	private void handleConvertToObject() {
+		System.out.println("handleConvertToObject");
+	}
+
+	@FXML
+	private void handleConvertWrap() {
+		System.out.println("handleConvertWrap");
 	}
 
 	@FXML
@@ -252,23 +287,43 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handlePasteBefore() {
-		System.out.println("handlePasteBefore");
+	private void handleCut() {
+		System.out.println("handleCut");
 	}
 
 	@FXML
-	private void handlePaste() {
-		System.out.println("handlePaste");
+	private void handleDemoteSection() {
+		System.out.println("handleDemoteSection");
 	}
 
 	@FXML
-	private void handlePasteAfter() {
-		System.out.println("handlePasteAfter");
+	private void handleDemoteSelection() {
+		System.out.println("handleDemoteSelection");
 	}
 
 	@FXML
-	private void handleInsertBefore() {
-		System.out.println("handleInsertBefore");
+	private void handleElementFind() {
+		System.out.println("handleElementFind");
+	}
+
+	@FXML
+	private void handleElementReplace() {
+		System.out.println("handleElementReplace");
+	}
+
+	@FXML
+	private void handleExit() {
+		System.out.println("handleExit");
+	}
+
+	@FXML
+	private void handleExtendSelectionToFollowingSibling() {
+		System.out.println("handleExtendSelectionToFollowingSibling");
+	}
+
+	@FXML
+	private void handleExtendSelectionToPrecedingSibling() {
+		System.out.println("handleExtendSelectionToPrecedingSibling");
 	}
 
 	@FXML
@@ -282,28 +337,8 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleRemove() {
-		System.out.println("handleRemove");
-	}
-
-	@FXML
-	private void handleConvert() {
-		System.out.println("handleConvert");
-	}
-
-	@FXML
-	private void handleConvertWrap() {
-		System.out.println("handleConvertWrap");
-	}
-
-	@FXML
-	private void handleUndo() {
-		System.out.println("handleUndo");
-	}
-
-	@FXML
-	private void handleRedo() {
-		System.out.println("handleRedo");
+	private void handleInsertBefore() {
+		System.out.println("handleInsertBefore");
 	}
 
 	@FXML
@@ -312,123 +347,43 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleSetReference() {
-		System.out.println("handleSetReference");
-	}
-
-	@FXML
 	private void handleInsertSetReferenceRange() {
 		System.out.println("handleInsertSetReferenceRange");
 	}
 
 	@FXML
-	private void handleTableIncreaseSize() {
-		System.out.println("handleTableIncreaseSize");
+	private void handleNewDocument() {
+		System.out.println("handleNewDocument");
 	}
 
 	@FXML
-	private void handleTableCopyColumn() {
-		System.out.println("handleTableCopyColumn");
+	private void handleOpenDocument() {
+		System.out.println("handleOpenDocument");
 	}
 
 	@FXML
-	private void handleTableCutColumn() {
-		System.out.println("handleTableCutColumn");
+	private void handlePaste() {
+		System.out.println("handlePaste");
 	}
 
 	@FXML
-	private void handleTableDeleteColumn() {
-		System.out.println("handleTableDeleteColumn");
+	private void handlePasteAfter() {
+		System.out.println("handlePasteAfter");
 	}
 
 	@FXML
-	private void handleTableInsertColumnBefore() {
-		System.out.println("handleTableInsertColumnBefore");
-	}
-
-	@FXML
-	private void handleTableInsertColumnAfter() {
-		System.out.println("handleTableInsertColumnAfter");
-	}
-
-	@FXML
-	private void handleTablePasteColumnBefore() {
-		System.out.println("handleTablePasteColumnBefore");
-	}
-
-	@FXML
-	private void handleTablePasteColumnAfter() {
-		System.out.println("handleTablePasteColumnAfter");
-	}
-
-	@FXML
-	private void handleTableCopyRow() {
-		System.out.println("handleTableCopyRow");
-	}
-
-	@FXML
-	private void handleTableCutRow() {
-		System.out.println("handleTableCutRow");
-	}
-
-	@FXML
-	private void handleTableDeleteRow() {
-		System.out.println("handleTableDeleteRow");
-	}
-
-	@FXML
-	private void handleTableInsertRowBefore() {
-		System.out.println("handleTableInsertRowBefore");
-	}
-
-	@FXML
-	private void handleTableInsertRowAfter() {
-		System.out.println("handleTableInsertRowAfter");
-	}
-
-	@FXML
-	private void handleTablePasteRowBefore() {
-		System.out.println("handleTablePasteRowBefore");
-	}
-
-	@FXML
-	private void handleTablePasteRowAfter() {
-		System.out.println("handleTablePasteRowAfter");
-	}
-
-	@FXML
-	private void handleTableIncrementColumnSpan() {
-		System.out.println("handleTableIncrementColumnSpan");
-	}
-
-	@FXML
-	private void handleTableDecrementColumnSpan() {
-		System.out.println("handleTableDecrementColumnSpan");
-	}
-
-	@FXML
-	private void handleTableIncrementRowSpan() {
-		System.out.println("handleTableIncrementRowSpan");
-	}
-
-	@FXML
-	private void handleTableDecrementRowSpan() {
-		System.out.println("handleTableDecrementRowSpan");
-	}
-
-	@FXML
-	private void handleProduceWebPage() {
-		System.out.println("handleProduceWebPage");
-	}
-
-	@FXML
-	private void handleShowWebPage() {
-		System.out.println("handleShowWebPage");
+	private void handlePasteBefore() {
+		System.out.println("handlePasteBefore");
 	}
 
 	@FXML
 	private void handleProduceEBook() {
 		System.out.println("handleProduceEBook");
+	}
+
+	@FXML
+	private void handleProduceOpenOffice() {
+		System.out.println("handleProduceOpenOffice");
 	}
 
 	@FXML
@@ -442,83 +397,18 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
+	private void handleProduceWebPage() {
+		System.out.println("handleProduceWebPage");
+	}
+
+	@FXML
 	private void handleProduceWord2003() {
 		System.out.println("handleProduceWord2003");
 	}
 
 	@FXML
-	private void handleProduceOpenOffice() {
-		System.out.println("handleProduceOpenOffice");
-	}
-
-	@FXML
-	private void handleConvertLineToWrd() {
-		System.out.println("handleConvertLineToWrd");
-	}
-
-	@FXML
-	private void handleConvertAbbrToAbbrRef() {
-		System.out.println("handleConvertAbbrToAbbrRef");
-	}
-
-	@FXML
-	private void handleConvertToObject() {
-		System.out.println("handleConvertToObject");
-	}
-
-	@FXML
-	private void handleConvertToLangData() {
-		System.out.println("handleConvertToLangData");
-	}
-
-	@FXML
-	private void handleConvertToGloss() {
-		System.out.println("handleConvertToGloss");
-	}
-
-	@FXML
-	private void handleConvertToEndnote() {
-		System.out.println("handleConvertToEndnote");
-	}
-
-	@FXML
-	private void handleConvertToBracketedConstituent() {
-		System.out.println("handleConvertToBracketedConstituent");
-	}
-
-	@FXML
-	private void handleConvertSvgToPdf() {
-		System.out.println("handleConvertSvgToPdf");
-	}
-
-	@FXML
-	private void handleDemoteSelection() {
-		System.out.println("handleDemoteSelection");
-	}
-
-	@FXML
-	private void handleDemoteSection() {
-		System.out.println("handleDemoteSection");
-	}
-
-	@FXML
 	private void handlePromoteSection() {
 		System.out.println("handlePromoteSection");
-	}
-
-	@FXML
-	private void handleAssociateStyleSheet() {
-		System.out.println("handleAssociateStyleSheet");
-	}
-
-	@FXML
-	private void handleRemoveStyleSheet() {
-		System.out.println("handleRemoveStyleSheet");
-	}
-
-	@FXML
-	private void handleUserDocumentation() {
-		System.out.println("handleUserDocumentation");
 	}
 
 	@FXML
@@ -532,18 +422,33 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleAbout() {
-		System.out.println("handleAbout");
+	private void handleRedo() {
+		System.out.println("handleRedo");
 	}
 
 	@FXML
-	private void handleChangeInterfaceLanguage() {
-		System.out.println("handleChangeInterfaceLanguage");
+	private void handleRemove() {
+		System.out.println("handleRemove");
 	}
 
 	@FXML
-	private void handleSelectParent() {
-		System.out.println("handleSelectParent");
+	private void handleRemoveStyleSheet() {
+		System.out.println("handleRemoveStyleSheet");
+	}
+
+	@FXML
+	private void handleSaveDocument() {
+		System.out.println("handleSaveDocument");
+	}
+
+	@FXML
+	private void handleSaveDocumentAs() {
+		System.out.println("handleSaveDocumentAs");
+	}
+
+	@FXML
+	private void handleSelectAllChildren() {
+		System.out.println("handleSelectAllChildren");
 	}
 
 	@FXML
@@ -552,28 +457,123 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleSelectPrecedingSibling() {
-		System.out.println("handleSelectPrecedingSibling");
-	}
-
-	@FXML
 	private void handleSelectFollowingSibling() {
 		System.out.println("handleSelectFollowingSibling");
 	}
 
 	@FXML
-	private void handleExtendSelectionToPrecedingSibling() {
-		System.out.println("handleExtendSelectionToPrecedingSibling");
+	private void handleSelectParent() {
+		System.out.println("handleSelectParent");
 	}
 
 	@FXML
-	private void handleExtendSelectionToFollowingSibling() {
-		System.out.println("handleExtendSelectionToFollowingSibling");
+	private void handleSelectPrecedingSibling() {
+		System.out.println("handleSelectPrecedingSibling");
 	}
 
 	@FXML
-	private void handleSelectAllChildren() {
-		System.out.println("handleSelectAllChildren");
+	private void handleSetReference() {
+		System.out.println("handleSetReference");
+	}
+
+	@FXML
+	private void handleShowWebPage() {
+		System.out.println("handleShowWebPage");
+	}
+
+	@FXML
+	private void handleTableCopyColumn() {
+		System.out.println("handleTableCopyColumn");
+	}
+
+	@FXML
+	private void handleTableCopyRow() {
+		System.out.println("handleTableCopyRow");
+	}
+
+	@FXML
+	private void handleTableCutColumn() {
+		System.out.println("handleTableCutColumn");
+	}
+
+	@FXML
+	private void handleTableCutRow() {
+		System.out.println("handleTableCutRow");
+	}
+
+	@FXML
+	private void handleTableDecrementColumnSpan() {
+		System.out.println("handleTableDecrementColumnSpan");
+	}
+
+	@FXML
+	private void handleTableDecrementRowSpan() {
+		System.out.println("handleTableDecrementRowSpan");
+	}
+
+	@FXML
+	private void handleTableDeleteColumn() {
+		System.out.println("handleTableDeleteColumn");
+	}
+
+	@FXML
+	private void handleTableDeleteRow() {
+		System.out.println("handleTableDeleteRow");
+	}
+
+	@FXML
+	private void handleTableIncreaseSize() {
+		System.out.println("handleTableIncreaseSize");
+	}
+
+	@FXML
+	private void handleTableIncrementColumnSpan() {
+		System.out.println("handleTableIncrementColumnSpan");
+	}
+
+	@FXML
+	private void handleTableIncrementRowSpan() {
+		System.out.println("handleTableIncrementRowSpan");
+	}
+
+	@FXML
+	private void handleTableInsertColumnAfter() {
+		System.out.println("handleTableInsertColumnAfter");
+	}
+
+	@FXML
+	private void handleTableInsertColumnBefore() {
+		System.out.println("handleTableInsertColumnBefore");
+	}
+
+	@FXML
+	private void handleTableInsertRowAfter() {
+		System.out.println("handleTableInsertRowAfter");
+	}
+
+	@FXML
+	private void handleTableInsertRowBefore() {
+		System.out.println("handleTableInsertRowBefore");
+	}
+
+	@FXML
+	private void handleTablePasteColumnAfter() {
+		System.out.println("handleTablePasteColumnAfter");
+	}
+
+	@FXML
+	private void handleTablePasteColumnBefore() {
+		System.out.println("handleTablePasteColumnBefore");
+	}
+
+	@FXML
+	private void handleTablePasteRowAfter() {
+		System.out.println("handleTablePasteRowAfter");
+	}
+
+	@FXML
+	private void handleTablePasteRowBefore() {
+		System.out.println("handleTablePasteRowBefore");
 	}
 
 	@FXML
@@ -587,13 +587,13 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleElementFind() {
-		System.out.println("handleElementFind");
+	private void handleUndo() {
+		System.out.println("handleUndo");
 	}
 
 	@FXML
-	private void handleElementReplace() {
-		System.out.println("handleElementReplace");
+	private void handleUserDocumentation() {
+		System.out.println("handleUserDocumentation");
 	}
 
 	// code taken from
