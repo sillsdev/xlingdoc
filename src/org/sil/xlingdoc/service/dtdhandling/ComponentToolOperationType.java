@@ -9,7 +9,7 @@ package org.sil.xlingdoc.service.dtdhandling;
 /**
  * 
  */
-public enum EditOperationType {
+public enum ComponentToolOperationType {
 	Convert,
 	ConvertWrap,
 	Insert,

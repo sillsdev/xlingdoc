@@ -282,6 +282,16 @@ public class XLingDocXmlToInternalHtmlMapper {
 		return sb.toString();
 	}
 
+	public static String getRenamedElement(String elementName) {
+		String name = elementName;
+		String adjustedName = elementName.replace(Constants.ELEMENT_RENAME_PREFIX.toUpperCase(), "");
+		int index = elementsToRename.indexOf(elementName.replace(Constants.ELEMENT_RENAME_PREFIX.toUpperCase(), "").toLowerCase());
+		if (index > -1) {
+			name = elementsToRename.get(index);
+		}
+		return name;
+	}
+
 	private final static List<String> elementsToWrapInDiv = List.of(
 			"annotationRef",
 			"author",
@@ -430,13 +440,12 @@ public class XLingDocXmlToInternalHtmlMapper {
 	public final static List<String> elementsToRename = List.of("br",
 //			"li",
 //			"ol",
-//			"p",
+			"p",
 //			"table",
 //			"td",
 //			"th",
 			"title"
 //			"ul"
 	);
-
 
 }

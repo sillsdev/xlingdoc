@@ -525,6 +525,10 @@ xlp-br
 {
 	display:inline;
 }
+xlp-p
+{
+	background-color: pink;
+}
 xlp-title {
     display: block;
     text-align: center;

@@ -19,6 +19,7 @@ import org.sil.xlingdoc.service.fileio.XLingDocSaver;
 import org.sil.xlingdoc.service.WebPageInteractor;
 import org.sil.xlingdoc.service.WebPageUtilities;
 import org.sil.xlingdoc.service.XLingDocXmlToInternalHtmlMapper;
+import org.sil.xlingdoc.service.dtdhandling.ComponentToolOperationType;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
 import org.w3c.dom.Document;
@@ -30,6 +31,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
@@ -57,10 +59,12 @@ public class MainController implements Initializable {
 	private XmlDocumentManager manager;
 	private WebPageInteractor webPageInteractor;
 	private ComponentPathBarHandler componentPathBarHandler;
+	private ComponentToolOperationType componentToolOperation = ComponentToolOperationType.Insert;
 	private ResourceBundle bundle;
 	private Element elementClickedOn;
 	private boolean escPressed;
 	Clipboard systemClipboard = Clipboard.getSystemClipboard();
+	Main main;
 
 	@FXML
 	private MenuItem menuItemEditCopy;
@@ -68,6 +72,22 @@ public class MainController implements Initializable {
 	private MenuItem menuItemEditCut;
 	@FXML
 	private MenuItem menuItemEditPaste;
+	@FXML
+	private Button buttonComponentToolCancel;
+	@FXML
+	private Button buttonComponentToolConvert;
+	@FXML
+	private Button buttonComponentToolConvertWrap;
+	@FXML
+	private Button buttonComponentToolInsert;
+	@FXML
+	private Button buttonComponentToolInsertAfter;
+	@FXML
+	private Button buttonComponentToolInsertBefore;
+	@FXML
+	private Button buttonComponentToolOK;
+	@FXML
+	private Button buttonComponentToolReplace;
 	@FXML
 	private Button buttonToolbarEditCopy;
 	@FXML
@@ -77,7 +97,7 @@ public class MainController implements Initializable {
 	@FXML
 	private Button buttonToolbarEditPaste;
 	@FXML
-	private Button buttonToolbarEditRemove;
+	private Button buttonToolbarEditDelete;
 	@FXML
 	private Button buttonToolbarElementFind;
 	@FXML
@@ -101,7 +121,7 @@ public class MainController implements Initializable {
 	@FXML
 	private Tooltip tooltipToolbarEditPaste;
 	@FXML
-	private Tooltip tooltipToolbarEditRemove;
+	private Tooltip tooltipToolbarEditDelete;
 	@FXML
 	private Tooltip tooltipToolbarElementFind;
 	@FXML
@@ -116,6 +136,24 @@ public class MainController implements Initializable {
 	private Tooltip tooltipToolbarProduceWebPage;
 	@FXML
 	private Tooltip tooltipToolbarTextFind;
+	@FXML
+	private TextField textFieldComponentTool;
+	@FXML
+	private Tooltip tooltipComponentToolCancel;
+	@FXML
+	private Tooltip tooltipComponentToolConvert;
+	@FXML
+	private Tooltip tooltipComponentToolConvertWrap;
+	@FXML
+	private Tooltip tooltipComponentToolInsert;
+	@FXML
+	private Tooltip tooltipComponentToolInsertAfter;
+	@FXML
+	private Tooltip tooltipComponentToolInsertBefore;
+	@FXML
+	private Tooltip tooltipComponentToolOK;
+	@FXML
+	private Tooltip tooltipComponentToolReplace;
 
 	public MainController() {
 		// TODO Auto-generated constructor stub
@@ -139,7 +177,7 @@ public class MainController implements Initializable {
 			System.out.println(filePath + " not found");
 		}
 		manager = new XmlDocumentManager();
-		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, bundle.getString("element.text"));
+		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		webPageInteractor = new WebPageInteractor();
 		componentPathBarHandler = new ComponentPathBarHandler();
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
@@ -239,6 +277,19 @@ public class MainController implements Initializable {
 	        }
 	    });
 
+	    textFieldComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+	        if (event.getCode() == KeyCode.ESCAPE) {
+	            escPressed = true;
+	            event.consume();
+	        } else if (escPressed && event.getCode() == KeyCode.DOWN) {
+	            handleSelectAllChildren();
+	            event.consume();
+	        }
+	        if (event.getCode() != KeyCode.ESCAPE && event.getCode() != KeyCode.DOWN) {
+	            escPressed = false;
+	        }
+	    });
+
 		componentPathBar.setOnMouseClicked(event -> {
 			if (event.getTarget() instanceof Text) {
 				Text clickedText = (Text) event.getTarget();
@@ -279,9 +330,9 @@ public class MainController implements Initializable {
 		tooltipToolbarEditInsert = ControllerUtilities.createToolbarButtonWithImage(
 				"insertAction.png", buttonToolbarEditInsert, tooltipToolbarEditInsert,
 				bundle.getString("tooltip.insert"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
-		tooltipToolbarEditRemove = ControllerUtilities.createToolbarButtonWithImage(
-				"deleteAction.png", buttonToolbarEditRemove, tooltipToolbarEditRemove,
-				bundle.getString("tooltip.remove"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipToolbarEditDelete = ControllerUtilities.createToolbarButtonWithImage(
+				"deleteAction.png", buttonToolbarEditDelete, tooltipToolbarEditDelete,
+				bundle.getString("tooltip.delete"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 		tooltipToolbarProduceWebPage = ControllerUtilities.createToolbarButtonWithImage(
 				"ProduceWebPage.png", buttonToolbarProduceWebPage, tooltipToolbarProduceWebPage,
 				bundle.getString("tooltip.producewebpage"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
@@ -294,6 +345,45 @@ public class MainController implements Initializable {
 		tooltipToolbarElementFind = ControllerUtilities.createToolbarButtonWithImage(
 				"ElementFind.png", buttonToolbarTextFind, tooltipToolbarElementFind,
 				bundle.getString("tooltip.textfind"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+
+		tooltipComponentToolCancel = ControllerUtilities.createToolbarButtonWithImage(
+				"cancel.png", buttonComponentToolCancel, tooltipComponentToolCancel,
+				bundle.getString("tooltip.cancel"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolConvert = ControllerUtilities.createToolbarButtonWithImage(
+				"ElementFind.png", buttonComponentToolConvert, tooltipComponentToolConvert,
+				bundle.getString("tooltip.convert"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolConvertWrap = ControllerUtilities.createToolbarButtonWithImage(
+				"ElementFind.png", buttonComponentToolConvertWrap, tooltipComponentToolConvertWrap,
+				bundle.getString("tooltip.convertwrap"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolInsert = ControllerUtilities.createToolbarButtonWithImage(
+				"insert_into.png", buttonComponentToolInsert, tooltipComponentToolInsert,
+				bundle.getString("tooltip.insert"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolInsertAfter = ControllerUtilities.createToolbarButtonWithImage(
+				"insert_after.png", buttonComponentToolInsertAfter, tooltipComponentToolInsertAfter,
+				bundle.getString("tooltip.insertafter"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolInsertBefore = ControllerUtilities.createToolbarButtonWithImage(
+				"insert_before.png", buttonComponentToolInsertBefore, tooltipComponentToolInsertBefore,
+				bundle.getString("tooltip.insertbefore"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolOK = ControllerUtilities.createToolbarButtonWithImage(
+				"Yes.png", buttonComponentToolOK, tooltipComponentToolOK,
+				bundle.getString("tooltip.ok"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		tooltipComponentToolReplace = ControllerUtilities.createToolbarButtonWithImage(
+				"ElementFind.png", buttonComponentToolReplace, tooltipComponentToolReplace,
+				bundle.getString("tooltip.replace"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
+		buttonComponentToolConvert.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
+		buttonComponentToolConvertWrap.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
+		buttonComponentToolInsert.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
+		buttonComponentToolInsertAfter.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
+		buttonComponentToolInsertBefore.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
+		buttonComponentToolReplace.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
+	}
+
+	public Main getMain() {
+		return main;
+	}
+
+	public void setMain(Main main) {
+		this.main = main;
 	}
 
 	@FXML
@@ -320,6 +410,16 @@ public class MainController implements Initializable {
 	@FXML
 	private void handleChangeInterfaceLanguage() {
 		System.out.println("handleChangeInterfaceLanguage");
+	}
+
+	@FXML
+	private void handleComponentToolCancel() {
+		System.out.println("handleComponentToolCancel");
+	}
+
+	@FXML
+	private void handleComponentToolOK() {
+		System.out.println("handleComponentToolOK");
 	}
 
 	@FXML
@@ -383,6 +483,11 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
+	private void handleDelete() {
+		System.out.println("handleDelete");
+	}
+
+	@FXML
 	private void handleDemoteSection() {
 		System.out.println("handleDemoteSection");
 	}
@@ -420,6 +525,19 @@ public class MainController implements Initializable {
 	@FXML
 	private void handleInsert() {
 		System.out.println("handleInsert");
+		if (elementClickedOn == null) {
+			return;
+		}
+		System.out.println("\telement clicked on = " + elementClickedOn);
+		Element element = elementClickedOn;
+		if (elementClickedOn.getTagName().equals("SPAN") || elementClickedOn.getTagName().equals("DIV")) {
+			element = (Element) element.getParentNode();
+			System.out.println("\t\tusing parent: " + element.getTagName());
+		}
+		String nameToUse = XLingDocXmlToInternalHtmlMapper.getRenamedElement(element.getTagName());
+		element = manager.getMasterXmlDoc().createElement(nameToUse);
+		System.out.println("\telement passed in = " + element);
+		InsertHandler.askForElementToInsert(webEngine.getDocument(), element, manager, dtdInspector, main, bundle);
 	}
 
 	@FXML
@@ -518,13 +636,13 @@ public class MainController implements Initializable {
 	}
 
 	@FXML
-	private void handleRemove() {
-		System.out.println("handleRemove");
+	private void handleRemoveStyleSheet() {
+		System.out.println("handleRemoveStyleSheet");
 	}
 
 	@FXML
-	private void handleRemoveStyleSheet() {
-		System.out.println("handleRemoveStyleSheet");
+	private void handleReplace() {
+		System.out.println("handleReplace");
 	}
 
 	@FXML
