@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <!-- Source XML Element Tag (< >) in Blue -->
+  <path d="M2.5 2.5L0.5 4.5L2.5 6.5" stroke="#2B579A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5.5 2.5L7.5 4.5L5.5 6.5" stroke="#2B579A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Conversion / Morphing Arrow in Vibrant Green -->
+  <path d="M4 9.5h6.5" stroke="#2E7D32" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M8.5 7.5L11 9.5L8.5 11.5" stroke="#2E7D32" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Target XML Element Tag (< >) in Orange/Amber -->
+  <path d="M10.5 10.5L8.5 12.5L10.5 14.5" stroke="#E65100" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13.5 10.5L15.5 12.5L13.5 14.5" stroke="#E65100" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

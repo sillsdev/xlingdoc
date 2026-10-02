@@ -16,7 +16,7 @@
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.web.WebView?>
 
-<BorderPane fx:id="rootLayout" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.sil.xlingdoc.view.MainController">
+<BorderPane fx:id="rootLayout" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.sil.xlingdoc.view.MainController">
    <top>
       <VBox>
 			<MenuBar BorderPane.alignment="CENTER">
@@ -183,26 +183,26 @@
       <SplitPane dividerPositions="0.7040133779264215" prefHeight="495.0" prefWidth="901.0" BorderPane.alignment="CENTER">
          <items>
             <WebView fx:id="webView" prefHeight="600.0" prefWidth="800.0" />
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
                <children>
                   <TextField fx:id="textFieldComponentTool" layoutX="70.0" layoutY="52.5" prefHeight="25.0" prefWidth="60.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0" />
                   <ListView layoutX="17.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0" />
                   <ToolBar layoutX="10.0" layoutY="2.0" prefHeight="40.0" prefWidth="315.0">
                     <items>
-                      <Button fx:id="buttonComponentToolInsertBefore" mnemonicParsing="false" text="%componenttool.insertbefore" onAction="#handleInsertBefore" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" prefHeight="33.0" prefWidth="19.0" />
-                        <Button fx:id="buttonComponentToolInsert" mnemonicParsing="false" text="%componenttool.insert" onAction="#handleInsert" contentDisplay="TOP" graphicTextGap="0.0" minWidth="39.0" prefHeight="33.0" prefWidth="19.0" />
-                        <Button fx:id="buttonComponentToolInsertAfter" mnemonicParsing="false" text="%componenttool.insertafter" onAction="#handleInsertAfter" contentDisplay="TOP" graphicTextGap="0.0" minWidth="39.0" prefHeight="33.0" prefWidth="19.0" />
+                      <Button fx:id="buttonComponentToolInsertBefore" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" mnemonicParsing="false" onAction="#handleInsertBefore" prefHeight="33.0" prefWidth="19.0" text="%componenttool.insertbefore" />
+                        <Button fx:id="buttonComponentToolInsert" contentDisplay="TOP" graphicTextGap="0.0" minWidth="39.0" mnemonicParsing="false" onAction="#handleInsert" prefHeight="33.0" prefWidth="19.0" text="%componenttool.insert" />
+                        <Button fx:id="buttonComponentToolInsertAfter" contentDisplay="TOP" graphicTextGap="0.0" minWidth="39.0" mnemonicParsing="false" onAction="#handleInsertAfter" prefHeight="33.0" prefWidth="19.0" text="%componenttool.insertafter" />
 						<Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="3.0" />
-                        <Button fx:id="buttonComponentToolConvert" mnemonicParsing="false" text="%componenttool.convert" onAction="#handleConvert" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" prefHeight="33.0" prefWidth="19.0"/>
-                        <Button fx:id="buttonComponentToolConvertWrap" mnemonicParsing="false" text="%componenttool.convertwrap"  onAction="#handleConvertWrap" contentDisplay="TOP" graphicTextGap="0.0" minWidth="39.0" prefHeight="33.0" prefWidth="19.0" />
+                        <Button fx:id="buttonComponentToolConvert" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" mnemonicParsing="false" onAction="#handleConvert" prefHeight="33.0" prefWidth="19.0" text="%componenttool.convert" />
+                        <Button fx:id="buttonComponentToolConvertWrap" contentDisplay="TOP" graphicTextGap="0.0" minWidth="39.0" mnemonicParsing="false" onAction="#handleConvertWrap" prefHeight="33.0" prefWidth="19.0" text="%componenttool.convertwrap" />
 						<Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="3.0" />
-                        <Button fx:id="buttonComponentToolReplace" mnemonicParsing="false" text="%componenttool.replace" onAction="#handleReplace" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" prefHeight="33.0" prefWidth="19.0"/>
+                        <Button fx:id="buttonComponentToolReplace" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" mnemonicParsing="false" onAction="#handleReplace" prefHeight="33.0" prefWidth="19.0" text="%componenttool.replace" />
                     </items>
                   </ToolBar>
                   <ToolBar layoutX="16.0" layoutY="44.0" prefHeight="40.0" prefWidth="58.0">
                     <items>
-                      <Button fx:id="buttonComponentToolCancel" mnemonicParsing="false" onAction="#handleComponentToolCancel" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="19.0" prefHeight="23.0" prefWidth="19.0" text="" />
-                        <Button fx:id="buttonComponentToolOK" mnemonicParsing="false" onAction="#handleComponentToolOK" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="19.0" prefHeight="23.0" prefWidth="19.0" text=""/>
+                      <Button fx:id="buttonComponentToolCancel" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="19.0" mnemonicParsing="false" onAction="#handleComponentToolCancel" prefHeight="23.0" prefWidth="19.0" text="" />
+                        <Button fx:id="buttonComponentToolOK" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="19.0" mnemonicParsing="false" onAction="#handleComponentToolOK" prefHeight="23.0" prefWidth="19.0" text="" />
                     </items>
                   </ToolBar>
                </children>

@@ -35,6 +35,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
@@ -65,6 +67,7 @@ public class MainController implements Initializable {
 	private boolean escPressed;
 	Clipboard systemClipboard = Clipboard.getSystemClipboard();
 	Main main;
+	KeyCombination ctrlI = new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN);
 
 	@FXML
 	private MenuItem menuItemEditCopy;
@@ -275,6 +278,9 @@ public class MainController implements Initializable {
 	        if (event.getCode() != KeyCode.ESCAPE && event.getCode() != KeyCode.DOWN) {
 	            escPressed = false;
 	        }
+	        if (ctrlI.match(event)) {
+	        	handleInsert();
+	        }
 	    });
 
 	    textFieldComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -350,10 +356,10 @@ public class MainController implements Initializable {
 				"cancel.png", buttonComponentToolCancel, tooltipComponentToolCancel,
 				bundle.getString("tooltip.cancel"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 		tooltipComponentToolConvert = ControllerUtilities.createToolbarButtonWithImage(
-				"ElementFind.png", buttonComponentToolConvert, tooltipComponentToolConvert,
+				"Convert.png", buttonComponentToolConvert, tooltipComponentToolConvert,
 				bundle.getString("tooltip.convert"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 		tooltipComponentToolConvertWrap = ControllerUtilities.createToolbarButtonWithImage(
-				"ElementFind.png", buttonComponentToolConvertWrap, tooltipComponentToolConvertWrap,
+				"ConvertWrap.png", buttonComponentToolConvertWrap, tooltipComponentToolConvertWrap,
 				bundle.getString("tooltip.convertwrap"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 		tooltipComponentToolInsert = ControllerUtilities.createToolbarButtonWithImage(
 				"insert_into.png", buttonComponentToolInsert, tooltipComponentToolInsert,
@@ -368,7 +374,7 @@ public class MainController implements Initializable {
 				"Yes.png", buttonComponentToolOK, tooltipComponentToolOK,
 				bundle.getString("tooltip.ok"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 		tooltipComponentToolReplace = ControllerUtilities.createToolbarButtonWithImage(
-				"ElementFind.png", buttonComponentToolReplace, tooltipComponentToolReplace,
+				"replace.png", buttonComponentToolReplace, tooltipComponentToolReplace,
 				bundle.getString("tooltip.replace"), Constants.RESOURCE_SOURCE_LOCATION, Main.class);
 		buttonComponentToolConvert.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
 		buttonComponentToolConvertWrap.setStyle(Constants.COMPONENT_TOOL_BUTTON_TEXT_SIZE);
