@@ -66,7 +66,7 @@ public class MainController implements Initializable {
 	Main main;
 	KeyCombination ctrlI = new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN);
 	private WebEngine webEngine;
-	private ObservableList<String> obsListComponentTool = FXCollections.observableArrayList();
+	private ObservableList<String> componentToolObservableList = FXCollections.observableArrayList();
 	private String componentToolSelectedItem = "";
 
 	@FXML
@@ -148,9 +148,9 @@ public class MainController implements Initializable {
 	@FXML
 	private Tooltip tooltipToolbarTextFind;
 	@FXML
-	private ListView<String> listViewComponentTool;
+	private ListView<String> componentToolListView;
 	@FXML
-	private TextField textFieldComponentTool;
+	private TextField componentToolTextField;
 	@FXML
 	private Tooltip tooltipComponentToolCancel;
 	@FXML
@@ -294,16 +294,16 @@ public class MainController implements Initializable {
 	        }
 	    });
 
-		listViewComponentTool.setOnMouseClicked(event -> {
+		componentToolListView.setOnMouseClicked(event -> {
 			if (event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
 				handleComponentToolOK();
 				event.consume();
 			}
 		});
-	    textFieldComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-	        textFieldComponentToolInitializeKeyboardHandling(event);
+	    componentToolTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+	        componentToolTextFieldKeyboardHandling(event);
 	    });
-		listViewComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+		componentToolListView.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 			if (event.getCode() == KeyCode.ENTER) {
 				handleComponentToolOK();
 				event.consume();
@@ -329,17 +329,14 @@ public class MainController implements Initializable {
 //		webView.setOnContextMenuRequested(null);
 	}
 
-	private void textFieldComponentToolInitializeKeyboardHandling(KeyEvent event) {
+	private void componentToolTextFieldKeyboardHandling(KeyEvent event) {
 		Platform.runLater(() -> {
 			switch (event.getCode()) {
-			case KeyCode.BACK_SPACE:
-				System.out.println("\tbackspace");
-				break;
 			case KeyCode.DOWN:
 			case KeyCode.KP_DOWN:
-				if (listViewComponentTool.getItems().size() > 0) {
-					listViewComponentTool.requestFocus();
-					listViewComponentTool.getSelectionModel().selectFirst();
+				if (componentToolListView.getItems().size() > 0) {
+					componentToolListView.requestFocus();
+					componentToolListView.getSelectionModel().selectFirst();
 				}
 				// the focus is in the list view, so we're done processing the text field
 				return;
@@ -347,23 +344,21 @@ public class MainController implements Initializable {
 				handleComponentToolOK();
 				break;
 			case KeyCode.ESCAPE:
-				textFieldComponentTool.setText("");
+				componentToolTextField.setText("");
 				handleComponentToolCancel();
 				break;
 			default:
 				// nothing special to do
 				break;
 			}
-			String match = textFieldComponentTool.getText();
-			System.out.println("text field = '" + match + "'");
+			String match = componentToolTextField.getText();
 //			ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.startsWith(match))
 //					.collect(Collectors.toCollection(FXCollections::observableArrayList));
-			ObservableList<String> matches = obsListComponentTool.stream().filter(i -> i.contains(match))
+			ObservableList<String> matches = componentToolObservableList.stream().filter(i -> i.contains(match))
 					.collect(Collectors.toCollection(FXCollections::observableArrayList));
-			System.out.println("\tmatches size = " + matches.size());
-			listViewComponentTool.getItems().setAll(matches);
-			if (listViewComponentTool.getItems().size() > 0) {
-				listViewComponentTool.getSelectionModel().selectFirst();
+			componentToolListView.getItems().setAll(matches);
+			if (componentToolListView.getItems().size() > 0) {
+				componentToolListView.getSelectionModel().selectFirst();
 			}
 		});
 	}
@@ -475,8 +470,8 @@ public class MainController implements Initializable {
 	@FXML
 	private void handleComponentToolCancel() {
 		Platform.runLater(() -> {
-			System.out.println("handleComponentToolCancel");
-			listViewComponentTool.getItems().clear();
+			componentToolListView.getItems().clear();
+			componentToolTextField.setText("");
 			webView.requestFocus();
 		});
 	}
@@ -486,11 +481,11 @@ public class MainController implements Initializable {
 		Platform.runLater(() -> {
 			componentToolSelectedItem = "";
 			System.out.println("handleComponentToolOK");
-			if (listViewComponentTool.getItems().size() > 0) {
-				componentToolSelectedItem = listViewComponentTool.getSelectionModel().getSelectedItem();
+			if (componentToolListView.getItems().size() > 0) {
+				componentToolSelectedItem = componentToolListView.getSelectionModel().getSelectedItem();
 				System.out.println("Selected '" + componentToolSelectedItem + "'");
-				listViewComponentTool.getItems().clear();
-				textFieldComponentTool.setText("");
+				componentToolListView.getItems().clear();
+				componentToolTextField.setText("");
 			}
 			webView.requestFocus();
 		});
@@ -604,11 +599,11 @@ public class MainController implements Initializable {
 			Element element = ComponentToolHandler.determineElementToUse(elementClickedOn, manager);
 			ListView<String> listView = ComponentToolHandler.fillComponentToolCandidates(element,
 					ComponentToolOperationType.Insert, manager, dtdInspector);
-			listViewComponentTool.getItems().setAll(listView.getItems());
-			obsListComponentTool.setAll(listViewComponentTool.getItems());
-			System.out.println("list view size = " + listViewComponentTool.getItems().size());
-			textFieldComponentTool.setText("");
-			textFieldComponentTool.requestFocus();
+			componentToolListView.getItems().setAll(listView.getItems());
+			componentToolObservableList.setAll(componentToolListView.getItems());
+			System.out.println("list view size = " + componentToolListView.getItems().size());
+			componentToolTextField.setText("");
+			componentToolTextField.requestFocus();
 		});
 	}
 
