@@ -186,7 +186,7 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
                <children>
                   <TextField fx:id="textFieldComponentTool" layoutX="70.0" layoutY="52.5" prefHeight="25.0" prefWidth="60.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0" />
-                  <ListView layoutX="17.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0" />
+                  <ListView fx:id="listViewComponentTool" layoutX="17.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0" />
                   <ToolBar layoutX="10.0" layoutY="2.0" prefHeight="40.0" prefWidth="315.0">
                     <items>
                       <Button fx:id="buttonComponentToolInsertBefore" contentDisplay="TOP" graphicTextGap="0.0" minWidth="49.0" mnemonicParsing="false" onAction="#handleInsertBefore" prefHeight="33.0" prefWidth="19.0" text="%componenttool.insertbefore" />

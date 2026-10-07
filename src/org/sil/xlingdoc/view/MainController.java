@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import org.sil.utility.view.ControllerUtilities;
 import org.sil.xlingdoc.Constants;
@@ -26,10 +27,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -140,6 +145,8 @@ public class MainController implements Initializable {
 	@FXML
 	private Tooltip tooltipToolbarTextFind;
 	@FXML
+	private ListView<String> listViewComponentTool;
+	@FXML
 	private TextField textFieldComponentTool;
 	@FXML
 	private Tooltip tooltipComponentToolCancel;
@@ -196,6 +203,7 @@ public class MainController implements Initializable {
 				webPageInteractor.setDocument(doc);
 				Element target = doc.getDocumentElement();
 				if (target != null) {
+					elementClickedOn = target;
 					((EventTarget) target).addEventListener("click", (org.w3c.dom.events.Event ev) -> {
 						// this finds the w3c DOM element that was clicked on;
 						// we get the X,Y coordinate from the webView via its setOnMouseClicked() method below
@@ -284,16 +292,7 @@ public class MainController implements Initializable {
 	    });
 
 	    textFieldComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-	        if (event.getCode() == KeyCode.ESCAPE) {
-	            escPressed = true;
-	            event.consume();
-	        } else if (escPressed && event.getCode() == KeyCode.DOWN) {
-	            handleSelectAllChildren();
-	            event.consume();
-	        }
-	        if (event.getCode() != KeyCode.ESCAPE && event.getCode() != KeyCode.DOWN) {
-	            escPressed = false;
-	        }
+	        initializeKeyboardHandling(event);
 	    });
 
 		componentPathBar.setOnMouseClicked(event -> {
@@ -302,6 +301,7 @@ public class MainController implements Initializable {
 				Object obj = clickedText.getUserData();
 				if (obj instanceof Element el) {
 					componentPathBarHandler.highlightSelectedElement(el);
+					elementClickedOn = el;
 				}
 			}
 		});
@@ -312,6 +312,35 @@ public class MainController implements Initializable {
 
 		createToolbarButtons(bundle);
 //		webView.setOnContextMenuRequested(null);
+	}
+
+	private void initializeKeyboardHandling(KeyEvent event) {
+		if (event.getCode() == KeyCode.ESCAPE) {
+		    escPressed = true;
+		    event.consume();
+		} else if (escPressed && event.getCode() == KeyCode.DOWN) {
+		    handleSelectAllChildren();
+		    event.consume();
+		}
+		if (event.getCode() != KeyCode.ESCAPE && event.getCode() != KeyCode.DOWN) {
+		    escPressed = false;
+		}
+		Platform.runLater(() -> {
+		String match = textFieldComponentTool.getText();
+		System.out.println("text field = '" + match + "'");
+//	        listViewComponentTool.getIte
+//			ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.startsWith(match))
+//					.collect(Collectors.toCollection(FXCollections::observableArrayList));
+		ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.contains(match))
+				.collect(Collectors.toCollection(FXCollections::observableArrayList));
+			listViewComponentTool.getItems().setAll(matches);
+		});
+		if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.KP_DOWN) {
+			if (listViewComponentTool.getItems().size() > 0) {
+				listViewComponentTool.requestFocus();
+				listViewComponentTool.getSelectionModel().selectFirst();
+			}
+		}
 	}
 
 	protected void createToolbarButtons(ResourceBundle bundle) {
@@ -530,20 +559,17 @@ public class MainController implements Initializable {
 
 	@FXML
 	private void handleInsert() {
-		System.out.println("handleInsert");
-		if (elementClickedOn == null) {
-			return;
-		}
-		System.out.println("\telement clicked on = " + elementClickedOn);
-		Element element = elementClickedOn;
-		if (elementClickedOn.getTagName().equals("SPAN") || elementClickedOn.getTagName().equals("DIV")) {
-			element = (Element) element.getParentNode();
-			System.out.println("\t\tusing parent: " + element.getTagName());
-		}
-		String nameToUse = XLingDocXmlToInternalHtmlMapper.getRenamedElement(element.getTagName());
-		element = manager.getMasterXmlDoc().createElement(nameToUse);
-		System.out.println("\telement passed in = " + element);
-		InsertHandler.askForElementToInsert(webEngine.getDocument(), element, manager, dtdInspector, main, bundle);
+		Platform.runLater(() -> {
+			System.out.println("handleInsert");
+			System.out.println("\telement clicked on = " + elementClickedOn);
+			Element element = ComponentToolHandler.determineElementToUse(elementClickedOn, manager);
+			ListView<String> listView = ComponentToolHandler.fillComponentToolCandidates(element,
+					ComponentToolOperationType.Insert, manager, dtdInspector);
+			listViewComponentTool.getItems().setAll(listView.getItems());
+			System.out.println("list view size = " + listViewComponentTool.getItems().size());
+			textFieldComponentTool.setText("");
+			textFieldComponentTool.requestFocus();
+		});
 	}
 
 	@FXML
