@@ -43,6 +43,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -53,15 +54,6 @@ import javafx.scene.web.WebView;
  * 
  */
 public class MainController implements Initializable {
-	private WebEngine webEngine;
-	@FXML
-	private WebView webView;
-	@FXML
-	BorderPane rootLayout;
-	@FXML
-	private Button btnSave;
-	@FXML
-	private TextFlow componentPathBar;
 	private DtdInspector dtdInspector;
 	private XmlDocumentManager manager;
 	private WebPageInteractor webPageInteractor;
@@ -73,7 +65,18 @@ public class MainController implements Initializable {
 	Clipboard systemClipboard = Clipboard.getSystemClipboard();
 	Main main;
 	KeyCombination ctrlI = new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN);
+	private WebEngine webEngine;
+	private ObservableList<String> obsListComponentTool = FXCollections.observableArrayList();
+	private String componentToolSelectedItem = "";
 
+	@FXML
+	private WebView webView;
+	@FXML
+	BorderPane rootLayout;
+	@FXML
+	private Button btnSave;
+	@FXML
+	private TextFlow componentPathBar;
 	@FXML
 	private MenuItem menuItemEditCopy;
 	@FXML
@@ -291,9 +294,21 @@ public class MainController implements Initializable {
 	        }
 	    });
 
+		listViewComponentTool.setOnMouseClicked(event -> {
+			if (event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
+				handleComponentToolOK();
+				event.consume();
+			}
+		});
 	    textFieldComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-	        initializeKeyboardHandling(event);
+	        textFieldComponentToolInitializeKeyboardHandling(event);
 	    });
+		listViewComponentTool.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			if (event.getCode() == KeyCode.ENTER) {
+				handleComponentToolOK();
+				event.consume();
+			}
+		});
 
 		componentPathBar.setOnMouseClicked(event -> {
 			if (event.getTarget() instanceof Text) {
@@ -314,33 +329,43 @@ public class MainController implements Initializable {
 //		webView.setOnContextMenuRequested(null);
 	}
 
-	private void initializeKeyboardHandling(KeyEvent event) {
-		if (event.getCode() == KeyCode.ESCAPE) {
-		    escPressed = true;
-		    event.consume();
-		} else if (escPressed && event.getCode() == KeyCode.DOWN) {
-		    handleSelectAllChildren();
-		    event.consume();
-		}
-		if (event.getCode() != KeyCode.ESCAPE && event.getCode() != KeyCode.DOWN) {
-		    escPressed = false;
-		}
+	private void textFieldComponentToolInitializeKeyboardHandling(KeyEvent event) {
 		Platform.runLater(() -> {
-		String match = textFieldComponentTool.getText();
-		System.out.println("text field = '" + match + "'");
-//	        listViewComponentTool.getIte
+			switch (event.getCode()) {
+			case KeyCode.BACK_SPACE:
+				System.out.println("\tbackspace");
+				break;
+			case KeyCode.DOWN:
+			case KeyCode.KP_DOWN:
+				if (listViewComponentTool.getItems().size() > 0) {
+					listViewComponentTool.requestFocus();
+					listViewComponentTool.getSelectionModel().selectFirst();
+				}
+				// the focus is in the list view, so we're done processing the text field
+				return;
+			case KeyCode.ENTER:
+				handleComponentToolOK();
+				break;
+			case KeyCode.ESCAPE:
+				textFieldComponentTool.setText("");
+				handleComponentToolCancel();
+				break;
+			default:
+				// nothing special to do
+				break;
+			}
+			String match = textFieldComponentTool.getText();
+			System.out.println("text field = '" + match + "'");
 //			ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.startsWith(match))
 //					.collect(Collectors.toCollection(FXCollections::observableArrayList));
-		ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.contains(match))
-				.collect(Collectors.toCollection(FXCollections::observableArrayList));
+			ObservableList<String> matches = obsListComponentTool.stream().filter(i -> i.contains(match))
+					.collect(Collectors.toCollection(FXCollections::observableArrayList));
+			System.out.println("\tmatches size = " + matches.size());
 			listViewComponentTool.getItems().setAll(matches);
-		});
-		if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.KP_DOWN) {
 			if (listViewComponentTool.getItems().size() > 0) {
-				listViewComponentTool.requestFocus();
 				listViewComponentTool.getSelectionModel().selectFirst();
 			}
-		}
+		});
 	}
 
 	protected void createToolbarButtons(ResourceBundle bundle) {
@@ -449,12 +474,26 @@ public class MainController implements Initializable {
 
 	@FXML
 	private void handleComponentToolCancel() {
-		System.out.println("handleComponentToolCancel");
+		Platform.runLater(() -> {
+			System.out.println("handleComponentToolCancel");
+			listViewComponentTool.getItems().clear();
+			webView.requestFocus();
+		});
 	}
 
 	@FXML
 	private void handleComponentToolOK() {
-		System.out.println("handleComponentToolOK");
+		Platform.runLater(() -> {
+			componentToolSelectedItem = "";
+			System.out.println("handleComponentToolOK");
+			if (listViewComponentTool.getItems().size() > 0) {
+				componentToolSelectedItem = listViewComponentTool.getSelectionModel().getSelectedItem();
+				System.out.println("Selected '" + componentToolSelectedItem + "'");
+				listViewComponentTool.getItems().clear();
+				textFieldComponentTool.setText("");
+			}
+			webView.requestFocus();
+		});
 	}
 
 	@FXML
@@ -566,6 +605,7 @@ public class MainController implements Initializable {
 			ListView<String> listView = ComponentToolHandler.fillComponentToolCandidates(element,
 					ComponentToolOperationType.Insert, manager, dtdInspector);
 			listViewComponentTool.getItems().setAll(listView.getItems());
+			obsListComponentTool.setAll(listViewComponentTool.getItems());
 			System.out.println("list view size = " + listViewComponentTool.getItems().size());
 			textFieldComponentTool.setText("");
 			textFieldComponentTool.requestFocus();
