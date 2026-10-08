@@ -134,6 +134,9 @@ public class ComponentPathBarHandler {
 	private void removeHighlightFromLastElementHighlighted() {
 		if (lastElementHighlighted != null) {
 			String cssClass = lastElementHighlighted.getAttribute(kClass);
+			if (cssClass == null) {
+				cssClass = "";
+			}
 			cssClass = cssClass.replaceAll(kComponentSelected, "");
 			lastElementHighlighted.setAttribute(kClass, cssClass);
 		}

@@ -168,10 +168,6 @@ public class MainController implements Initializable {
 	@FXML
 	private Tooltip tooltipComponentToolReplace;
 
-	public MainController() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		bundle = resources;
@@ -183,7 +179,6 @@ public class MainController implements Initializable {
 				String cssUrl = f.toURI().toURL().toExternalForm();
 				webEngine.setUserStyleSheetLocation(cssUrl);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -211,7 +206,6 @@ public class MainController implements Initializable {
 						// this finds the w3c DOM element that was clicked on;
 						// we get the X,Y coordinate from the webView via its setOnMouseClicked() method below
 						elementClickedOn = (Element) ev.getTarget();
-//						System.out.println("New Clicked: " + elementClickedOn.getTagName());
 						componentPathBarHandler.updateComponentPathBar(elementClickedOn, componentPathBar, bundle.getString("label.text"));
 					}, false);
 				}
@@ -315,6 +309,7 @@ public class MainController implements Initializable {
 				Text clickedText = (Text) event.getTarget();
 				Object obj = clickedText.getUserData();
 				if (obj instanceof Element el) {
+					componentPathBarHandler.updateComponentPathBar(el, componentPathBar, bundle.getString("label.text"));
 					componentPathBarHandler.highlightSelectedElement(el);
 					elementClickedOn = el;
 				}
@@ -483,7 +478,7 @@ public class MainController implements Initializable {
 			System.out.println("handleComponentToolOK");
 			if (componentToolListView.getItems().size() > 0) {
 				componentToolSelectedItem = componentToolListView.getSelectionModel().getSelectedItem();
-				System.out.println("Selected '" + componentToolSelectedItem + "'");
+				System.out.println("Selected '" + componentToolSelectedItem + "'; operation = " + componentToolOperation);
 				componentToolListView.getItems().clear();
 				componentToolTextField.setText("");
 			}
@@ -604,6 +599,7 @@ public class MainController implements Initializable {
 			System.out.println("list view size = " + componentToolListView.getItems().size());
 			componentToolTextField.setText("");
 			componentToolTextField.requestFocus();
+			componentToolOperation = ComponentToolOperationType.Insert;
 		});
 	}
 
@@ -917,9 +913,8 @@ public class MainController implements Initializable {
 
 	// code taken from
 	// http://bekwam.blogspot.com/2014/10/cut-copy-and-paste-from-javafx-menubar.html
-	private void adjustForDeselection() {
-		menuItemEditCut.setDisable(true);
-		menuItemEditCopy.setDisable(true);
-	}
-
+//	private void adjustForDeselection() {
+//		menuItemEditCut.setDisable(true);
+//		menuItemEditCopy.setDisable(true);
+//	}
 }

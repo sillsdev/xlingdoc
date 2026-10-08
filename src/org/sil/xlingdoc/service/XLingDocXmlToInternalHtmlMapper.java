@@ -284,7 +284,6 @@ public class XLingDocXmlToInternalHtmlMapper {
 
 	public static String getRenamedElement(String elementName) {
 		String name = elementName;
-		String adjustedName = elementName.replace(Constants.ELEMENT_RENAME_PREFIX.toUpperCase(), "");
 		int index = elementsToRename.indexOf(elementName.replace(Constants.ELEMENT_RENAME_PREFIX.toUpperCase(), "").toLowerCase());
 		if (index > -1) {
 			name = elementsToRename.get(index);
