@@ -6,64 +6,50 @@
 
 package org.sil.xlingdoc.view;
 
-import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
-import org.controlsfx.control.textfield.TextFields;
-import org.sil.utility.view.ControllerUtilities;
-import org.sil.xlingdoc.Main;
+import org.sil.xlingdoc.service.WebPageUtilities;
 import org.sil.xlingdoc.service.XLingDocXmlToInternalHtmlMapper;
 import org.sil.xlingdoc.service.dtdhandling.ComponentToolOperationType;
 import org.sil.xlingdoc.service.dtdhandling.DtdInspector;
 import org.sil.xlingdoc.service.dtdhandling.XmlDocumentManager;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebEngine;
 
 /**
  * 
  */
 public class ComponentToolHandler {
 
-	public static void askForElementToInsert(Document doc, Element element, XmlDocumentManager manager, DtdInspector dtdInspector, Main main, ResourceBundle bundle) {
-		try {
-			// TextFields insert component
-			String title = bundle.getString("program.name");
-			String contentText = bundle.getString("label.insertcomponent");
-			TextInputDialog dialog = ControllerUtilities.getTextInputDialog(main, title,
-					contentText, bundle);
+	String componentToolSelectedItem = "";
+	private ObservableList<String> componentToolObservableList = FXCollections.observableArrayList();
+	ComponentToolOperationType componentToolOperation = ComponentToolOperationType.Insert;
+	XmlDocumentManager manager;
+	DtdInspector dtdInspector;
 
-			SortedSet<String> candidates = dtdInspector.getValidInsertElements(element, manager);
-//			ObservableList<String> listOfWords = FXCollections.observableArrayList();
-//			ObservableList<Word> wordsToUse = words;
-//			for (Word word : wordsToUse) {
-//				listOfWords.add(word.getWord());
-//			}
-			System.out.println("candidates = " + candidates);
-			TextFields.bindAutoCompletion(dialog.getEditor(), candidates);
-			Optional<String> result = dialog.showAndWait();
-			result.ifPresent(candidate -> {
-				System.out.println("askForElementToInsert: result is '" + result.get() + "'");
-				System.out.println("\tcandidate = " + candidate);
-//				int index = candidates..getFirst().indexOf(result.get());
-//					handleCVWords(index, true, true);
-			});
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			Main.reportException(e, bundle);
-		}
+	public ComponentToolHandler(XmlDocumentManager manager, DtdInspector dtdInspector) {
+		super();
+		this.manager = manager;
+		this.dtdInspector = dtdInspector;
 	}
 
-	public static ListView<String> fillComponentToolCandidates(Element element, ComponentToolOperationType op, XmlDocumentManager manager, DtdInspector dtdInspector) {
+	public String getComponentToolSelectedItem() {
+		return componentToolSelectedItem;
+	}
+
+	public ListView<String> fillComponentToolCandidates(Element element) {
 //		listView.getChildrenUnmodifiable().clear();
 		SortedSet<String> candidates = null;
-		switch (op) {
+		switch (componentToolOperation) {
 		case Convert:
 			candidates = dtdInspector.getValidConvertElements(element, manager);
 			break;
@@ -85,27 +71,103 @@ public class ComponentToolHandler {
 		default:
 			break;
 		}
-		System.out.println("\tcandidates size = " + candidates.size());
+//		System.out.println("\tcandidates size = " + candidates.size());
 		ObservableList<String> obsList = FXCollections.observableArrayList();
 		for (String s : candidates) {
 			obsList.add(s);
 		}
-		System.out.println("\tobsList size = " + obsList.size());
+//		System.out.println("\tobsList size = " + obsList.size());
 		ListView<String> listView = new ListView<String>(obsList);
-		System.out.println("\tlist view size = " + listView.getItems().size());
+//		System.out.println("\tlist view size = " + listView.getItems().size());
 		return listView;
 	}
 
-	public static Element determineElementToUse(Element elementClickedOn, XmlDocumentManager manager) {
+	public Element determineElementToUse(Element elementClickedOn) {
 		Element element = elementClickedOn;
 		if (elementClickedOn.getTagName().equals("SPAN") || elementClickedOn.getTagName().equals("DIV")) {
 			element = (Element) element.getParentNode();
-			System.out.println("\t\tusing parent: " + element.getTagName());
+//			System.out.println("\t\tusing parent: " + element.getTagName());
 		}
 		String nameToUse = XLingDocXmlToInternalHtmlMapper.getRenamedElement(element.getTagName());
 		element = manager.getMasterXmlDoc().createElement(nameToUse);
-		System.out.println("\telement passed in = " + element);
+//		System.out.println("\telement passed in = " + element);
 		return element;
 	}
 
+	public void handleCancel(ListView<String> componentToolListView, TextInputControl componentToolTextField) {
+		Platform.runLater(() -> {
+			componentToolListView.getItems().clear();
+			componentToolTextField.setText("");
+//			webView.requestFocus();
+		});
+	}
+
+	public void handleOK(ListView<String> componentToolListView, TextInputControl componentToolTextField,
+			WebEngine webEngine) {
+		Platform.runLater(() -> {
+			System.out.println("handleComponentToolOK");
+			if (componentToolListView.getItems().size() > 0) {
+				componentToolSelectedItem = "";
+				componentToolSelectedItem = componentToolListView.getSelectionModel().getSelectedItem();
+				System.out.println(
+						"\tSelected '" + componentToolSelectedItem + "'; operation = " + componentToolOperation);
+				componentToolListView.getItems().clear();
+				componentToolTextField.setText("");
+				int pos = WebPageUtilities.obtainCurrentCursorPosition(webEngine);
+				System.out.println("\tInsert position is " + pos);
+			}
+//			webView.requestFocus();
+		});
+	}
+
+	public void setUpComponentTool(Element elementClickedOn, ListView<String> componentToolListView,
+			TextInputControl componentToolTextField, ComponentToolOperationType componentToolOperation) {
+		Platform.runLater(() -> {
+			System.out.println("handleInsert");
+//			System.out.println("\telement clicked on = " + elementClickedOn);
+			Element element = determineElementToUse(elementClickedOn);
+			ListView<String> listView = fillComponentToolCandidates(element);
+			componentToolListView.getItems().setAll(listView.getItems());
+			componentToolObservableList.setAll(componentToolListView.getItems());
+//			System.out.println("list view size = " + componentToolListView.getItems().size());
+			componentToolTextField.setText("");
+			componentToolTextField.requestFocus();
+			this.componentToolOperation = componentToolOperation;
+		});
+	}
+
+	public void textFieldKeyboardHandling(KeyEvent event, ListView<String> componentToolListView,
+			TextInputControl componentToolTextField, WebEngine webEngine) {
+		Platform.runLater(() -> {
+			switch (event.getCode()) {
+			case KeyCode.DOWN:
+			case KeyCode.KP_DOWN:
+				if (componentToolListView.getItems().size() > 0) {
+					componentToolListView.requestFocus();
+					componentToolListView.getSelectionModel().selectFirst();
+				}
+				// the focus is in the list view, so we're done processing the text field
+				return;
+			case KeyCode.ENTER:
+				handleOK(componentToolListView, componentToolTextField, webEngine);
+				break;
+			case KeyCode.ESCAPE:
+				componentToolTextField.setText("");
+				handleCancel(componentToolListView, componentToolTextField);
+				break;
+			default:
+				// nothing special to do
+				break;
+			}
+			String match = componentToolTextField.getText();
+//			ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.startsWith(match))
+//					.collect(Collectors.toCollection(FXCollections::observableArrayList));
+			ObservableList<String> matches = componentToolObservableList.stream().filter(i -> i.contains(match))
+					.collect(Collectors.toCollection(FXCollections::observableArrayList));
+			componentToolListView.getItems().setAll(matches);
+			if (componentToolListView.getItems().size() > 0) {
+				componentToolListView.getSelectionModel().selectFirst();
+			}
+		});
+	}
 }

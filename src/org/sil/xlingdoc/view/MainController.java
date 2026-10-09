@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import org.sil.utility.view.ControllerUtilities;
 import org.sil.xlingdoc.Constants;
@@ -28,8 +27,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,7 +55,7 @@ public class MainController implements Initializable {
 	private XmlDocumentManager manager;
 	private WebPageInteractor webPageInteractor;
 	private ComponentPathBarHandler componentPathBarHandler;
-	private ComponentToolOperationType componentToolOperation = ComponentToolOperationType.Insert;
+	private ComponentToolHandler componentToolHandler;
 	private ResourceBundle bundle;
 	private Element elementClickedOn;
 	private boolean escPressed;
@@ -66,9 +63,6 @@ public class MainController implements Initializable {
 	Main main;
 	KeyCombination ctrlI = new KeyCodeCombination(KeyCode.I, KeyCombination.SHORTCUT_DOWN);
 	private WebEngine webEngine;
-	private ObservableList<String> componentToolObservableList = FXCollections.observableArrayList();
-	private String componentToolSelectedItem = "";
-
 	@FXML
 	private WebView webView;
 	@FXML
@@ -188,6 +182,7 @@ public class MainController implements Initializable {
 		dtdInspector = new DtdInspector(Constants.DTD_LOCATION, "(text)");
 		webPageInteractor = new WebPageInteractor();
 		componentPathBarHandler = new ComponentPathBarHandler();
+		componentToolHandler = new ComponentToolHandler(manager, dtdInspector);
 		String xmlFilePath = Constants.UNIT_TEST_DATA_FILE;
 //		String xmlFilePath = Constants.UNIT_TEST_XINCLUDE_DATA_FILE;
 		XLingDocXmlToInternalHtmlMapper.resetElementInputBoxAtrributeMap(webEngine);
@@ -325,37 +320,7 @@ public class MainController implements Initializable {
 	}
 
 	private void componentToolTextFieldKeyboardHandling(KeyEvent event) {
-		Platform.runLater(() -> {
-			switch (event.getCode()) {
-			case KeyCode.DOWN:
-			case KeyCode.KP_DOWN:
-				if (componentToolListView.getItems().size() > 0) {
-					componentToolListView.requestFocus();
-					componentToolListView.getSelectionModel().selectFirst();
-				}
-				// the focus is in the list view, so we're done processing the text field
-				return;
-			case KeyCode.ENTER:
-				handleComponentToolOK();
-				break;
-			case KeyCode.ESCAPE:
-				componentToolTextField.setText("");
-				handleComponentToolCancel();
-				break;
-			default:
-				// nothing special to do
-				break;
-			}
-			String match = componentToolTextField.getText();
-//			ObservableList<String> matches = listViewComponentTool.getItems().stream().filter(i -> i.startsWith(match))
-//					.collect(Collectors.toCollection(FXCollections::observableArrayList));
-			ObservableList<String> matches = componentToolObservableList.stream().filter(i -> i.contains(match))
-					.collect(Collectors.toCollection(FXCollections::observableArrayList));
-			componentToolListView.getItems().setAll(matches);
-			if (componentToolListView.getItems().size() > 0) {
-				componentToolListView.getSelectionModel().selectFirst();
-			}
-		});
+		componentToolHandler.textFieldKeyboardHandling(event, componentToolListView, componentToolTextField, webEngine);
 	}
 
 	protected void createToolbarButtons(ResourceBundle bundle) {
@@ -464,24 +429,17 @@ public class MainController implements Initializable {
 
 	@FXML
 	private void handleComponentToolCancel() {
+		componentToolHandler.handleCancel(componentToolListView, componentToolTextField);
 		Platform.runLater(() -> {
-			componentToolListView.getItems().clear();
-			componentToolTextField.setText("");
 			webView.requestFocus();
 		});
 	}
 
 	@FXML
 	private void handleComponentToolOK() {
+		componentToolHandler.handleOK(componentToolListView, componentToolTextField,
+				webEngine);
 		Platform.runLater(() -> {
-			componentToolSelectedItem = "";
-			System.out.println("handleComponentToolOK");
-			if (componentToolListView.getItems().size() > 0) {
-				componentToolSelectedItem = componentToolListView.getSelectionModel().getSelectedItem();
-				System.out.println("Selected '" + componentToolSelectedItem + "'; operation = " + componentToolOperation);
-				componentToolListView.getItems().clear();
-				componentToolTextField.setText("");
-			}
 			webView.requestFocus();
 		});
 	}
@@ -588,19 +546,8 @@ public class MainController implements Initializable {
 
 	@FXML
 	private void handleInsert() {
-		Platform.runLater(() -> {
-			System.out.println("handleInsert");
-			System.out.println("\telement clicked on = " + elementClickedOn);
-			Element element = ComponentToolHandler.determineElementToUse(elementClickedOn, manager);
-			ListView<String> listView = ComponentToolHandler.fillComponentToolCandidates(element,
-					ComponentToolOperationType.Insert, manager, dtdInspector);
-			componentToolListView.getItems().setAll(listView.getItems());
-			componentToolObservableList.setAll(componentToolListView.getItems());
-			System.out.println("list view size = " + componentToolListView.getItems().size());
-			componentToolTextField.setText("");
-			componentToolTextField.requestFocus();
-			componentToolOperation = ComponentToolOperationType.Insert;
-		});
+		componentToolHandler.setUpComponentTool(elementClickedOn, componentToolListView, componentToolTextField,
+				ComponentToolOperationType.Insert);
 	}
 
 	@FXML
