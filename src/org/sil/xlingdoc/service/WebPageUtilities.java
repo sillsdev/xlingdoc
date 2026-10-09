@@ -36,5 +36,21 @@ public class WebPageUtilities {
 		return webEngine;
 	}
 
+	// Following based on Gemini answer on 2026.10.08
+	public static int obtainCurrentCursorPosition(WebEngine webEngine) {
+		String script = "(function() {" + "    var sel = window.getSelection();"
+				+ "    if (sel && sel.rangeCount > 0) {" + "        var range = sel.getRangeAt(0);"
+				+ "        var node = range.startContainer;" + "        var offset = range.startOffset;"
+				+ "        var span = (node.nodeType === 3) ? node.parentNode : node;"
+				+ "            return (span.id || 'NO_ID') + ':' + offset;" + "        };" + "})();";
+		int position = -1;
+		Object result = webEngine.executeScript(script);
+		if (result != null) {
+			String[] details = result.toString().split(":");
+//			String spanId = details[0];
+			position = Integer.parseInt(details[1]);
+		}
+		return position;
+	}
 
 }
